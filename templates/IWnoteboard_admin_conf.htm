@@ -109,8 +109,8 @@
 </table>
 <a href="index.php?module=IWnoteboard&type=admin&func=newShared">{gt text="Create a new linked noteboard"}</a>
 {*}
-<form  class="z-form" enctype="application/x-www-form-urlencoded" method="post" name="conf" id="conf" action="{modurl modname="IWnoteboard" type="admin" func="confupdate"}">
-       <input type="hidden" name="authid" value="{secgenauthkey module="IWnoteboard"}" />
+    <form  class="z-form" enctype="application/x-www-form-urlencoded" method="post" name="conf" id="conf" action="{modurl modname="IWnoteboard" type="admin" func="confupdate"}">
+       <input type="hidden" name="authid" value="{insert name="generateauthkey" module="IWnoteboard"}" />
        <table class="z-datatable">
         <thead>
             <tr align="left">
@@ -225,27 +225,47 @@
         <div id="shareOptions">
             {include file="IWnoteboard_admin_confSharedOptions.htm"}
         </div>
-		{*}
+        {*}
         <div class="z-formrow">
             <label for="color1">{gt text="Row color one for visited notes"}</label>
-            <input type="text" name="color1" id="color1" size="7" maxlength="7" style="background-color:{$colorrow1};" value="{$colorrow1}" /> <a href="#" onClick="pick('pick','color1');return false;" name="pick" id="pick">{gt text="Try a color"}</a>
+            <div class="z-formnote">
+                <input type="text" name="color1" id="color1" size="7" maxlength="7" style="background-color:{$colorrow1};" value="{$colorrow1}" />
+                <a href="#" onClick="pick('pick','color1');return false;" name="pick" id="pick">
+                    {gt text="Try a color"}
+                </a>
+            </div>
         </div>
         <div class="z-formrow">
-        <label for="color2">{gt text="Row color two for visited notes"}</label>
-        <input type="text" name="color2" id="color2" size="7" maxlength="7" style="background-color:{$colorrow2};" value="{$colorrow2}" /> <a href="#" onClick="pick('pick','color2');return false;" name="pick" id="pick">{gt text="Try a color"}</a>
-    </div>
-    <div class="z-formrow">
-        <label for="colornew1">{gt text="Row color one for not visited notes"}</label>
-        <input type="text" name="colornew1" id="colornew1" size="7" maxlength="7" style="background-color:{$colornewrow1};" value="{$colornewrow1}" /> <a href="#" onClick="pick('pick','colornew1');return false;" name="pick" id="pick">{gt text="Try a color"}</a>
-    </div>
-    <div class="z-formrow">
-        <label for="colornew2">{gt text="Row color tho for not visited notes"}</label>
-        <input type="text" name="colornew2" id="colornew2" size="7" maxlength="7" style="background-color:{$colornewrow2};" value="{$colornewrow2}" /> <a href="#" onClick="pick('pick','colornew2');return false;" name="pick" id="pick">{gt text="Try a color"}</a>
-    </div>
-    <div class="z-formbuttons">
-        <a onClick="javascript:send()">{img modname='core' src='button_ok.gif' set='icons/small'}</a> {gt text="Modify the configuration"}
-    </div>
-</form>
+            <label for="color2">{gt text="Row color two for visited notes"}</label>
+            <div class="z-formnote">
+                <input type="text" name="color2" id="color2" size="7" maxlength="7" style="background-color:{$colorrow2};" value="{$colorrow2}" />
+                <a href="#" onClick="pick('pick','color2');return false;" name="pick" id="pick">
+                    {gt text="Try a color"}
+                </a>
+            </div>
+        </div>
+        <div class="z-formrow">
+            <label for="colornew1">{gt text="Row color one for not visited notes"}</label>
+            <div class="z-formnote">
+                <input type="text" name="colornew1" id="colornew1" size="7" maxlength="7" style="background-color:{$colornewrow1};" value="{$colornewrow1}" />
+                <a href="#" onClick="pick('pick','colornew1');return false;" name="pick" id="pick">
+                    {gt text="Try a color"}
+                </a>
+            </div>
+        </div>
+        <div class="z-formrow">
+            <label for="colornew2">{gt text="Row color tho for not visited notes"}</label>
+            <div class="z-formnote">
+                <input type="text" name="colornew2" id="colornew2" size="7" maxlength="7" style="background-color:{$colornewrow2};" value="{$colornewrow2}" />
+                <a href="#" onClick="pick('pick','colornew2');return false;" name="pick" id="pick">
+                    {gt text="Try a color"}
+                </a>
+            </div>
+        </div>
+        <div class="z-formbuttons">
+            <a onClick="javascript:send()">{img modname='core' src='button_ok.gif' set='icons/small'}</a> {gt text="Modify the configuration"}
+        </div>
+    </form>
 </div>
 
 <script type="text/javascript">

@@ -1,6 +1,6 @@
 <?php
 
-class IWnoteboard_Controler_User extends Zikula_Controller {
+class IWnoteboard_Controller_User extends Zikula_Controller {
 
     /**
      * Show the list of notes that an user can read
@@ -25,7 +25,8 @@ class IWnoteboard_Controler_User extends Zikula_Controller {
         if ($uid == '') {
             $uid = '-1';
         }
-
+        $usersList = '';
+        $anotacions = array();
         // Create output object
         $view = Zikula_View::getInstance('IWnoteboard', false);
 
@@ -41,7 +42,7 @@ class IWnoteboard_Controler_User extends Zikula_Controller {
         //get notes from shared noteboards
         $currentuser_groups = $permissions['grups'];
 
-        array_walk($currentuser_groups, 'IWnoteboard_user_groupidtonamemd5', $allgroups);
+        array_walk($currentuser_groups, 'groupidtonamemd5', $allgroups);
         $str_groups = "";
         foreach ($currentuser_groups as $user_group) {
             $str_groups .= "&g[]=" . $user_group;
@@ -405,7 +406,7 @@ class IWnoteboard_Controler_User extends Zikula_Controller {
         if (!SecurityUtil::checkPermission('IWnoteboard::', "::", ACCESS_READ)) {
             return LogUtil::registerError($this->__('Sorry! No authorization to access this module.'), 403);
         }
-
+        $registre = array();
         // Create output object
         $view = Zikula_View::getInstance('IWnoteboard', false);
 
@@ -417,7 +418,7 @@ class IWnoteboard_Controler_User extends Zikula_Controller {
                 LogUtil::registerError($this->__('The note has not been found'));
                 return System::redirect(ModUtil::url('IWnoteboard', 'user', 'main'));
             }
-        }
+        } else $registre['informa'] = 0;
 
         // Get the user permissions in noteboard
         $permissions = ModUtil::apiFunc('IWnoteboard', 'user', 'permisos',
@@ -616,18 +617,6 @@ class IWnoteboard_Controler_User extends Zikula_Controller {
     }
 
     /**
-     * Convert the items of specified array to md5 (it's used with array_walk function)
-     * @author: Sara Arjona Tï¿œllez (sarjona@xtec.cat)
-     * @param:	value the identifier of the group
-     * @param:	key
-     * @return:	The array after apply md5 function to the name of the group
-     */
-    public function groupidtonamemd5(&$value, $key, $allgroups) {
-        if ($value != '')
-            $value = md5($allgroups[$value]['name']);
-    }
-
-    /**
      * Create the RSS content with all the notes of a noteboard
      * @author: Sara Arjona Tï¿œllez (sarjona@xtec.cat)
      * @param:	args
@@ -668,7 +657,7 @@ class IWnoteboard_Controler_User extends Zikula_Controller {
             //Check if user can see the topic
             $note_groups = explode('$', substr($registre['destinataris'], 2, -1));
 
-            array_walk($note_groups, 'IWnoteboard_user_groupidtonamemd5', $allgroups);
+            array_walk($note_groups, 'groupidtonamemd5', $allgroups);
 
             $group_intersect = array_uintersect($request_groups, $note_groups, "strcasecmp");
             if (sizeof($group_intersect) > 0) {
@@ -1413,4 +1402,17 @@ class IWnoteboard_Controler_User extends Zikula_Controller {
 
         return $view->fetch('IWnoteboard_user_hanvist.htm');
     }
+
+}
+
+/**
+ * Convert the items of specified array to md5 (it's used with array_walk function)
+ * @author: Sara Arjona Tï¿œllez (sarjona@xtec.cat)
+ * @param:	value the identifier of the group
+ * @param:	key
+ * @return:	The array after apply md5 function to the name of the group
+ */
+function groupidtonamemd5(&$value, $key, $allgroups) {
+    if ($value != '')
+        $value = md5($allgroups[$value]['name']);
 }

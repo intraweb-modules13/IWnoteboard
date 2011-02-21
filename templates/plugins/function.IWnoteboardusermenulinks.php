@@ -24,15 +24,15 @@ function smarty_function_iwnoteboardusermenulinks($params, &$smarty)
 	$noteboardusermenulinks = "<span class=\"" . $params['class'] . "\">" . $params['start'] . " ";
 
 	if (SecurityUtil::checkPermission('IWnoteboard::', "::", ACCESS_READ) && $permisos['nivell'] >= 3) {
-		$noteboardusermenulinks .= "<a href=\"" . DataUtil::formatForDisplayHTML(ModUtil::url('IWnoteboard', 'user', 'nova',array('m' => 'n', 'tema' => $tema))) . "\">" . $this->__('Add a new note',$dom) . "</a> " . $params['seperator'];
+		$noteboardusermenulinks .= "<a href=\"" . DataUtil::formatForDisplayHTML(ModUtil::url('IWnoteboard', 'user', 'nova',array('m' => 'n', 'tema' => $tema))) . "\">" . __('Add a new note') . "</a> " . $params['seperator'];
 	}
 
 	if (SecurityUtil::checkPermission('IWnoteboard::', "::", ACCESS_READ)) {
-		$noteboardusermenulinks .= " <a href=\"" . DataUtil::formatForDisplayHTML(ModUtil::url('IWnoteboard', 'user', 'main', array('tema' => $tema))) . "\">" . $this->__('View notes list',$dom) . "</a> ";
+		$noteboardusermenulinks .= " <a href=\"" . DataUtil::formatForDisplayHTML(ModUtil::url('IWnoteboard', 'user', 'main', array('tema' => $tema))) . "\">" . __('View notes list') . "</a> ";
 	}
 
 	if (SecurityUtil::checkPermission('IWnoteboard::', "::", ACCESS_READ) && $permisos['potverificar']) {
-		$noteboardusermenulinks .= $params['seperator'] . " <a href=\"" . DataUtil::formatForDisplayHTML(ModUtil::url('IWnoteboard', 'user', 'main', array('tema' => $tema, 'saved' => '1'))) . "\">" . $this->__('Show the notes stored (expired)',$dom) . "</a> ";
+		$noteboardusermenulinks .= $params['seperator'] . " <a href=\"" . DataUtil::formatForDisplayHTML(ModUtil::url('IWnoteboard', 'user', 'main', array('tema' => $tema, 'saved' => '1'))) . "\">" . __('Show the notes stored (expired)') . "</a> ";
 	}
 
 	$noteboardusermenulinks .= $params['end'] . "</span>\n";

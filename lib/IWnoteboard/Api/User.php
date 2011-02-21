@@ -692,6 +692,7 @@ class IWnoteboard_Api_User extends Zikula_Api {
         } else {
             $requestByCron = true;
         }
+        $n_permisos = 0;
         $nivell_permisos = array();
         //if user is not registered have a fixed permissions
         if (!UserUtil::isLoggedIn() && !$requestByCron) {

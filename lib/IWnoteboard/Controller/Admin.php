@@ -26,7 +26,10 @@ class IWnoteboard_Controller_Admin extends Zikula_Controller {
                         array('version' => $versionNeeded))) {
             return false;
         }
-
+        $temes_array = array();
+        $sharedsArray = array();
+        $noFolder = false;
+        $noWriteable = false;
         // Create output object
         $view = Zikula_View::getInstance('IWnoteboard', false);
 
@@ -83,10 +86,10 @@ class IWnoteboard_Controller_Admin extends Zikula_Controller {
                     'less' => ModUtil::getVar('iw_myrole', 'rolegroup')));
 
         if (!file_exists(ModUtil::getVar('IWmain', 'documentRoot') . '/' . ModUtil::getVar('IWnoteboard', 'attached')) || ModUtil::getVar('IWnoteboard', 'attached') == '') {
-            $view->assign('noFolder', true);
+            $noFolder = true;
         } else {
             if (!is_writeable(ModUtil::getVar('IWmain', 'documentRoot') . '/' . ModUtil::getVar('IWnoteboard', 'attached'))) {
-                $view->assign('noWriteable', true);
+                $noWriteable = true;
             }
         }
 
@@ -147,6 +150,8 @@ class IWnoteboard_Controller_Admin extends Zikula_Controller {
         $view->assign('publicSharedURL', $publicSharedURL);
         $view->assign('sharedName', $sharedName);
         $view->assign('editPrintAfter', $editPrintAfter);
+        $view->assign('noFolder', $noFolder);
+        $view->assign('noWriteable', $noWriteable);
 
         if ($topicsSystem == 1) {
             // load necessary classes
@@ -285,7 +290,10 @@ class IWnoteboard_Controller_Admin extends Zikula_Controller {
         $view->assign('grups', $groups);
         $view->assign('title', $this->__('Create a new topic'));
         $view->assign('submit', $this->__('Create the topic'));
-
+        $view->assign('nomtema', '');
+        $view->assign('descriu', '');
+        $view->assign('grup', 0);
+        $view->assign('tid', 0);
         return $view->fetch('IWnoteboard_admin_noutema.htm');
     }
 

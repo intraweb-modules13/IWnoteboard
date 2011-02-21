@@ -1,16 +1,16 @@
 {include file="IWnoteboard_admin_menu.htm"}
 <div class="z-admincontainer">
     <div class="z-adminpageicon">
-        {if $m eq 0}
-        {img modname='core' src='filenew.gif' set='icons/large' __alt=$templatetitle}
+        {if isset($m) AND $m eq 0}
+            {img modname='core' src='filenew.gif' set='icons/large' __alt=''}
         {else}
-        {img modname='core' src='edit.gif' set='icons/large' __alt=$templatetitle}
+            {img modname='core' src='edit.gif' set='icons/large' __alt=''}
         {/if}
     </div>
     <h2>{$title}</h2>
     <form action=""  class="pn-adminform" method="post" name="new_tema">
-        <input type="hidden" name="authid" value="{secgenauthkey module="IWnoteboard"}" />
-               <input type="hidden" name="tid" value="{$tid}">
+        <input type="hidden" name="authid" value="{insert name="generateauthkey" module="IWnoteboard"}" />
+        <input type="hidden" name="tid" value="{$tid}">
         <table>
             <tr>
                 <td align="left"><strong>{gt text="Topic name"}</strong></td>
@@ -25,15 +25,24 @@
                 <td align="left">
                     <select name="grup">
                         {foreach item="group" from="$grups"}
-                            <option {if $grup eq $group.id}selected{/if} value="{$group.id}">{$group.name}</option>
+                            {if $grup eq $group.id}
+                                {assign var=selected value='selected'}
+                            {else}
+                                {assign var=selected value=''}
+                            {/if}
+                            <option {$selected} value="{$group.id}">{$group.name}</option>
                         {/foreach}
                     </select>
                 </td>
             </tr>
         </table>
         <div class="z-formbuttons">
-            <a onClick="javascript:send({$m})" title="{$submit}">{img modname='core' src='button_ok.gif' set='icons/small'}</a>{$submit}
-            <a href="#" onclick ='javascript:history.back(-1)'>{img modname='core' src='button_cancel.gif' set='icons/small'   __alt="Cancel" __title="Cancel"}</a>
+            <a onClick="javascript:send({if isset($m)}{$m}{/if})" title="{$submit}">
+                {img modname='core' src='button_ok.gif' set='icons/small'}
+            </a>{$submit}
+            <a href="#" onclick ='javascript:history.back(-1)'>
+                {img modname='core' src='button_cancel.gif' set='icons/small' __alt="Cancel" __title="Cancel"}
+            </a>
         </div>
     </form>
 </div>
