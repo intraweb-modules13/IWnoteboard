@@ -1,6 +1,6 @@
 <?php
 
-class IWnoteboard_Api_User extends Zikula_Api {
+class IWnoteboard_Api_User extends Zikula_AbstractApi {
     /**
      * Gets all the notes created in the noteboard
      * @author:     Albert PÃ©rez Monfort (aperezm@xtec.cat)

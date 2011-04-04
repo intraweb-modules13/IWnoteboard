@@ -1,5 +1,5 @@
 <?php
-class IWnoteboard_Version extends Zikula_Version
+class IWnoteboard_Version extends Zikula_AbstractVersion
 {
     public function getMetaData() {
         $meta = array();

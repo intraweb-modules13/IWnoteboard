@@ -1,6 +1,6 @@
 <?php
 
-class IWnoteboard_Controller_User extends Zikula_Controller {
+class IWnoteboard_Controller_User extends Zikula_AbstractController {
 
     /**
      * Show the list of notes that an user can read

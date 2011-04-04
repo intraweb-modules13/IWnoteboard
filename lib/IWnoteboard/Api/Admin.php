@@ -1,6 +1,6 @@
 <?php
 
-class IWnoteboard_Api_Admin extends Zikula_Api {
+class IWnoteboard_Api_Admin extends Zikula_AbstractApi {
     /**
      * Create a new topic
      * @author:     Albert Pï¿œrez Monfort (aperezm@xtec.cat)

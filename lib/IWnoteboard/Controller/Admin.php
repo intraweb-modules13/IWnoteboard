@@ -1,6 +1,6 @@
 <?php
 
-class IWnoteboard_Controller_Admin extends Zikula_Controller {
+class IWnoteboard_Controller_Admin extends Zikula_AbstractController {
     /**
      * Show the manage module site
      * @author		Albert PÃ©rez Monfort (aperezm@xtec.cat)

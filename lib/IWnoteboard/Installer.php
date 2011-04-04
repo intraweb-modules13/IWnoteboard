@@ -1,6 +1,6 @@
 <?php
 
-class IWnoteboard_Installer extends Zikula_Installer {
+class IWnoteboard_Installer extends Zikula_AbstractInstaller {
     /**
      * Initialise the IWnoteboard module creating module tables and module vars
      * @author Albert Pérez Monfort (aperezm@xtec.cat)
