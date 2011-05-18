@@ -6,12 +6,13 @@
             alert("{{gt text="The extension of the attached file is not accepted. Allowed extensions are: "}}{{$extensions}}");
             var error=true;
         }
+        {{if not $shipHeadersLines}}
         if(!error){
             if(!checkDate(f.caduca) || !checkDate(f.titulin) || !checkDate(f.titulout)){
                 var error=true;
             }
         }
-		
+        {{/if}}
         if(!error){
             if(!chkdate()){
                 var error=true;
