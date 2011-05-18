@@ -28,8 +28,6 @@ class IWnoteboard_Installer extends Zikula_AbstractInstaller {
             return false;
         if (!DBUtil::createTable('IWnoteboard_topics'))
             return false;
-        if (!DBUtil::createTable('IWnoteboard_public'))
-            return false;
 
         //Create module vars
         $this->setVar('grups', '')
@@ -63,7 +61,6 @@ class IWnoteboard_Installer extends Zikula_AbstractInstaller {
         // Delete module table
         DBUtil::dropTable('IWnoteboard');
         DBUtil::dropTable('IWnoteboard_topics');
-        DBUtil::dropTable('IWnoteboard_public');
 
         //Delete module vars
         $this->delVar('grups')

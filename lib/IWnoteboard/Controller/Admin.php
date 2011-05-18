@@ -33,7 +33,6 @@ class IWnoteboard_Controller_Admin extends Zikula_AbstractController {
             return false;
         }
         $temes_array = array();
-        $sharedsArray = array();
         $noFolder = false;
         $noWriteable = false;
 
@@ -60,7 +59,6 @@ class IWnoteboard_Controller_Admin extends Zikula_AbstractController {
                 'grup' => $grup);
         }
 
-        $shareds = ModUtil::apiFunc('IWnoteboard', 'user', 'getallSharedURL');
         $grupsModVar = ModUtil::getVar('IWnoteboard', 'grups');
         $permisosModVar = ModUtil::getVar('IWnoteboard', 'permisos');
         $marcatModVar = ModUtil::getVar('IWnoteboard', 'marcat');
