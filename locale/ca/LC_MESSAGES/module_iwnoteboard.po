@@ -3,18 +3,20 @@
 # This file is distributed under the same license as the PACKAGE package.
 # FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
 #
-#, fuzzy
 msgid ""
 msgstr ""
-"Project-Id-Version: Zikula 1.2.x\n"
+"Project-Id-Version: Module IWnoteboard versión 3.0\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2010-01-27 10:50+0100\n"
-"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
-"Language-Team: LANGUAGE <LL@li.org>\n"
+"PO-Revision-Date: 2011-05-18 12:35+0100\n"
+"Last-Translator: \n"
+"Language-Team: Intraweb <intraweb@xtec.cat>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
+"X-Poedit-Language: Catalan\n"
+"X-Poedit-Country: SPAIN\n"
+"X-Poedit-SourceCharset: utf-8\n"
 
 #: pnblocks/nbtopics.php:25
 msgid "NoteBoard topics"
@@ -24,7 +26,9 @@ msgstr "Mostra els temes del tauler"
 msgid "Show the NoteBoard headlines"
 msgstr "Mostra els titulars del tauler de notes"
 
-#: pnblocks/nbheadlines.php:89 pnblocks/nbheadlines.php:101 pnuser.php:71
+#: pnblocks/nbheadlines.php:89
+#: pnblocks/nbheadlines.php:101
+#: pnuser.php:71
 msgid "Not classified"
 msgstr "No classificats"
 
@@ -32,70 +36,169 @@ msgstr "No classificats"
 msgid "Topic not found"
 msgstr "No s'ha pogut trobar el tema"
 
-#: pnuserapi.php:38 pnuser.php:342 pnuser.php:410 pnuser.php:949
-#: pnuser.php:1123 pnuser.php:1223 pnuser.php:1230
+#: pnuserapi.php:38
+#: pnuser.php:342
+#: pnuser.php:410
+#: pnuser.php:949
+#: pnuser.php:1123
+#: pnuser.php:1223
+#: pnuser.php:1230
 msgid "The note has not been found"
 msgstr "No s'ha trobat la nota sobre la qual fer l'acció sol·licitada"
 
-#: pnuserapi.php:57 pnuserapi.php:83 pnuserapi.php:176 pnuserapi.php:316
-#: pnuserapi.php:358 pnuserapi.php:390 pnuserapi.php:538 pnuserapi.php:580
-#: pnuserapi.php:681 pnuserapi.php:798 pnuserapi.php:835 pnuserapi.php:868
+#: pnuserapi.php:57
+#: pnuserapi.php:83
+#: pnuserapi.php:176
+#: pnuserapi.php:316
+#: pnuserapi.php:358
+#: pnuserapi.php:390
+#: pnuserapi.php:538
+#: pnuserapi.php:580
+#: pnuserapi.php:681
+#: pnuserapi.php:798
+#: pnuserapi.php:835
+#: pnuserapi.php:868
 #: pnuserapi.php:899
 msgid "Error! Could not load items."
 msgstr "S'ha produït un error en carregar elements"
 
-#: pnuserapi.php:105 pnuserapi.php:170 pnuserapi.php:198 pnuserapi.php:248
-#: pnuserapi.php:348 pnuserapi.php:380 pnuserapi.php:416 pnuserapi.php:458
-#: pnuserapi.php:497 pnuserapi.php:662 pnuserapi.php:734 pnuserapi.php:821
-#: pnuserapi.php:858 pnuserapi.php:967 pnuserapi.php:987 pnuser.php:333
-#: pnadminapi.php:22 pnadminapi.php:60 pnadminapi.php:101 pnadminapi.php:144
-#: pnadminapi.php:181 pnadminapi.php:221 pnadmin.php:594
+#: pnuserapi.php:105
+#: pnuserapi.php:170
+#: pnuserapi.php:198
+#: pnuserapi.php:248
+#: pnuserapi.php:348
+#: pnuserapi.php:380
+#: pnuserapi.php:416
+#: pnuserapi.php:458
+#: pnuserapi.php:497
+#: pnuserapi.php:662
+#: pnuserapi.php:734
+#: pnuserapi.php:821
+#: pnuserapi.php:858
+#: pnuserapi.php:967
+#: pnuserapi.php:987
+#: pnuser.php:333
+#: pnadminapi.php:22
+#: pnadminapi.php:60
+#: pnadminapi.php:101
+#: pnadminapi.php:144
+#: pnadminapi.php:181
+#: pnadminapi.php:221
+#: pnadmin.php:594
 msgid "Error! Could not do what you wanted. Please check your input."
 msgstr "No s'ha pogut carregar el que volíeu. Reviseu les dades"
 
-#: pnuserapi.php:116 pnuserapi.php:211 pnuserapi.php:216 pnuserapi.php:264
-#: pnuserapi.php:453 pnuserapi.php:492 pnuserapi.php:562 pnuserapi.php:657
-#: pnuser.php:364 pnuser.php:423 pnuser.php:432 pnuser.php:440 pnuser.php:529
-#: pnuser.php:958 pnuser.php:1131 pnuser.php:1178 pnuser.php:1242
-#: pnuser.php:1249 pnuser.php:1263 pnuser.php:1316 pnuser.php:1353
-#: pnajax.php:15 pnajax.php:64 pnajax.php:118 pnajax.php:178 pnajax.php:183
+#: pnuserapi.php:116
+#: pnuserapi.php:211
+#: pnuserapi.php:216
+#: pnuserapi.php:264
+#: pnuserapi.php:453
+#: pnuserapi.php:492
+#: pnuserapi.php:562
+#: pnuserapi.php:657
+#: pnuser.php:364
+#: pnuser.php:423
+#: pnuser.php:432
+#: pnuser.php:440
+#: pnuser.php:529
+#: pnuser.php:958
+#: pnuser.php:1131
+#: pnuser.php:1178
+#: pnuser.php:1242
+#: pnuser.php:1249
+#: pnuser.php:1263
+#: pnuser.php:1316
+#: pnuser.php:1353
+#: pnajax.php:15
+#: pnajax.php:64
+#: pnajax.php:118
+#: pnajax.php:178
+#: pnajax.php:183
 msgid "You are not allowed to do this action"
 msgstr "No teniu autorització per dur a terme aquesta acció"
 
-#: pnuserapi.php:145 pnadminapi.php:35 pnadminapi.php:156
+#: pnuserapi.php:145
+#: pnadminapi.php:35
+#: pnadminapi.php:156
 msgid "Error! Creation attempt failed."
 msgstr "L'intent de creació ha fallat"
 
-#: pnuserapi.php:204 pnuserapi.php:254 pnuserapi.php:422 pnuserapi.php:463
-#: pnuserapi.php:502 pnuserapi.php:668 pnadminapi.php:66 pnadminapi.php:107
-#: pnadminapi.php:187 pnadminapi.php:227 pnadmin.php:601
+#: pnuserapi.php:204
+#: pnuserapi.php:254
+#: pnuserapi.php:422
+#: pnuserapi.php:463
+#: pnuserapi.php:502
+#: pnuserapi.php:668
+#: pnadminapi.php:66
+#: pnadminapi.php:107
+#: pnadminapi.php:187
+#: pnadminapi.php:227
+#: pnadmin.php:601
 msgid "No such item found."
 msgstr "No s'ha trobat l'element"
 
-#: pnuserapi.php:220 pnadminapi.php:70 pnadminapi.php:191
+#: pnuserapi.php:220
+#: pnadminapi.php:70
+#: pnadminapi.php:191
 msgid "Error! Sorry! Deletion attempt failed."
 msgstr "L'intent d'esborrament ha fallat"
 
-#: pnuserapi.php:303 pnuserapi.php:324 pnuserapi.php:430 pnuserapi.php:470
-#: pnuserapi.php:509 pnadminapi.php:119 pnadminapi.php:238
+#: pnuserapi.php:303
+#: pnuserapi.php:324
+#: pnuserapi.php:430
+#: pnuserapi.php:470
+#: pnuserapi.php:509
+#: pnadminapi.php:119
+#: pnadminapi.php:238
 msgid "Error! Update attempt failed."
 msgstr "No s'ha pogut actualitzar"
 
-#: pninit.php:26 pninit.php:115 pnadmin.php:20
-msgid "Module IWmain is required. You have to install the IWmain module previously to install it."msgstr "El mòdul IWmain ha d'estar instal·lat. Instal·leu-lo per poder instal·lar aquest mòdul."
+#: pninit.php:26
+#: pninit.php:115
+#: pnadmin.php:20
+msgid "Module IWmain is required. You have to install the IWmain module previously to install it."
+msgstr "El mòdul IWmain ha d'estar instal·lat. Instal·leu-lo per poder instal·lar aquest mòdul."
 
-#: pnuser.php:19 pnuser.php:306 pnuser.php:328 pnuser.php:401 pnuser.php:620
-#: pnuser.php:756 pnuser.php:933 pnuser.php:1114 pnuser.php:1164
-#: pnuser.php:1214 pnuser.php:1296 pnuser.php:1349 pnajax.php:12 pnajax.php:61
-#: pnajax.php:111 pnajax.php:160 pnajax.php:232 pnajax.php:274 pnajax.php:308
-#: pnajax.php:331 pnadmin.php:12 pnadmin.php:159 pnadmin.php:205
-#: pnadmin.php:274 pnadmin.php:309 pnadmin.php:352 pnadmin.php:400
-#: pnadmin.php:434 pnadmin.php:462 pnadmin.php:513 pnadmin.php:553
+#: pnuser.php:19
+#: pnuser.php:306
+#: pnuser.php:328
+#: pnuser.php:401
+#: pnuser.php:620
+#: pnuser.php:756
+#: pnuser.php:933
+#: pnuser.php:1114
+#: pnuser.php:1164
+#: pnuser.php:1214
+#: pnuser.php:1296
+#: pnuser.php:1349
+#: pnajax.php:12
+#: pnajax.php:61
+#: pnajax.php:111
+#: pnajax.php:160
+#: pnajax.php:232
+#: pnajax.php:274
+#: pnajax.php:308
+#: pnajax.php:331
+#: pnadmin.php:12
+#: pnadmin.php:159
+#: pnadmin.php:205
+#: pnadmin.php:274
+#: pnadmin.php:309
+#: pnadmin.php:352
+#: pnadmin.php:400
+#: pnadmin.php:434
+#: pnadmin.php:462
+#: pnadmin.php:513
+#: pnadmin.php:553
 #: pnadmin.php:658
 msgid "Sorry! No authorization to access this module."
 msgstr "No teniu autorització per accedir a aquest mòdul"
 
-#: pnuser.php:35 pnuser.php:544 pnuser.php:632 pnadmin.php:75 pnadmin.php:220
+#: pnuser.php:35
+#: pnuser.php:544
+#: pnuser.php:632
+#: pnadmin.php:75
+#: pnadmin.php:220
 msgid "Unregistered"
 msgstr "No registrats"
 
@@ -103,7 +206,9 @@ msgstr "No registrats"
 msgid "All the topics"
 msgstr "Tots els temes"
 
-#: pnuser.php:443 pnuser.php:1252 pntemplates/IWnoteboard_user_main.htm:85
+#: pnuser.php:443
+#: pnuser.php:1252
+#: pntemplates/IWnoteboard_user_main.htm:85
 #: pntemplates/IWnoteboard_user_main.htm:118
 msgid "Validate"
 msgstr "Valida"
@@ -112,11 +217,13 @@ msgstr "Valida"
 msgid "Validate a note"
 msgstr "Validació d'una nota"
 
-#: pnuser.php:448 pntemplates/IWnoteboard_admin_conf.htm:246
+#: pnuser.php:448
+#: pntemplates/IWnoteboard_admin_conf.htm:246
 msgid "Modify the configuration"
 msgstr "Modifica la configuració"
 
-#: pnuser.php:449 pnuser.php:1256
+#: pnuser.php:449
+#: pnuser.php:1256
 msgid "Modify"
 msgstr "Modifica"
 
@@ -128,26 +235,31 @@ msgstr "Afegeix una nota"
 msgid "Send"
 msgstr "Envia"
 
-#: pnuser.php:537 pnuser.php:539
+#: pnuser.php:537
+#: pnuser.php:539
 msgid "More information"
 msgstr "Més informació"
 
-#: pnuser.php:844 pnuser.php:1052
+#: pnuser.php:844
+#: pnuser.php:1052
 msgid "Probably the note have been sent without the attached file"
 msgstr "Probablement la nota s'ha enviat sense el fitxer adjunt"
 
-#: pnuser.php:872 pnuser.php:877
+#: pnuser.php:872
+#: pnuser.php:877
 msgid "The note has been created successfully"
 msgstr "La nota s'ha creat correctament"
 
 #: pnuser.php:879
-msgid "The note has been sent successfully, but is waiting for administrator's validation."msgstr "La nota s'ha enviat correctament, però necessita la validació de l'administrador/a."
+msgid "The note has been sent successfully, but is waiting for administrator's validation."
+msgstr "La nota s'ha enviat correctament, però necessita la validació de l'administrador/a."
 
 #: pnuser.php:1084
 msgid "The note has been modified"
 msgstr "S'ha modificat la nota"
 
-#: pnuser.php:1139 pnuser.php:1140
+#: pnuser.php:1139
+#: pnuser.php:1140
 msgid "Send the comment"
 msgstr "Envia un comentari"
 
@@ -156,7 +268,8 @@ msgid "A new comment has been created"
 msgstr "S'ha creat un comentari nou"
 
 #: pnuser.php:1193
-msgid "The comment has been sent successfully, but is waiting for administrator's validation."msgstr "El comentari s'ha enviat correctament, però necessita la validació de l'administrador/a."
+msgid "The comment has been sent successfully, but is waiting for administrator's validation."
+msgstr "El comentari s'ha enviat correctament, però necessita la validació de l'administrador/a."
 
 #: pnuser.php:1253
 msgid "Comment validation"
@@ -186,37 +299,50 @@ msgstr "Torna a la pantalla de configuració del mòdul de tauler"
 msgid "Show the notes stored (expired)"
 msgstr "Mostra les notes emmagatzemades (caducades)"
 
-#: pnajax.php:39 pnajax.php:88 pnajax.php:138 pnajax.php:209 pnajax.php:251
+#: pnajax.php:39
+#: pnajax.php:88
+#: pnajax.php:138
+#: pnajax.php:209
+#: pnajax.php:251
 #: pnajax.php:293
 msgid "The action has failed"
 msgstr "S'ha produït un error"
 
 #: pnajax.php:190
-msgid "The note cannot be deleted because it has comments. Remove the comments previously."msgstr "No podeu esborrar la nota perquè té comentaris. Abans heu d'esborrar tots els comentaris."
+msgid "The note cannot be deleted because it has comments. Remove the comments previously."
+msgstr "No podeu esborrar la nota perquè té comentaris. Abans heu d'esborrar tots els comentaris."
 
 #: pnajax.php:198
 msgid "The note has been deleted"
 msgstr "El registre s'ha esborrat amb èxit"
 
-#: pnajax.php:235 pnajax.php:277 index.php:50
-msgid "Invalid 'authkey':  this probably means that you pressed the 'Back' button, or that the page 'authkey' expired. Please refresh the page and try again."msgstr "La clau de validació no és vàlida. Això vol dir que heu clicat el botó de tornar enrere del navegador o que la clau de validació ha expirat. L'expiració de la clau podria ser deguda a que esteu navegant amb diverses pestanyes simultàniament. Torneu a carregar la pàgina i torneu-ho a provar."
+#: pnajax.php:235
+#: pnajax.php:277
+#: index.php:50
+msgid "Invalid 'authkey':  this probably means that you pressed the 'Back' button, or that the page 'authkey' expired. Please refresh the page and try again."
+msgstr "La clau de validació no és vàlida. Això vol dir que heu clicat el botó de tornar enrere del navegador o que la clau de validació ha expirat. L'expiració de la clau podria ser deguda a que esteu navegant amb diverses pestanyes simultàniament. Torneu a carregar la pàgina i torneu-ho a provar."
 
 #: index.php:57
 msgid "Error! Could not load module."
 msgstr "No s'ha pogut carregar el mòdul"
 
 #: pnadmin.php:238
-msgid "The shared URL has been modified. Remember to notify it to everybody you need"msgstr "S'ha modificat la URL compartida. Recordeu notificar-ho a tothom qui us convingui"
+msgid "The shared URL has been modified. Remember to notify it to everybody you need"
+msgstr "S'ha modificat la URL compartida. Recordeu notificar-ho a tothom qui us convingui"
 
 #: pnadmin.php:261
 msgid "The configuration has been modified"
 msgstr "S'ha modificat la configuració del mòdul"
 
-#: pnadmin.php:279 pnadmin.php:367 pntemplates/IWnoteboard_user_nova.htm:211 pnadmin:42
+#: pnadmin.php:279
+#: pnadmin.php:367
+#: pntemplates/IWnoteboard_user_nova.htm:211
+#: pnadmin:42
 msgid "All"
 msgstr "Tots"
 
-#: pnadmin.php:287 pntemplates/IWnoteboard_admin_conf.htm:54
+#: pnadmin.php:287
+#: pntemplates/IWnoteboard_admin_conf.htm:54
 msgid "Create a new topic"
 msgstr "Crea un tema nou"
 
@@ -224,19 +350,23 @@ msgstr "Crea un tema nou"
 msgid "Create the topic"
 msgstr "Crea el tema"
 
-#: pnadmin.php:324 pnadmin.php:484
+#: pnadmin.php:324
+#: pnadmin.php:484
 msgid "A new topic has been created"
 msgstr "S'ha creat un tema nou"
 
-#: pnadmin.php:361 pnadmin.php:522
+#: pnadmin.php:361
+#: pnadmin.php:522
 msgid "The topic has not been found"
 msgstr "No s'ha trobat el tema sobre el qual fer l'acció demanada"
 
-#: pnadmin.php:372 pnadmin.php:527
+#: pnadmin.php:372
+#: pnadmin.php:527
 msgid "Edit a topic"
 msgstr "Edita un tema"
 
-#: pnadmin.php:377 pnadmin.php:530
+#: pnadmin.php:377
+#: pnadmin.php:530
 msgid "Modify the topic"
 msgstr "Modifica el tema"
 
@@ -244,11 +374,13 @@ msgstr "Modifica el tema"
 msgid "The topic has been modified"
 msgstr "S'ha modificat el tema"
 
-#: pnadmin.php:441 pntemplates/IWnoteboard_admin_conf.htm:110
+#: pnadmin.php:441
+#: pntemplates/IWnoteboard_admin_conf.htm:110
 msgid "Create a new linked noteboard"
 msgstr "Crear un enllaç a tauler nou"
 
-#: pnadmin.php:442 pntemplates/IWnoteboard_user_nova.htm:331
+#: pnadmin.php:442
+#: pntemplates/IWnoteboard_user_nova.htm:331
 msgid "Create"
 msgstr "Crea"
 
@@ -274,7 +406,8 @@ msgid "IWnoteboard"
 msgstr "IWnoteboard"
 
 #: pnversion.php:11
-msgid "Provides a system to send small pieces of information to selected users. It has file support."msgstr "Permet enviar informacions als usuaris designats"
+msgid "Provides a system to send small pieces of information to selected users. It has file support."
+msgstr "Permet enviar informacions als usuaris designats"
 
 #: pnversion.php:12
 msgid "NoteBoard"
@@ -459,7 +592,8 @@ msgid "days from their creation"
 msgstr "dies de ser creades"
 
 #: pntemplates/IWnoteboard_admin_conf.htm:204
-msgid "Inform about edition after the minutes given from creation time (-1 = never)"msgstr "Informa de l'edició passats els minuts indicats després de la publicació (-1 = mai)"
+msgid "Inform about edition after the minutes given from creation time (-1 = never)"
+msgstr "Informa de l'edició passats els minuts indicats després de la publicació (-1 = mai)"
 
 #: pntemplates/IWnoteboard_admin_conf.htm:208
 msgid "When addressee cannot be chosen are"
@@ -493,7 +627,7 @@ msgstr "Color de fons de les files senars per a les notes visitades"
 #: pntemplates/IWnoteboard_admin_conf.htm:235
 #: pntemplates/IWnoteboard_admin_conf.htm:239
 #: pntemplates/IWnoteboard_admin_conf.htm:243
-msgid "Try a color"
+msgid "Choose a color"
 msgstr "Tria el color"
 
 #: pntemplates/IWnoteboard_admin_conf.htm:234
@@ -528,7 +662,7 @@ msgstr "...esborrant enllaç compartit..."
 #: pntemplates/IWnoteboard_admin_menu.htm:4
 #: pntemplates/IWnoteboard_user_menu.htm:3
 msgid "Noteboard"
-msgstr "Tauler"
+msgstr "Tauler de notes"
 
 #: pntemplates/IWnoteboard_admin_noutema.htm:14
 msgid "Topic name"
@@ -673,7 +807,8 @@ msgid "The shared URL is empty"
 msgstr "No has escrit la URL del tauler compartit"
 
 #: pntemplates/IWnoteboard_admin_confSharedOptions.htm:6
-msgid "You are going to change the shared noteboard URL. This will disconnect the websites sindicated to your noteboard. Do you want continue?"msgstr "Estàs a punt de canviar la URL del tauler compartit. Això desconnectarà els taulers dels portals que estiguin sindicats amb aquests. Vols continuar?"
+msgid "You are going to change the shared noteboard URL. This will disconnect the websites sindicated to your noteboard. Do you want continue?"
+msgstr "Estàs a punt de canviar la URL del tauler compartit. Això desconnectarà els taulers dels portals que estiguin sindicats amb aquests. Vols continuar?"
 
 #: pntemplates/IWnoteboard_admin_confSharedOptions.htm:6
 msgid "Regenerate shared URL"
@@ -688,7 +823,8 @@ msgid "Name to show in linked noteboards"
 msgstr "Nom a mostrar en el tauler enllaçats"
 
 #: pntemplates/IWnoteboard_user_nova.htm:5
-msgid "The extension of the attached file is not accepted. Allowed extensions are: "msgstr "L'extensió del fitxer adjunt no és admesa. Les extensions possibles són: "
+msgid "The extension of the attached file is not accepted. Allowed extensions are: "
+msgstr "L'extensió del fitxer adjunt no és admesa. Les extensions possibles són: "
 
 #: pntemplates/IWnoteboard_user_nova.htm:30
 msgid "There are no chosen addressee for the note"
@@ -777,3 +913,10 @@ msgstr "Esborra el fitxer adjunt a la nota"
 #: pntemplates/IWnoteboard_user_nova.htm:315
 msgid "Attached file text"
 msgstr "Text de l'enllaç del fitxer"
+
+msgid "Headline text"
+msgstr "Titular"
+
+msgid "Additional information"
+msgstr "Informació addicional"
+

@@ -1056,7 +1056,7 @@ class IWnoteboard_Api_User extends Zikula_AbstractApi {
         $permisos = ModUtil::apiFunc('IWnoteboard', 'user', 'permisos',
                         array('uid' => UserUtil::getVar('uid')));
         $links = array();
-        if (SecurityUtil::checkPermission('IWnoteboard::', '::', ACCESS_READ) && $permisos['nivell'] >= 3) {
+        if ((SecurityUtil::checkPermission('IWnoteboard::', '::', ACCESS_READ) && $permisos['nivell'] >= 3) || !UserUtil::isLoggedIn()) {
             $links[] = array('url' => ModUtil::url('IWnoteboard', 'user', 'nova', array('m' => 'n', 'tema' => $tema)), 'text' => $this->__('Add a new note'), 'id' => 'iwnoteboard_newnote', 'class' => 'z-icon-es-new');
         }
         if (SecurityUtil::checkPermission('IWnoteboard::', '::', ACCESS_READ)) {

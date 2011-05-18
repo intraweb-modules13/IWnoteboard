@@ -129,9 +129,8 @@
 <script type="text/javascript" src="modules/IWmain/js/calendar/calendar-setup.js"></script>
 <script type="text/javascript" src="modules/IWmain/js/calendar/calendar-ca.js"></script>
 
-{include file="IWnoteboard_user_menu.htm"}
+{include file="IWnoteboard_user_menu.htm" pageTitle=$titol}
 
-<h2>{$titol}</h2>
 <form class="z-form" id="new_note" enctype="multipart/form-data" method="post" action="">
     <input type="hidden" name="csrftoken" value="{insert name='csrftoken'}" />
     <input type="hidden" name="verifica" value="{$verifica}" />

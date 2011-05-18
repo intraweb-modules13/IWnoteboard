@@ -16,13 +16,13 @@ class IWnoteboard_Controller_User extends Zikula_AbstractController {
     public function main($args) {
         // Get the parameters
         $nid = FormUtil::getPassedValue('nid', isset($args['nid']) ? $args['nid'] : null, 'GET');
-        $tema = FormUtil::getPassedValue('tema', isset($args['tema']) ? $args['tema'] : 0, 'REQUEST');
-        $saved = FormUtil::getPassedValue('saved', isset($args['saved']) ? $args['saved'] : null, 'REQUEST');
-        $marked = FormUtil::getPassedValue('marked', isset($args['marked']) ? $args['marked'] : 0, 'REQUEST');
+        $tema = FormUtil::getPassedValue('tema', isset($args['tema']) ? $args['tema'] : 0, 'GETPOST');
+        $saved = FormUtil::getPassedValue('saved', isset($args['saved']) ? $args['saved'] : null, 'GETPOST');
+        $marked = FormUtil::getPassedValue('marked', isset($args['marked']) ? $args['marked'] : 0, 'GETPOST');
 
         // Security check
         if (!SecurityUtil::checkPermission('IWnoteboard::', "::", ACCESS_READ)) {
-            return LogUtil::registerError($this->__('Sorry! No authorization to access this module.'), 403);
+            throw new Zikula_Exception_Forbidden();
         }
 
         // get user identity
@@ -286,7 +286,7 @@ class IWnoteboard_Controller_User extends Zikula_AbstractController {
 
         // Security check
         if (!SecurityUtil::checkPermission('IWnoteboard::', "::", ACCESS_READ)) {
-            return LogUtil::registerError($this->__('Sorry! No authorization to access this module.'), 403);
+            throw new Zikula_Exception_Forbidden();
         }
 
         $sv = ModUtil::func('IWmain', 'user', 'genSecurityValue');
@@ -307,7 +307,7 @@ class IWnoteboard_Controller_User extends Zikula_AbstractController {
         $fileName = FormUtil::getPassedValue('fileName', isset($args['fileName']) ? $args['fileName'] : 0, 'GET');
         // Security check
         if (!SecurityUtil::checkPermission('IWnoteboard::', "::", ACCESS_READ)) {
-            return LogUtil::registerError($this->__('Sorry! No authorization to access this module.'), 403);
+            throw new Zikula_Exception_Forbidden();
         }
 
         // Needed argument
@@ -361,14 +361,14 @@ class IWnoteboard_Controller_User extends Zikula_AbstractController {
      * @return:	The values input in the form
      */
     public function nova($args) {
-        $m = FormUtil::getPassedValue('m', isset($args['m']) ? $args['m'] : null, 'REQUEST');
-        $nid = FormUtil::getPassedValue('nid', isset($args['nid']) ? $args['nid'] : null, 'REQUEST');
-        $saved = FormUtil::getPassedValue('saved', isset($args['saved']) ? $args['saved'] : null, 'REQUEST');
-        $tema = FormUtil::getPassedValue('tema', isset($args['tema']) ? $args['tema'] : null, 'REQUEST');
+        $m = FormUtil::getPassedValue('m', isset($args['m']) ? $args['m'] : null, 'GETPOST');
+        $nid = FormUtil::getPassedValue('nid', isset($args['nid']) ? $args['nid'] : null, 'GETPOST');
+        $saved = FormUtil::getPassedValue('saved', isset($args['saved']) ? $args['saved'] : null, 'GETPOST');
+        $tema = FormUtil::getPassedValue('tema', isset($args['tema']) ? $args['tema'] : null, 'GETPOST');
 
         // Security check
         if (!SecurityUtil::checkPermission('IWnoteboard::', "::", ACCESS_READ)) {
-            return LogUtil::registerError($this->__('Sorry! No authorization to access this module.'), 403);
+            throw new Zikula_Exception_Forbidden();
         }
         $registre = array();
 
@@ -401,8 +401,13 @@ class IWnoteboard_Controller_User extends Zikula_AbstractController {
         if (!$permissions['potverificar'] || ($m != 'c' && $m != 'v' && $m != 'e')) {
             if (empty($permissions) ||
                     $permissions['nivell'] < 3) {
-                LogUtil::registerError($this->__('You are not allowed to do this action'));
-                return System::redirect(ModUtil::url('IWnoteboard', 'user', 'main'));
+                if (!UserUtil::isLoggedIn()) {
+                    return ModUtil::func('users', 'user', 'login',
+                            array('returnurl' => ModUtil::url('IWnoteboard', 'user', 'nova', array('m' => 'n'))));
+                } else {
+                    LogUtil::registerError($this->__('You are not allowed to do this action'));
+                    return System::redirect(ModUtil::url('IWnoteboard', 'user', 'main'));
+                }
             }
 
             if (empty($permissions) ||
@@ -613,7 +618,7 @@ class IWnoteboard_Controller_User extends Zikula_AbstractController {
 
         // Security check
         if (!SecurityUtil::checkPermission('IWnoteboard::', "::", ACCESS_READ)) {
-            return LogUtil::registerError($this->__('Sorry! No authorization to access this module.'), 403);
+            throw new Zikula_Exception_Forbidden();
         }
 
         $this->checkCsrfToken();
@@ -788,9 +793,8 @@ class IWnoteboard_Controller_User extends Zikula_AbstractController {
 
         // Security check
         if (!SecurityUtil::checkPermission('IWnoteboard::', "::", ACCESS_READ)) {
-            return LogUtil::registerError($this->__('Sorry! No authorization to access this module.'), 403);
+            throw new Zikula_Exception_Forbidden();
         }
-
 
         $this->checkCsrfToken();
 
@@ -976,7 +980,7 @@ class IWnoteboard_Controller_User extends Zikula_AbstractController {
 
         // Security check
         if (!SecurityUtil::checkPermission('IWnoteboard::', "::", ACCESS_READ)) {
-            return LogUtil::registerError($this->__('Sorry! No authorization to access this module.'), 403);
+            throw new Zikula_Exception_Forbidden();
         }
 
         // get a note informtion
@@ -1020,7 +1024,7 @@ class IWnoteboard_Controller_User extends Zikula_AbstractController {
 
         // Security check
         if (!SecurityUtil::checkPermission('IWnoteboard::', "::", ACCESS_READ)) {
-            return LogUtil::registerError($this->__('Sorry! No authorization to access this module.'), 403);
+            throw new Zikula_Exception_Forbidden();
         }
 
         $this->checkCsrfToken();
@@ -1065,9 +1069,8 @@ class IWnoteboard_Controller_User extends Zikula_AbstractController {
 
         // Security check
         if (!SecurityUtil::checkPermission('IWnoteboard::', "::", ACCESS_READ)) {
-            return LogUtil::registerError($this->__('Sorry! No authorization to access this module.'), 403);
+            throw new Zikula_Exception_Forbidden();
         }
-
 
         // get comment information
         $registre = ModUtil::apiFunc('IWnoteboard', 'user', 'get',
@@ -1143,7 +1146,7 @@ class IWnoteboard_Controller_User extends Zikula_AbstractController {
 
         // Security check
         if (!SecurityUtil::checkPermission('IWnoteboard::', "::", ACCESS_READ)) {
-            return LogUtil::registerError($this->__('Sorry! No authorization to access this module.'), 403);
+            throw new Zikula_Exception_Forbidden();
         }
 
         $this->checkCsrfToken();
@@ -1191,7 +1194,7 @@ class IWnoteboard_Controller_User extends Zikula_AbstractController {
 
         // Security check
         if (!SecurityUtil::checkPermission('IWnoteboard::', "::", ACCESS_READ)) {
-            return LogUtil::registerError($this->__('Sorry! No authorization to access this module.'), 403);
+            throw new Zikula_Exception_Forbidden();
         }
 
         if (!UserUtil::isLoggedIn()) {
