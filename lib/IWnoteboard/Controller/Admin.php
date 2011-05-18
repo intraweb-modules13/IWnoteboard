@@ -75,11 +75,8 @@ class IWnoteboard_Controller_Admin extends Zikula_AbstractController {
         $directoriroot = ModUtil::getVar('IWmain', 'documentRoot');
         $notRegisteredSeeRedactors = ModUtil::getVar('IWnoteboard', 'notRegisteredSeeRedactors');
         $multiLanguage = ModUtil::getVar('IWnoteboard', 'multiLanguage');
-        $public = ModUtil::getVar('IWnoteboard', 'public');
-        $showSharedURL = ModUtil::getVar('IWnoteboard', 'showSharedURL');
         $topicsSystem = ModUtil::getVar('IWnoteboard', 'topicsSystem');
-        $publicSharedURL = ModUtil::getVar('IWnoteboard', 'publicSharedURL');
-        $sharedName = ModUtil::getVar('IWnoteboard', 'sharedName');
+        $shipHeadersLines = ModUtil::getVar('IWnoteboard', 'shipHeadersLines');
         $editPrintAfter = ModUtil::getVar('IWnoteboard', 'editPrintAfter');
         $repperdefecte = ModUtil::getVar('IWnoteboard', 'repperdefecte');
 
@@ -138,12 +135,8 @@ class IWnoteboard_Controller_Admin extends Zikula_AbstractController {
                 ->assign('directoriroot', $directoriroot)
                 ->assign('notRegisteredSeeRedactors', $notRegisteredSeeRedactors)
                 ->assign('multiLanguage', $multiLanguage)
-                ->assign('public', $public)
-                ->assign('showSharedURL', $showSharedURL)
                 ->assign('topicsSystem', $topicsSystem)
-                ->assign('shareds', $sharedsArray)
-                ->assign('publicSharedURL', $publicSharedURL)
-                ->assign('sharedName', $sharedName)
+                ->assign('shipHeadersLines', $shipHeadersLines)
                 ->assign('editPrintAfter', $editPrintAfter)
                 ->assign('noFolder', $noFolder)
                 ->assign('noWriteable', $noWriteable)
@@ -173,15 +166,13 @@ class IWnoteboard_Controller_Admin extends Zikula_AbstractController {
         $attached = FormUtil::getPassedValue('attached', isset($args['attached']) ? $args['attached'] : null, 'POST');
         $notRegisteredSeeRedactors = FormUtil::getPassedValue('notRegisteredSeeRedactors', isset($args['notRegisteredSeeRedactors']) ? $args['notRegisteredSeeRedactors'] : null, 'POST');
         $multiLanguage = FormUtil::getPassedValue('multiLanguage', isset($args['multiLanguage']) ? $args['multiLanguage'] : null, 'POST');
-        $public = FormUtil::getPassedValue('public', isset($args['public']) ? $args['public'] : null, 'POST');
-        $showSharedURL = FormUtil::getPassedValue('showSharedURL', isset($args['showSharedURL']) ? $args['showSharedURL'] : null, 'POST');
         $topicsSystem = FormUtil::getPassedValue('topicsSystem', isset($args['topicsSystem']) ? $args['topicsSystem'] : null, 'POST');
-        $sharedName = FormUtil::getPassedValue('sharedName', isset($args['sharedName']) ? $args['sharedName'] : null, 'POST');
+        $shipHeadersLines = FormUtil::getPassedValue('shipHeadersLines', isset($args['shipHeadersLines']) ? $args['shipHeadersLines'] : null, 'POST');
         $editPrintAfter = FormUtil::getPassedValue('editPrintAfter', isset($args['editPrintAfter']) ? $args['editPrintAfter'] : null, 'POST');
 
         // Security check
         if (!SecurityUtil::checkPermission('IWnoteboard::', "::", ACCESS_ADMIN)) {
-            return LogUtil::registerError($this->__('Sorry! No authorization to access this module.'), 403);
+            throw new Zikula_Exception_Forbidden();
         }
 
         $this->checkCsrfToken();
@@ -232,10 +223,8 @@ class IWnoteboard_Controller_Admin extends Zikula_AbstractController {
                 ->setVar('attached', $attached)
                 ->setVar('notRegisteredSeeRedactors', $notRegisteredSeeRedactors)
                 ->setVar('multiLanguage', $multiLanguage)
-                ->setVar('public', $public)
-                ->setVar('showSharedURL', $showSharedURL)
                 ->setVar('topicsSystem', $topicsSystem)
-                ->setVar('sharedName', $sharedName)
+                ->setVar('shipHeadersLines', $shipHeadersLines)
                 ->setVar('editPrintAfter', $editPrintAfter);
 
         LogUtil::registerStatus($this->__('The configuration has been modified'));
@@ -251,7 +240,7 @@ class IWnoteboard_Controller_Admin extends Zikula_AbstractController {
 
         // Security check
         if (!SecurityUtil::checkPermission('IWnoteboard::', "::", ACCESS_ADMIN)) {
-            return LogUtil::registerError($this->__('Sorry! No authorization to access this module.'), 403);
+            throw new Zikula_Exception_Forbidden();
         }
 
         // Gets the groups
@@ -287,7 +276,7 @@ class IWnoteboard_Controller_Admin extends Zikula_AbstractController {
 
         // Security check
         if (!SecurityUtil::checkPermission('IWnoteboard::', "::", ACCESS_ADMIN)) {
-            return LogUtil::registerError($this->__('Sorry! No authorization to access this module.'), 403);
+            throw new Zikula_Exception_Forbidden();
         }
 
         $this->checkCsrfToken();
@@ -329,9 +318,8 @@ class IWnoteboard_Controller_Admin extends Zikula_AbstractController {
 
         // Security check
         if (!SecurityUtil::checkPermission('IWnoteboard::', "::", ACCESS_ADMIN)) {
-            return LogUtil::registerError($this->__('Sorry! No authorization to access this module.'), 403);
+            throw new Zikula_Exception_Forbidden();
         }
-
 
         $registre = ModUtil::apiFunc('IWnoteboard', 'user', 'gettema', array('tid' => $tid));
 
@@ -374,7 +362,7 @@ class IWnoteboard_Controller_Admin extends Zikula_AbstractController {
 
         // Security check
         if (!SecurityUtil::checkPermission('IWnoteboard::', "::", ACCESS_ADMIN)) {
-            return LogUtil::registerError($this->__('Sorry! No authorization to access this module.'), 403);
+            throw new Zikula_Exception_Forbidden();
         }
 
         $this->checkCsrfToken();

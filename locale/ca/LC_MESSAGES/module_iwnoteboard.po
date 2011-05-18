@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: Module IWnoteboard versión 3.0\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2010-01-27 10:50+0100\n"
-"PO-Revision-Date: 2011-05-18 12:35+0100\n"
+"PO-Revision-Date: 2011-05-18 13:36+0100\n"
 "Last-Translator: \n"
 "Language-Team: Intraweb <intraweb@xtec.cat>\n"
 "MIME-Version: 1.0\n"
@@ -919,4 +919,7 @@ msgstr "Titular"
 
 msgid "Additional information"
 msgstr "Informació addicional"
+
+msgid "Skip Headlines"
+msgstr "No fer ús dels titulars"
 

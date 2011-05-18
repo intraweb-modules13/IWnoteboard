@@ -108,7 +108,6 @@
         }
     }
 
-
     function chkdate(){
         var f=document.forms['new_note'];
         data = new Date(20 + f.data.value.substr(6,2), f.data.value.substr(3,2), f.data.value.substr(0,2))
@@ -161,9 +160,6 @@
         <div class="z-formrow">
             <label for="noticia">{gt text="Note content"}</label>
             <textarea id="intraweb" id="noticia" name="noticia" cols="70" rows="7">{$noticia|safetext}</textarea>
-            <div class="z-formnote">
-                {allowedhtml}
-            </div>
         </div>
         <div class="z-formrow">
             <label for="data">{gt text="Publish date"}</label>
@@ -177,6 +173,7 @@
             </div>
         </div>
     </fieldset>
+    {if not $shipHeadersLines}
     <fieldset>
         <legend>{gt text="Headline"}</legend>
         <div class="z-formrow">
@@ -198,6 +195,7 @@
             </div>
         </div>
     </fieldset>
+    {/if}
     <fieldset>
         <legend>{gt text="Additional information"}</legend>
         <div class="z-formrow">
@@ -209,7 +207,7 @@
             <input type="text" name="text" id="text" size="50"  maxlength="150" value="{$text|safetext}" />
         </div>
         <div class="z-formrow">
-            <label for="file">{gt text="Add an attached file"} ({gt text="Allowed extensions - "} {$extensions})</label>
+            <label for="file">{gt text="Add an attached file"}</label>
             {if $m eq 'n'}
             <input type="file" id="file" name="fitxer" size="50" />
             {else}
@@ -223,6 +221,9 @@
             <input type="checkbox" name="segur" value="1" />{gt text="Erase the file attached to the note"}
             {/if}
             {/if}
+            <div class="z-formnote z-informationmsg">
+                {gt text="Allowed extensions - "} {$extensions}
+            </div>
         </div>
         <div class="z-formrow">
             <label for="textfitxer">{gt text="Attached file text"}</label>
@@ -319,6 +320,7 @@
         singleClick    :    true,           // double-click mode
         step           :    1                // show all years in drop-down boxes (instead of every other year as default)
     });
+    {{if not $shipHeadersLines}}
     Calendar.setup({
         inputField     :    "titulin",      // id of the input field
         ifFormat       :    "%d/%m/%y",       // format of the input field
@@ -335,4 +337,5 @@
         singleClick    :    true,           // double-click mode
         step           :    1                // show all years in drop-down boxes (instead of every other year as default)
     });
+    {{/if}}
 </script>

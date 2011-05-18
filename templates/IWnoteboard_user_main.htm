@@ -19,7 +19,7 @@
     <thead>
         <tr align="left">
             <th>
-                {gt text="Date"}/{gt text="Topic"}
+                {gt text="Date"}{if $temes_MS|@count gt 2 && $loggedIn}/{gt text="Topic"}{/if}
             </th>
             <th>
                 {gt text="Note content"}

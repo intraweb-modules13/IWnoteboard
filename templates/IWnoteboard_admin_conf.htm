@@ -175,11 +175,10 @@
                 <label for="multiLanguage">{gt text="Multi language notes are allowed"}</label>
                 <input type="checkbox" {if $multiLanguage}checked{/if} name="multiLanguage" value="1"/>
             </div>
-            {*}
-            <div id="shareOptions">
-                {include file="IWnoteboard_admin_confSharedOptions.htm"}
+            <div class="z-formrow">
+                <label for="shipHeadersLines">{gt text="Skip Headlines"}</label>
+                <input type="checkbox" {if $shipHeadersLines}checked{/if} name="shipHeadersLines" value="1"/>
             </div>
-            {*}
             <div class="z-formrow">
                 <label for="color1">{gt text="Row color one for visited notes"}</label>
                 <div class="z-formnote">

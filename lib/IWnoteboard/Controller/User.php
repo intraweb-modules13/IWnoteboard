@@ -583,6 +583,7 @@ class IWnoteboard_Controller_User extends Zikula_AbstractController {
                 ->assign('tria', $tria)
                 ->assign('saved', $saved)
                 ->assign('multiLanguage', ModUtil::getVar('IWnoteboard', 'multiLanguage'))
+                ->assign('shipHeadersLines', ModUtil::getVar('IWnoteboard', 'shipHeadersLines'))
                 ->assign('language', $language)
                 ->fetch('IWnoteboard_user_nova.htm');
     }
