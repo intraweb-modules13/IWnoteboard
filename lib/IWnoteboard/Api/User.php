@@ -15,6 +15,9 @@ class IWnoteboard_Api_User extends Zikula_AbstractApi {
         $marked = FormUtil::getPassedValue('marked', isset($args['marked']) ? $args['marked'] : null, 'POST');
         $public = FormUtil::getPassedValue('public', isset($args['public']) ? $args['public'] : null, 'POST');
         $sv = FormUtil::getPassedValue('sv', isset($args['sv']) ? $args['sv'] : null, 'POST');
+
+        $numitems = (isset($args['numitems'])) ? $args['numitems'] : '-1';
+
         if (!ModUtil::func('IWmain', 'user', 'checkSecurityValue', array('sv' => $sv))) {
             // Security check
             if (!SecurityUtil::checkPermission('IWnoteboard::', '::', ACCESS_READ)) {
@@ -52,7 +55,7 @@ class IWnoteboard_Api_User extends Zikula_AbstractApi {
             $where .= " AND ($c[lang]='" . ZLanguage::getLanguageCode() . "' OR $c[lang] = '')";
         }
         // get the objects from the db
-        $items = DBUtil::selectObjectArray('IWnoteboard', $where, $orderby, '-1', '-1', 'nid');
+        $items = DBUtil::selectObjectArray('IWnoteboard', $where, $orderby, '-1', $numitems, 'nid');
         // Check for an error with the database code, and if so set an appropriate
         // error message and return
         if ($items === false) {
