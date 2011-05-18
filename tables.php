@@ -44,10 +44,8 @@ function IWnoteboard_tables() {
         'edited' => 'iw_edited',
         'edited_by' => 'iw_edited_by',
         'lang' => 'iw_lang',
-        'public' => 'iw_public',
-        'sharedFrom' => 'iw_sharedFrom',
         'literalGroups' => 'iw_literalGroups',
-        'sharedId' => 'iw_sharedId');
+);
     $table['IWnoteboard_column_def'] = array('nid' => "I NOTNULL AUTO PRIMARY",
         'data' => "C(15) NOTNULL DEFAULT ''",
         'informa' => "I NOTNULL DEFAULT '0'",
@@ -70,10 +68,8 @@ function IWnoteboard_tables() {
         'edited' => "C(15) NOTNULL DEFAULT ''",
         'edited_by' => "I NOTNULL DEFAULT '0'",
         'lang' => "C(3) NOTNULL DEFAULT ''",
-        'public' => "I(1) NOTNULL DEFAULT '0'",
-        'sharedFrom' => "C(50) NOTNULL DEFAULT ''",
         'literalGroups' => "C(255) NOTNULL DEFAULT ''",
-        'sharedId' => "I NOTNULL DEFAULT '0'");
+);
 
     ObjectUtil::addStandardFieldsToTableDefinition($table['IWnoteboard_column'], 'pn_');
     ObjectUtil::addStandardFieldsToTableDataDefinition($table['IWnoteboard_column_def'], 'iw_');
@@ -93,23 +89,6 @@ function IWnoteboard_tables() {
 
     ObjectUtil::addStandardFieldsToTableDefinition($table['IWnoteboard_topics_column'], 'pn_');
     ObjectUtil::addStandardFieldsToTableDataDefinition($table['IWnoteboard_topics_column_def'], 'iw_');
-
-    // IWnoteboard_public table definition
-    $table['IWnoteboard_public'] = DBUtil::getLimitedTablename('IWnoteboard_public');
-    $table['IWnoteboard_public_column'] = array('pid' => 'iw_pid',
-        'url' => 'iw_url',
-        'descriu' => 'iw_descriu',
-        'name' => 'iw_name',
-        'testDate' => 'iw_testDate');
-
-    $table['IWnoteboard_public_column_def'] = array('pid' => "I NOTNULL AUTO PRIMARY",
-        'url' => "C(255) NOTNULL DEFAULT ''",
-        'descriu' => "C(255) NOTNULL DEFAULT ''",
-        'name' => "C(255) NOTNULL DEFAULT ''",
-        'testDate' => "C(20) NOTNULL DEFAULT ''");
-
-    ObjectUtil::addStandardFieldsToTableDefinition($table['IWnoteboard_public_column'], 'pn_');
-    ObjectUtil::addStandardFieldsToTableDataDefinition($table['IWnoteboard_public_column_def'], 'iw_');
 
     // Return the table information
     return $table;
