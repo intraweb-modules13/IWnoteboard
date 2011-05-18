@@ -2,6 +2,11 @@
 
 class IWnoteboard_Controller_User extends Zikula_AbstractController {
 
+    protected function postInitialize() {
+        // Set caching to false by default.
+        $this->view->setCaching(false);
+    }
+
     /**
      * Show the list of notes that an user can read
      * @author:     Albert PÃ©rez Monfort (aperezm@xtec.cat)
@@ -27,8 +32,8 @@ class IWnoteboard_Controller_User extends Zikula_AbstractController {
         }
         $usersList = '';
         $anotacions = array();
-        // Create output object
-        $view = Zikula_View::getInstance('IWnoteboard', false);
+        $n = 0;
+        $informa = '';
 
         // Get the user permissions in noteboard
         $permissions = ModUtil::apiFunc('IWnoteboard', 'user', 'permisos',
@@ -39,22 +44,6 @@ class IWnoteboard_Controller_User extends Zikula_AbstractController {
         $allgroups = ModUtil::func('IWmain', 'user', 'getAllGroups',
                         array('sv' => $sv,
                             'plus' => $this->__('Unregistered')));
-        //get notes from shared noteboards
-        $currentuser_groups = $permissions['grups'];
-
-        array_walk($currentuser_groups, 'groupidtonamemd5', $allgroups);
-        $str_groups = "";
-        foreach ($currentuser_groups as $user_group) {
-            $str_groups .= "&g[]=" . $user_group;
-        }
-
-        // Display shared noteboard notes
-        $shared_urls = ModUtil::apiFunc('IWnoteboard', 'user', 'getallSharedURL');
-        foreach ($shared_urls as $shared) {
-            $url = $shared['url'] . $str_groups;
-            $rss_content = ModUtil::apiFunc('IWnoteboard', 'user', 'display_rss',
-                            array("url" => $url));
-        }
 
         // Get all the notes that have been sended
         if (isset($saved) &&
@@ -96,18 +85,6 @@ class IWnoteboard_Controller_User extends Zikula_AbstractController {
         }
 
         $vistes = '$';
-
-        $shareds = ModUtil::apiFunc('IWnoteboard', 'user', 'getallSharedURL');
-        $sharedsArray = array();
-        foreach ($shareds as $shared) {
-            $parsed_url = parse_url($shared['url']);
-            $start = strpos($parsed_url['query'], "sid=") + 4;
-            $sid = substr($parsed_url['query'], $start);
-            $base_url = substr($shared['url'], 0, strpos($shared['url'], "?"));
-            //$sharedsArray[$sid] = $shared['name'];
-            $sharedsArray[$sid] = array("name" => $shared['descriu'],
-                "base_url" => $base_url);
-        }
 
         foreach ($registres as $registre) {
             // insert the list of groups that have access to the note into an array
@@ -152,7 +129,7 @@ class IWnoteboard_Controller_User extends Zikula_AbstractController {
 
                 //Check if user can see the thopic
                 $isInArray = in_array($tema_anotacio['grup'], $permissions['grups']);
-                if ($isInArray || $registre['potverificar'] || $tema_anotacio['grup'] == 0) {
+                if ($isInArray || $permissions['potverificar'] || $tema_anotacio['grup'] == 0) {
                     $acces_tema = true;
                 }
 
@@ -175,7 +152,6 @@ class IWnoteboard_Controller_User extends Zikula_AbstractController {
                         'bgcolorcomentari' => $bgcolorcomentari,
                         'data' => date('d/m/y', $comentari['data']),
                         'hora' => date('H:i', $comentari['data']),
-                        'usuari' => $usersFullname[$comentari['informa']],
                         'id_user_informa' => $comentari['informa'],
                         'id_user' => $uid);
                 }
@@ -191,8 +167,7 @@ class IWnoteboard_Controller_User extends Zikula_AbstractController {
                         $registre['informa'] == $uid &&
                         $registre['verifica'] == 1) ||
                         ($permissions['nivell'] == 7 &&
-                        $registre['verifica'] == 1) &&
-                        $registre['sharedFrom'] == '') {
+                        $registre['verifica'] == 1)) {
                     $pot_editar = true;
                 }
 
@@ -200,8 +175,7 @@ class IWnoteboard_Controller_User extends Zikula_AbstractController {
                 $pot_esborrar = false;
                 if (($permissions['nivell'] > 5 &&
                         $registre['informa'] == $uid) ||
-                        $permissions['nivell'] == 7 &&
-                        $registre['sharedFrom'] == '') {
+                        $permissions['nivell'] == 7) {
                     $pot_esborrar = true;
                 }
 
@@ -221,12 +195,7 @@ class IWnoteboard_Controller_User extends Zikula_AbstractController {
                     $edited = date('d/m/y H:i', $registre['edited']);
                 }
 
-                $informa = ($registre['sharedFrom'] === '') ? $registre['informa'] : $sharedsArray[$registre['sharedFrom']][name];
                 $usersList .= $registre['informa'] . '$$';
-                if ($registre['sharedFrom'] != null)
-                    $created_by = $sharedsArray[$registre['sharedFrom']]['name'];
-                else
-                    $created_by=$informa;
 
                 $anotacions[] = array('nid' => $registre['nid'],
                     'bgcolor' => $bgcolor,
@@ -249,10 +218,9 @@ class IWnoteboard_Controller_User extends Zikula_AbstractController {
                     'comentaris' => $comentaris_array,
                     'marca' => $marca,
                     'edited' => $edited,
-                    'created_by' => $created_by,
-                    'created_by_url' => $sharedsArray[$registre['sharedFrom']]['base_url'],
+                    'created_by' => $registre['informa'],
                     'edited_by' => UserUtil::getVar('uname', $registre['edited_by']),
-                    'public' => $registre['public']);
+                );
                 $vistes .= '$' . $registre['nid'] . '$';
             }
         }
@@ -294,20 +262,16 @@ class IWnoteboard_Controller_User extends Zikula_AbstractController {
                             'sv' => $sv,
                             'list' => $usersList));
 
-        $view->assign('temes_MS', $temes_MS);
-        $view->assign('users', $users);
-        $view->assign('tema', $tema);
-        $view->assign('saved', $saved);
-        $view->assign('permisos', $permissions);
-        $view->assign('saved', $saved);
-        $view->assign('anotacions', $anotacions);
-        $view->assign('loggedIn', UserUtil::isLoggedIn());
-        $view->assign('notRegisteredSeeRedactors', ModUtil::getVar('IWnoteboard', 'notRegisteredSeeRedactors'));
-        $view->assign('publicAllowed', ModUtil::getVar('IWnoteboard', 'public'));
-        $view->assign('publicSharedURL', ModUtil::getVar('IWnoteboard', 'publicSharedURL'));
-        $view->assign('showSharedURL', ModUtil::getVar('IWnoteboard', 'showSharedURL'));
-
-        return $view->fetch('IWnoteboard_user_main.htm');
+        return $this->view->assign('temes_MS', $temes_MS)
+                ->assign('users', $users)
+                ->assign('tema', $tema)
+                ->assign('saved', $saved)
+                ->assign('permisos', $permissions)
+                ->assign('saved', $saved)
+                ->assign('anotacions', $anotacions)
+                ->assign('loggedIn', UserUtil::isLoggedIn())
+                ->assign('notRegisteredSeeRedactors', ModUtil::getVar('IWnoteboard', 'notRegisteredSeeRedactors'))
+                ->fetch('IWnoteboard_user_main.htm');
     }
 
     /**
@@ -407,8 +371,14 @@ class IWnoteboard_Controller_User extends Zikula_AbstractController {
             return LogUtil::registerError($this->__('Sorry! No authorization to access this module.'), 403);
         }
         $registre = array();
-        // Create output object
-        $view = Zikula_View::getInstance('IWnoteboard', false);
+
+        $data = $data = date('d/m/y', time());
+        $titular = '';
+        $noticia = '';
+        $admet_comentaris = '';
+        $fitxer = '';
+        $tid = 0;
+        $grups_array = array();
 
         if (isset($nid)) {
             // Get the record information
@@ -418,7 +388,8 @@ class IWnoteboard_Controller_User extends Zikula_AbstractController {
                 LogUtil::registerError($this->__('The note has not been found'));
                 return System::redirect(ModUtil::url('IWnoteboard', 'user', 'main'));
             }
-        } else $registre['informa'] = 0;
+        } else
+            $registre['informa'] = 0;
 
         // Get the user permissions in noteboard
         $permissions = ModUtil::apiFunc('IWnoteboard', 'user', 'permisos',
@@ -478,9 +449,7 @@ class IWnoteboard_Controller_User extends Zikula_AbstractController {
             }
         }
 
-        $data = date('d/m/y', time());
-
-        $language = UserUtil::getLang();
+        $language = ZLanguage::getLanguageCode();
 
         if (isset($nid)) {
             $noticia = $registre['noticia'];
@@ -500,7 +469,6 @@ class IWnoteboard_Controller_User extends Zikula_AbstractController {
             $verifica = $registre['verifica'];
             $tid = $registre['tid'];
             $language = $registre['lang'];
-            $public = $registre['public'];
             if ($m == 'c') {
                 // update the record in the database
                 $lid = ModUtil::apiFunc('IWnoteboard', 'user', 'update',
@@ -524,7 +492,7 @@ class IWnoteboard_Controller_User extends Zikula_AbstractController {
                                     'm' => 'c',
                                     'tid' => $tid,
                                     'language' => $language,
-                                    'public' => $public));
+                        ));
 
                 if ($lid != false) {
                     //Uptated Successfully
@@ -542,23 +510,23 @@ class IWnoteboard_Controller_User extends Zikula_AbstractController {
             return System::redirect(ModUtil::url('IWnoteboard', 'user', 'main'));
         }
 
-        if ($caduca == '') {
+        if (!isset($caduca) || $caduca == '') {
             $caduca = time() + ModUtil::getVar('IWnoteboard', 'caducitat') * 24 * 60 * 60;
         }
-        if ($titulin == '') {
+        if (!isset($titulin) || $titulin == '') {
             $titulin = time();
         }
-        if ($titulout == '') {
+        if (!isset($titulout) || $titulout == '') {
             $titulout = time() + 5 * 24 * 60 * 60;
         }
-        if ($mes_info == '') {
+        if (!isset($mes_info) || $mes_info == '') {
             $mes_info = 'http://';
         }
-        if ($text == '') {
+        if (!isset($text) || $text == '') {
             $text = $this->__('More information');
         }
         $extensions = ModUtil::getVar('IWmain', 'extensions');
-        if ($textfitxer == '') {
+        if (!isset($textfitxer) || $textfitxer == '') {
             $textfitxer = $this->__('More information');
         }
 
@@ -585,157 +553,33 @@ class IWnoteboard_Controller_User extends Zikula_AbstractController {
         } else {
             $tria = false;
         }
-        $view->assign('temes_MS', $temes_MS);
-        $view->assign('verifica', $permissions['verifica']);
-        $view->assign('data', $data);
-        $view->assign('caduca', date('d/m/y', $caduca));
-        $view->assign('titulin', date('d/m/y', $titulin));
-        $view->assign('titulout', date('d/m/y', $titulout));
-        $view->assign('mes_info', $mes_info);
-        $view->assign('text', $text);
-        $view->assign('extensions', $extensions);
-        $view->assign('textfitxer', $textfitxer);
-        $view->assign('m', $m);
-        $view->assign('titular', $titular);
-        $view->assign('noticia', $noticia);
-        $view->assign('admet_comentaris', $admet_comentaris);
-        $view->assign('fitxer', $fitxer);
-        $view->assign('titol', $titol);
-        $view->assign('submit', $submit);
-        $view->assign('nid', $nid);
-        $view->assign('tema', $tema);
-        $view->assign('tid', $tid);
-        $view->assign('grups_array', $grups_array);
-        $view->assign('tria', $tria);
-        $view->assign('saved', $saved);
-        $view->assign('multiLanguage', ModUtil::getVar('IWnoteboard', 'multiLanguage'));
-        $view->assign('language', $language);
-        $view->assign('publicAllowed', ModUtil::getVar('IWnoteboard', 'public'));
-        $view->assign('public', $public);
 
-        return $view->fetch('IWnoteboard_user_nova.htm');
-    }
-
-    /**
-     * Create the RSS content with all the notes of a noteboard
-     * @author: Sara Arjona Tï¿œllez (sarjona@xtec.cat)
-     * @param:	args
-     * @return:	The XML with the context of the noteboard
-     */
-    public function rss($args) {
-        // Get the parameters
-        $sid = FormUtil::getPassedValue('sid', isset($args['sid']) ? $args['sid'] : null, 'GET');
-        $request_groups = FormUtil::getPassedValue('g', isset($args['g']) ? $args['g'] : null, 'GET');
-
-        // Security check
-        if (ModUtil::getVar('IWnoteboard', 'publicSharedURL') != $sid) {
-            return LogUtil::registerError($this->__('Sorry! No authorization to access this module.'), 403);
-        }
-
-        // get user identity
-        $uid = UserUtil::getVar('uid');
-        if ($uid == '') {
-            $uid = '-1';
-        }
-
-        // Get the user permissions in noteboard
-        $permissions = ModUtil::apiFunc('IWnoteboard', 'user', 'permisos',
-                        array('uid' => $uid));
-
-        // Security recipients groups check
-        $sv = ModUtil::func('IWmain', 'user', 'genSecurityValue');
-        $allgroups = ModUtil::func('IWmain', 'user', 'getAllGroups',
-                        array('sv' => $sv,
-                            'plus' => $this->__('Unregistered')));
-
-        // Get all the notes
-        $registres = ModUtil::apiFunc('IWnoteboard', 'user', 'getall',
-                        array('tema' => $tema,
-                            'nid' => $nid,
-                            'public' => 1));
-        foreach ($registres as $registre) {
-            //Check if user can see the topic
-            $note_groups = explode('$', substr($registre['destinataris'], 2, -1));
-
-            array_walk($note_groups, 'groupidtonamemd5', $allgroups);
-
-            $group_intersect = array_uintersect($request_groups, $note_groups, "strcasecmp");
-            if (sizeof($group_intersect) > 0) {
-                $edited = '';
-                if ($registre['edited'] != '') {
-                    $edited = date('d/m/y H:i', $registre['edited']);
-                }
-                $registreArray[] = array('nid' => $registre['nid'],
-                    'titular' => $registre['titular'],
-                    'titulin' => $registre['titulin'],
-                    'titulout' => $registre['titulout'],
-                    'caduca' => $registre['caduca'],
-                    'data' => time(),
-                    'noticia' => DataUtil::formatForDisplayHTML($registre['noticia']),
-                    'mes_info' => $registre['mes_info'],
-                    'text' => $registre['text'],
-                    'textfitxer' => $registre['textfitxer'],
-                    'fitxer' => $registre['fitxer'],
-                    'edited' => $registre['edited'],
-                    'language' => $registre['language'],
-                    'literalGroups' => $registre['literalGroups']);
-            }
-        }
-
-        //Gather relevent info about file
-        $ctype = "text/xml";
-        //Begin writing headers
-        header("Pragma: public");
-        header("Expires: 0");
-        header("Cache-Control: must-revalidate, post-check=0, pre-check=0");
-        header("Cache-Control: public");
-        header("Content-Description: File Transfer");
-
-        //Use the switch-generated Content-Type
-        header("Content-Type: $ctype");
-        //Force the download
-        $xml = '<?xml version="1.0" encoding="ISO-8859-15"?>';
-        $xml .= '<rss version="2.0">';
-        $xml .= '<channel>';
-        $xml .= "<title>" . System::getVar('sitename') . "</title>";
-        $xml .= "<link><![CDATA[" . System::getBaseUrl() . "?module=IWnoteboard&amp;func=rss&amp;sid=$sid]]></link>";
-        $xml .= "<description>Notes compartides del tauler</description>";
-        $xml .= "<language>ca</language>";
-//	$xml .= "<docs>http://ca.wikipedia.org/wiki/RSS</docs>";
-        foreach ($registreArray as $registre) {
-            $xml .= "<item>";
-            $xml .= "<title><![CDATA[" . $registre['titular'] . "]]></title>";
-            $xml .= "<description><![CDATA[" . $registre['noticia'] . "]]></description>";
-            $xml .= "<pubDate>" . $registre['edited'] . "</pubDate>";
-            if ($registre['mes_info'] != 'http://' && $registre['mes_info'] != '')
-                $xml .= "<link>" . $registre['mes_info'] . "</link>";
-            $xml .= "<author>" . $registre['informa'] . "</author>";
-            $xml .= "<category>" . $registre['tema_anotacio'] . "</category>";
-            //Afegit
-            $xml .= "<shared_id>" . $registre['nid'] . "</shared_id>";
-            $xml .= "<data>" . $registre['data'] . "</data>";
-            $xml .= "<caduca>" . $registre['caduca'] . "</caduca>";
-//			$xml .= "<noticia><![CDATA[".$registre['noticia']."]]></noticia>";
-            $xml .= "<mes_info>" . $registre['mes_info'] . "</mes_info>";
-            $xml .= "<text>" . $registre['text'] . "</text>";
-            $xml .= "<caduca>" . $registre['caduca'] . "</caduca>";
-//			$xml .= "<titular><![CDATA[".$registre['titular']."]]></titular>";
-            $xml .= "<titulin>" . $registre['titulin'] . "</titulin>";
-            $xml .= "<titulout>" . $registre['titulout'] . "</titulout>";
-            $xml .= "<fitxer>" . $registre['fitxer'] . "</fitxer>";
-            $xml .= "<textfitxer>" . $registre['textfitxer'] . "</textfitxer>";
-            $xml .= "<language>" . $registre['language'] . "</language>";
-            $xml .= "<edited>" . $registre['edited'] . "</edited>";
-            $xml .= "<shared_from>" . $sid . "</shared_from>";
-            $xml .= "<literal_groups><![CDATA[" . $registre['literalGroups'] . "]]></literal_groups>";
-            //final
-            $xml .= "</item>";
-        }
-
-        $xml .= "</channel>";
-        $xml .= "</rss>";
-        echo $xml;
-        exit;
+        return $this->view->assign('temes_MS', $temes_MS)
+                ->assign('verifica', $permissions['verifica'])
+                ->assign('data', $data)
+                ->assign('caduca', date('d/m/y', $caduca))
+                ->assign('titulin', date('d/m/y', $titulin))
+                ->assign('titulout', date('d/m/y', $titulout))
+                ->assign('mes_info', $mes_info)
+                ->assign('text', $text)
+                ->assign('extensions', $extensions)
+                ->assign('textfitxer', $textfitxer)
+                ->assign('m', $m)
+                ->assign('titular', $titular)
+                ->assign('noticia', $noticia)
+                ->assign('admet_comentaris', $admet_comentaris)
+                ->assign('fitxer', $fitxer)
+                ->assign('titol', $titol)
+                ->assign('submit', $submit)
+                ->assign('nid', $nid)
+                ->assign('tema', $tema)
+                ->assign('tid', $tid)
+                ->assign('grups_array', $grups_array)
+                ->assign('tria', $tria)
+                ->assign('saved', $saved)
+                ->assign('multiLanguage', ModUtil::getVar('IWnoteboard', 'multiLanguage'))
+                ->assign('language', $language)
+                ->fetch('IWnoteboard_user_nova.htm');
     }
 
     /**
@@ -772,13 +616,7 @@ class IWnoteboard_Controller_User extends Zikula_AbstractController {
             return LogUtil::registerError($this->__('Sorry! No authorization to access this module.'), 403);
         }
 
-        // Create output object
-        $view = Zikula_View::getInstance('IWnoteboard', false);
-
-        // Confirm authorisation code
-        if (!SecurityUtil::confirmAuthKey()) {
-            return LogUtil::registerAuthidError(ModUtil::url('IWnoteboard', 'user', 'main'));
-        }
+        $this->checkCsrfToken();
 
         $permissions = ModUtil::apiFunc('IWnoteboard', 'user', 'permisos',
                         array('uid' => UserUtil::getVar('uid')));
@@ -953,13 +791,8 @@ class IWnoteboard_Controller_User extends Zikula_AbstractController {
             return LogUtil::registerError($this->__('Sorry! No authorization to access this module.'), 403);
         }
 
-        // Create output object
-        $view = Zikula_View::getInstance('IWnoteboard', false);
 
-        // Confirm authorisation code
-        if (!SecurityUtil::confirmAuthKey()) {
-            return LogUtil::registerAuthidError(ModUtil::url('IWnoteboard', 'user', 'main'));
-        }
+        $this->checkCsrfToken();
 
         $permissions = ModUtil::apiFunc('IWnoteboard', 'user', 'permisos',
                         array('uid' => UserUtil::getVar('uid')));
@@ -1146,9 +979,6 @@ class IWnoteboard_Controller_User extends Zikula_AbstractController {
             return LogUtil::registerError($this->__('Sorry! No authorization to access this module.'), 403);
         }
 
-        // Create output object
-        $view = Zikula_View::getInstance('IWnoteboard', false);
-
         // get a note informtion
         $registre = ModUtil::apiFunc('IWnoteboard', 'user', 'get',
                         array('nid' => $nid));
@@ -1166,17 +996,13 @@ class IWnoteboard_Controller_User extends Zikula_AbstractController {
             return System::redirect(ModUtil::url('IWnoteboard', 'user', 'main'));
         }
 
-        $security = SecurityUtil::generateAuthKey();
-
-        $view->assign('security', $security);
-        $view->assign('nid', $nid);
-        $view->assign('textnota', DataUtil::formatForDisplayHTML($registre['noticia']));
-        $view->assign('titol', $this->__('Send the comment'));
-        $view->assign('submit', $this->__('Send the comment'));
-        $view->assign('m', 'n');
-        $view->assign('verifica', $permissions['verifica']);
-
-        return $view->fetch('IWnoteboard_user_comenta.htm');
+        return $this->view->assign('nid', $nid)
+                ->assign('textnota', DataUtil::formatForDisplayHTML($registre['noticia']))
+                ->assign('titol', $this->__('Send the comment'))
+                ->assign('submit', $this->__('Send the comment'))
+                ->assign('m', 'n')
+                ->assign('verifica', $permissions['verifica'])
+                ->fetch('IWnoteboard_user_comenta.htm');
     }
 
     /**
@@ -1197,13 +1023,7 @@ class IWnoteboard_Controller_User extends Zikula_AbstractController {
             return LogUtil::registerError($this->__('Sorry! No authorization to access this module.'), 403);
         }
 
-        // Create output object
-        $view = Zikula_View::getInstance('IWnoteboard', false);
-
-        // Confirm authorisation code
-        if (!SecurityUtil::confirmAuthKey()) {
-            return LogUtil::registerAuthidError(ModUtil::url('IWnoteboard', 'user', 'main'));
-        }
+        $this->checkCsrfToken();
 
         $permissions = ModUtil::apiFunc('IWnoteboard', 'user', 'permisos',
                         array('uid' => UserUtil::getVar('uid')));
@@ -1248,8 +1068,6 @@ class IWnoteboard_Controller_User extends Zikula_AbstractController {
             return LogUtil::registerError($this->__('Sorry! No authorization to access this module.'), 403);
         }
 
-        // Create output object
-        $view = Zikula_View::getInstance('IWnoteboard', false);
 
         // get comment information
         $registre = ModUtil::apiFunc('IWnoteboard', 'user', 'get',
@@ -1301,18 +1119,14 @@ class IWnoteboard_Controller_User extends Zikula_AbstractController {
             return System::redirect(ModUtil::url('IWnoteboard', 'user', 'main'));
         }
 
-        $security = SecurityUtil::generateAuthKey();
-
-        $view->assign('security', $security);
-        $view->assign('titol', $titol);
-        $view->assign('submit', $submit);
-        $view->assign('m', 'e');
-        $view->assign('textnota', DataUtil::formatForDisplayHTML($note['noticia']));
-        $view->assign('noticia', $registre['noticia']);
-        $view->assign('nid', $nid);
-        $view->assign('verifica', $permissions['verifica']);
-
-        return $view->fetch('IWnoteboard_user_comenta.htm');
+        return $this->view->assign('titol', $titol)
+                ->assign('submit', $submit)
+                ->assign('m', 'e')
+                ->assign('textnota', DataUtil::formatForDisplayHTML($note['noticia']))
+                ->assign('noticia', $registre['noticia'])
+                ->assign('nid', $nid)
+                ->assign('verifica', $permissions['verifica'])
+                ->fetch('IWnoteboard_user_comenta.htm');
     }
 
     /**
@@ -1332,13 +1146,7 @@ class IWnoteboard_Controller_User extends Zikula_AbstractController {
             return LogUtil::registerError($this->__('Sorry! No authorization to access this module.'), 403);
         }
 
-        // Create output object
-        $view = Zikula_View::getInstance('IWnoteboard', false);
-
-        // Confirm authorisation code
-        if (!SecurityUtil::confirmAuthKey()) {
-            return LogUtil::registerAuthidError(ModUtil::url('IWnoteboard', 'user', 'main'));
-        }
+        $this->checkCsrfToken();
 
         // get a note information
         $registre = ModUtil::apiFunc('IWnoteboard', 'user', 'get',
@@ -1391,28 +1199,12 @@ class IWnoteboard_Controller_User extends Zikula_AbstractController {
             return System::redirect(ModUtil::url('IWnoteboard', 'user', 'main'));
         }
 
-        // Create output object
-        $view = Zikula_View::getInstance('IWnoteboard', false);
-
         $registres = ModUtil::apiFunc('IWnoteboard', 'user', 'hanvist',
                         array('nid' => $nid));
 
-        $view->assign('registres', $registres);
-        $view->assign('tema', $tema);
-
-        return $view->fetch('IWnoteboard_user_hanvist.htm');
+        return $this->view->assign('registres', $registres)
+                ->assign('tema', $tema)
+                ->fetch('IWnoteboard_user_hanvist.htm');
     }
 
-}
-
-/**
- * Convert the items of specified array to md5 (it's used with array_walk function)
- * @author: Sara Arjona Tï¿œllez (sarjona@xtec.cat)
- * @param:	value the identifier of the group
- * @param:	key
- * @return:	The array after apply md5 function to the name of the group
- */
-function groupidtonamemd5(&$value, $key, $allgroups) {
-    if ($value != '')
-        $value = md5($allgroups[$value]['name']);
 }

@@ -1,6 +1,12 @@
 <?php
 
 class IWnoteboard_Controller_Admin extends Zikula_AbstractController {
+
+    protected function postInitialize() {
+        // Set caching to false by default.
+        $this->view->setCaching(false);
+    }
+
     /**
      * Show the manage module site
      * @author		Albert PÃ©rez Monfort (aperezm@xtec.cat)
@@ -30,8 +36,6 @@ class IWnoteboard_Controller_Admin extends Zikula_AbstractController {
         $sharedsArray = array();
         $noFolder = false;
         $noWriteable = false;
-        // Create output object
-        $view = Zikula_View::getInstance('IWnoteboard', false);
 
         // Get the themes from the database
         $themes = ModUtil::apiFunc('IWnoteboard', 'user', 'getalltemes');
@@ -81,9 +85,9 @@ class IWnoteboard_Controller_Admin extends Zikula_AbstractController {
 
         $sv = ModUtil::func('IWmain', 'user', 'genSecurityValue');
         $groups = ModUtil::func('IWmain', 'user', 'getAllGroups',
-                array('sv' => $sv,
-                    'plus' => $this->__('Unregistered'),
-                    'less' => ModUtil::getVar('iw_myrole', 'rolegroup')));
+                        array('sv' => $sv,
+                            'plus' => $this->__('Unregistered'),
+                            'less' => ModUtil::getVar('iw_myrole', 'rolegroup')));
 
         if (!file_exists(ModUtil::getVar('IWmain', 'documentRoot') . '/' . ModUtil::getVar('IWnoteboard', 'attached')) || ModUtil::getVar('IWnoteboard', 'attached') == '') {
             $noFolder = true;
@@ -118,50 +122,32 @@ class IWnoteboard_Controller_Admin extends Zikula_AbstractController {
                 'permis' => $permis);
         }
 
-        foreach ($shareds as $shared) {
-            $url = str_replace('http://', '*******', $shared['url']);
-            $url = str_replace('/', '/<br>', $url);
-            $url = str_replace('*******', 'http://', $url);
-            $sharedsArray[] = array('pid' => $shared['pid'],
-                'name' => $shared['name'],
-                'url' => $url,
-                'descriu' => $shared['descriu'],
-                'testDate' => $shared['testDate']);
-        }
         $multizk = (isset($GLOBALS['PNConfig']['Multisites']['multi']) && $GLOBALS['PNConfig']['Multisites']['multi'] == 1) ? 1 : 0;
-        $view->assign('multizk', $multizk);
-        $view->assign('temes', $temes_array);
-        $view->assign('grups', $grups_array);
-        $view->assign('quiverifica', $quiverifica);
-        $view->assign('caducitat', $caducitat);
-        $view->assign('repperdefecte', $repperdefecte);
-        $view->assign('colorrow1', $colorrow1);
-        $view->assign('colorrow2', $colorrow2);
-        $view->assign('colornewrow1', $colornewrow1);
-        $view->assign('colornewrow2', $colornewrow2);
-        $view->assign('attached', $attached);
-        $view->assign('directoriroot', $directoriroot);
-        $view->assign('notRegisteredSeeRedactors', $notRegisteredSeeRedactors);
-        $view->assign('multiLanguage', $multiLanguage);
-        $view->assign('public', $public);
-        $view->assign('showSharedURL', $showSharedURL);
-        $view->assign('topicsSystem', $topicsSystem);
-        $view->assign('shareds', $sharedsArray);
-        $view->assign('publicSharedURL', $publicSharedURL);
-        $view->assign('sharedName', $sharedName);
-        $view->assign('editPrintAfter', $editPrintAfter);
-        $view->assign('noFolder', $noFolder);
-        $view->assign('noWriteable', $noWriteable);
 
-        if ($topicsSystem == 1) {
-            // load necessary classes
-            Loader::loadClass('CategoryUtil');
-            // get categories
-            $cats = CategoryUtil::getCategoriesByParentID(30);
-            $view->assign('cats', $cats);
-        }
-
-        return $view->fetch('IWnoteboard_admin_conf.htm');
+        return $this->view->assign('multizk', $multizk)
+                ->assign('temes', $temes_array)
+                ->assign('grups', $grups_array)
+                ->assign('quiverifica', $quiverifica)
+                ->assign('caducitat', $caducitat)
+                ->assign('repperdefecte', $repperdefecte)
+                ->assign('colorrow1', $colorrow1)
+                ->assign('colorrow2', $colorrow2)
+                ->assign('colornewrow1', $colornewrow1)
+                ->assign('colornewrow2', $colornewrow2)
+                ->assign('attached', $attached)
+                ->assign('directoriroot', $directoriroot)
+                ->assign('notRegisteredSeeRedactors', $notRegisteredSeeRedactors)
+                ->assign('multiLanguage', $multiLanguage)
+                ->assign('public', $public)
+                ->assign('showSharedURL', $showSharedURL)
+                ->assign('topicsSystem', $topicsSystem)
+                ->assign('shareds', $sharedsArray)
+                ->assign('publicSharedURL', $publicSharedURL)
+                ->assign('sharedName', $sharedName)
+                ->assign('editPrintAfter', $editPrintAfter)
+                ->assign('noFolder', $noFolder)
+                ->assign('noWriteable', $noWriteable)
+                ->fetch('IWnoteboard_admin_conf.htm');
     }
 
     /**
@@ -190,7 +176,6 @@ class IWnoteboard_Controller_Admin extends Zikula_AbstractController {
         $public = FormUtil::getPassedValue('public', isset($args['public']) ? $args['public'] : null, 'POST');
         $showSharedURL = FormUtil::getPassedValue('showSharedURL', isset($args['showSharedURL']) ? $args['showSharedURL'] : null, 'POST');
         $topicsSystem = FormUtil::getPassedValue('topicsSystem', isset($args['topicsSystem']) ? $args['topicsSystem'] : null, 'POST');
-        $regenerateShared = FormUtil::getPassedValue('regenerateShared', isset($args['regenerateShared']) ? $args['regenerateShared'] : null, 'POST');
         $sharedName = FormUtil::getPassedValue('sharedName', isset($args['sharedName']) ? $args['sharedName'] : null, 'POST');
         $editPrintAfter = FormUtil::getPassedValue('editPrintAfter', isset($args['editPrintAfter']) ? $args['editPrintAfter'] : null, 'POST');
 
@@ -199,10 +184,7 @@ class IWnoteboard_Controller_Admin extends Zikula_AbstractController {
             return LogUtil::registerError($this->__('Sorry! No authorization to access this module.'), 403);
         }
 
-        // Confirm authorisation code
-        if (!SecurityUtil::confirmAuthKey()) {
-            return LogUtil::registerAuthidError(ModUtil::url('IWnoteboard', 'admin', 'main'));
-        }
+        $this->checkCsrfToken();
 
         if (empty($mida)) {
             $mida = 0;
@@ -215,9 +197,9 @@ class IWnoteboard_Controller_Admin extends Zikula_AbstractController {
 
         $sv = ModUtil::func('IWmain', 'user', 'genSecurityValue');
         $groups = ModUtil::func('IWmain', 'user', 'getAllGroups',
-                array('sv' => $sv,
-                    'plus' => $this->__('Unregistered'),
-                    'less' => ModUtil::getVar('iw_myrole', 'rolegroup')));
+                        array('sv' => $sv,
+                            'plus' => $this->__('Unregistered'),
+                            'less' => ModUtil::getVar('iw_myrole', 'rolegroup')));
 
         $i = 0;
         $permisos = '$$';
@@ -236,30 +218,25 @@ class IWnoteboard_Controller_Admin extends Zikula_AbstractController {
             $verifica .= $v1 . '$';
         }
 
-        if ($regenerateShared == 1 || ModUtil::getVar('IWnoteboard', 'publicSharedURL') == '') {
-            $publicSharedValue = ModUtil::func('IWnoteboard', 'admin', 'regenerateShared');
-            LogUtil::registerStatus($this->__('The shared URL has been modified. Remember to notify it to everybody you need'));
-        }
-
-        ModUtil::setVar('IWnoteboard', 'grups', $select);
-        ModUtil::setVar('IWnoteboard', 'permisos', $permisos);
-        ModUtil::setVar('IWnoteboard', 'marcat', $marcat);
-        ModUtil::setVar('IWnoteboard', 'verifica', $verifica);
-        ModUtil::setVar('IWnoteboard', 'quiverifica', $q);
-        ModUtil::setVar('IWnoteboard', 'caducitat', $c);
-        ModUtil::setVar('IWnoteboard', 'repperdefecte', $r);
-        ModUtil::setVar('IWnoteboard', 'colorrow1', $color1);
-        ModUtil::setVar('IWnoteboard', 'colorrow2', $color2);
-        ModUtil::setVar('IWnoteboard', 'colornewrow1', $colornew1);
-        ModUtil::setVar('IWnoteboard', 'colornewrow2', $colornew2);
-        ModUtil::setVar('IWnoteboard', 'attached', $attached);
-        ModUtil::setVar('IWnoteboard', 'notRegisteredSeeRedactors', $notRegisteredSeeRedactors);
-        ModUtil::setVar('IWnoteboard', 'multiLanguage', $multiLanguage);
-        ModUtil::setVar('IWnoteboard', 'public', $public);
-        ModUtil::setVar('IWnoteboard', 'showSharedURL', $showSharedURL);
-        ModUtil::setVar('IWnoteboard', 'topicsSystem', $topicsSystem);
-        ModUtil::setVar('IWnoteboard', 'sharedName', $sharedName);
-        ModUtil::setVar('IWnoteboard', 'editPrintAfter', $editPrintAfter);
+        $this->setVar('grups', $select)
+                ->setVar('permisos', $permisos)
+                ->setVar('marcat', $marcat)
+                ->setVar('verifica', $verifica)
+                ->setVar('quiverifica', $q)
+                ->setVar('caducitat', $c)
+                ->setVar('repperdefecte', $r)
+                ->setVar('colorrow1', $color1)
+                ->setVar('colorrow2', $color2)
+                ->setVar('colornewrow1', $colornew1)
+                ->setVar('colornewrow2', $colornew2)
+                ->setVar('attached', $attached)
+                ->setVar('notRegisteredSeeRedactors', $notRegisteredSeeRedactors)
+                ->setVar('multiLanguage', $multiLanguage)
+                ->setVar('public', $public)
+                ->setVar('showSharedURL', $showSharedURL)
+                ->setVar('topicsSystem', $topicsSystem)
+                ->setVar('sharedName', $sharedName)
+                ->setVar('editPrintAfter', $editPrintAfter);
 
         LogUtil::registerStatus($this->__('The configuration has been modified'));
         return System::redirect(ModUtil::url('IWnoteboard', 'admin', 'main'));
@@ -280,21 +257,19 @@ class IWnoteboard_Controller_Admin extends Zikula_AbstractController {
         // Gets the groups
         $sv = ModUtil::func('IWmain', 'user', 'genSecurityValue');
         $groups = ModUtil::func('IWmain', 'user', 'getAllGroups',
-                array('plus' => $this->__('All'),
-                    'less' => ModUtil::getVar('iw_myrole', 'rolegroup'),
-                    'sv' => $sv));
+                        array('plus' => $this->__('All'),
+                            'less' => ModUtil::getVar('iw_myrole', 'rolegroup'),
+                            'sv' => $sv));
 
-        // Create output object
-        $view = Zikula_View::getInstance('IWnoteboard', false);
 
-        $view->assign('grups', $groups);
-        $view->assign('title', $this->__('Create a new topic'));
-        $view->assign('submit', $this->__('Create the topic'));
-        $view->assign('nomtema', '');
-        $view->assign('descriu', '');
-        $view->assign('grup', 0);
-        $view->assign('tid', 0);
-        return $view->fetch('IWnoteboard_admin_noutema.htm');
+        $this->view->assign('grups', $groups)
+                ->assign('title', $this->__('Create a new topic'))
+                ->assign('submit', $this->__('Create the topic'))
+                ->assign('nomtema', '')
+                ->assign('descriu', '')
+                ->assign('grup', 0)
+                ->assign('tid', 0)
+                ->fetch('IWnoteboard_admin_noutema.htm');
     }
 
     /**
@@ -315,10 +290,7 @@ class IWnoteboard_Controller_Admin extends Zikula_AbstractController {
             return LogUtil::registerError($this->__('Sorry! No authorization to access this module.'), 403);
         }
 
-        // Confirm authorisation code
-        if (!SecurityUtil::confirmAuthKey()) {
-            return LogUtil::registerAuthidError(ModUtil::url('IWnoteboard', 'admin', 'main'));
-        }
+        $this->checkCsrfToken();
 
         // create the new topic
         $lid = ModUtil::apiFunc('IWnoteboard', 'admin', 'crear',
@@ -360,8 +332,6 @@ class IWnoteboard_Controller_Admin extends Zikula_AbstractController {
             return LogUtil::registerError($this->__('Sorry! No authorization to access this module.'), 403);
         }
 
-        // Create output object
-        $view = Zikula_View::getInstance('IWnoteboard', false);
 
         $registre = ModUtil::apiFunc('IWnoteboard', 'user', 'gettema', array('tid' => $tid));
 
@@ -373,20 +343,19 @@ class IWnoteboard_Controller_Admin extends Zikula_AbstractController {
         // Get all the groups
         $sv = ModUtil::func('IWmain', 'user', 'genSecurityValue');
         $groups = ModUtil::func('IWmain', 'user', 'getAllGroups',
-                array('plus' => $this->__('All'),
-                    'sv' => $sv,
-                    'less' => ModUtil::getVar('iw_myrole', 'rolegroup')));
+                        array('plus' => $this->__('All'),
+                            'sv' => $sv,
+                            'less' => ModUtil::getVar('iw_myrole', 'rolegroup')));
 
-        $view->assign('tid', $tid);
-        $view->assign('title', $this->__('Edit a topic'));
-        $view->assign('nomtema', $registre['nomtema']);
-        $view->assign('descriu', $registre['descriu']);
-        $view->assign('grup', $registre['grup']);
-        $view->assign('grups', $groups);
-        $view->assign('submit', $this->__('Modify the topic'));
-        $view->assign('m', 1);
-
-        return $view->fetch('IWnoteboard_admin_noutema.htm');
+        $this->view->assign('tid', $tid)
+                ->assign('title', $this->__('Edit a topic'))
+                ->assign('nomtema', $registre['nomtema'])
+                ->assign('descriu', $registre['descriu'])
+                ->assign('grup', $registre['grup'])
+                ->assign('grups', $groups)
+                ->assign('submit', $this->__('Modify the topic'))
+                ->assign('m', 1)
+                ->fetch('IWnoteboard_admin_noutema.htm');
     }
 
     /**
@@ -408,270 +377,25 @@ class IWnoteboard_Controller_Admin extends Zikula_AbstractController {
             return LogUtil::registerError($this->__('Sorry! No authorization to access this module.'), 403);
         }
 
-        // Confirm authorisation code
-        if (!SecurityUtil::confirmAuthKey()) {
-            return LogUtil::registerAuthidError(ModUtil::url('IWnoteboard', 'admin', 'main'));
-        }
+        $this->checkCsrfToken();
 
         $lid = ModUtil::apiFunc('IWnoteboard', 'admin', 'modificar',
-                array('tid' => $tid,
-                    'nomtema' => $nomtema,
-                    'descriu' => $descriu,
-                    'grup' => $grup));
+                        array('tid' => $tid,
+                            'nomtema' => $nomtema,
+                            'descriu' => $descriu,
+                            'grup' => $grup));
         if ($lid != false) {
             // Success
             LogUtil::registerStatus($this->__('The topic has been modified'));
             $sv = ModUtil::func('IWmain', 'user', 'genSecurityValue');
             ModUtil::apiFunc('IWmain', 'user', 'usersVarsDelModule',
-                    array('name' => 'nbtopics',
-                        'module' => 'IWnoteboard',
-                        'sv' => $sv));
+                            array('name' => 'nbtopics',
+                                'module' => 'IWnoteboard',
+                                'sv' => $sv));
         }
 
         // Return to admin pannel
         return System::redirect(ModUtil::url('IWnoteboard', 'admin', 'main'));
     }
 
-    /**
-     * Show a form needed to create a new shared link
-     * @author	Albert PÃ©rez Monfort (aperezm@xtec.cat)
-     * @return	The form fields
-     */
-    public function newShared() {
-
-        // Security check
-        if (!SecurityUtil::checkPermission('IWnoteboard::', "::", ACCESS_ADMIN)) {
-            return LogUtil::registerError($this->__('Sorry! No authorization to access this module.'), 403);
-        }
-
-
-        // Create output object
-        $view = Zikula_View::getInstance('IWnoteboard', false);
-
-        $view->assign('title', $this->__('Create a new linked noteboard'));
-        $view->assign('submit', $this->__('Create'));
-
-        return $view->fetch('IWnoteboard_admin_newShared.htm');
-    }
-
-    /**
-     * Create a new shared url
-     * @author	Albert PÃ©rez Monfort (aperezm@xtec.cat)
-     * @param:	args   Array with the topic information
-     * @return	redirect the user to the main admin page
-     */
-    public function createShared($args) {
-
-        // get the parameters sended from the form
-        $url = FormUtil::getPassedValue('url', isset($args['url']) ? $args['url'] : null, 'POST');
-        $descriu = FormUtil::getPassedValue('descriu', isset($args['descriu']) ? $args['descriu'] : null, 'POST');
-
-        // Security check
-        if (!SecurityUtil::checkPermission('IWnoteboard::', "::", ACCESS_ADMIN)) {
-            return LogUtil::registerError($this->__('Sorry! No authorization to access this module.'), 403);
-        }
-
-        // Confirm authorisation code
-        if (!SecurityUtil::confirmAuthKey()) {
-            return LogUtil::registerAuthidError(ModUtil::url('IWnoteboard', 'admin', 'main'));
-        }
-
-        // create the new shared url
-        $lid = ModUtil::apiFunc('IWnoteboard', 'admin', 'createShared',
-                array('url' => $url,
-                    'descriu' => $descriu));
-
-        //Check if the shared nateboard is available and shared. If not returns false
-        $available = true;
-
-        if (!$available) {
-            LogUtil::registerError($this->__('The noteboard is not available or is not shared'));
-            return System::redirect(ModUtil::url('IWnoteboard', 'admin', 'main'));
-        }
-
-        if ($lid != false) {
-            // Success
-            LogUtil::registerStatus($this->__('A new topic has been created'));
-            /* 		$sv = ModUtil::func('IWmain', 'user', 'genSecurityValue');
-              ModUtil::apiFunc('IWmain', 'user', 'usersVarsDelModule', array('name' => 'nbtopics',
-              'module' => 'IWnoteboard',
-              'sv' => $sv)); */
-        }
-
-        // Redirect to the main site for the admin
-        return System::redirect(ModUtil::url('IWnoteboard', 'admin', 'main'));
-    }
-
-    /**
-     * Give access to a form from where the shared information can be edited
-     * @author	Albert PÃ©rez Monfort (aperezm@xtec.cat)
-     * @param:	args   Array with the topic id
-     * @return	The topics edit form
-     */
-    public function editShared($args) {
-
-        // Get parameters from whatever input we need
-        $pid = FormUtil::getPassedValue('pid', isset($args['pid']) ? $args['pid'] : null, 'GET');
-        $objectid = FormUtil::getPassedValue('objectid', isset($args['objectid']) ? $args['objectid'] : null, 'GET');
-        if (!empty($objectid)) {
-            $pid = $objectid;
-        }
-
-        // Security check
-        if (!SecurityUtil::checkPermission('IWnoteboard::', "::", ACCESS_ADMIN)) {
-            return LogUtil::registerError($this->__('Sorry! No authorization to access this module.'), 403);
-        }
-
-        // Create output object
-        $view = Zikula_View::getInstance('IWnoteboard', false);
-
-        $registre = ModUtil::apiFunc('IWnoteboard', 'user', 'getShared',
-                array('pid' => $pid));
-
-        if ($registre == false) {
-            LogUtil::registerError($this->__('The topic has not been found'));
-            return System::redirect(ModUtil::url('IWnoteboard', 'admin', 'main'));
-        }
-
-        $view->assign('pid', $pid);
-        $view->assign('title', $this->__('Edit a topic'));
-        $view->assign('url', $registre['url']);
-        $view->assign('descriu', $registre['descriu']);
-        $view->assign('submit', $this->__('Modify the topic'));
-        $view->assign('m', 1);
-
-        return $view->fetch('IWnoteboard_admin_newShared.htm');
-    }
-
-    /**
-     * Update a shared URL information
-     * @author	Albert PÃ©rez Monfort (aperezm@xtec.cat)
-     * @param:	args   Array with the arguments needed
-     * @return	Redirect the user to the admin main page
-     */
-    public function updateShared($args) {
-
-
-        // Get parameters from whatever input we need
-        $pid = FormUtil::getPassedValue('pid', isset($args['pid']) ? $args['pid'] : null, 'POST');
-        $url = FormUtil::getPassedValue('url', isset($args['url']) ? $args['url'] : null, 'POST');
-        $descriu = FormUtil::getPassedValue('descriu', isset($args['descriu']) ? $args['descriu'] : null, 'POST');
-
-        // Security check
-        if (!SecurityUtil::checkPermission('IWnoteboard::', "::", ACCESS_ADMIN)) {
-            return LogUtil::registerError($this->__('Sorry! No authorization to access this module.'), 403);
-        }
-
-        // Confirm authorisation code
-        if (!SecurityUtil::confirmAuthKey()) {
-            return LogUtil::registerAuthidError(ModUtil::url('IWnoteboard', 'admin', 'main'));
-        }
-
-        $lid = ModUtil::apiFunc('IWnoteboard', 'admin', 'editShared',
-                array('pid' => $pid,
-                    'url' => $url,
-                    'descriu' => $descriu));
-        if ($lid != false) {
-            // Success
-            LogUtil::registerStatus($this->__('The shared noteboard URL has been modified'));
-            /* 		$sv = ModUtil::func('IWmain', 'user', 'genSecurityValue');
-              ModUtil::apiFunc('IWmain', 'user', 'usersVarsDelModule', array('name' => 'nbtopics',
-              'module' => 'IWnoteboard',
-              'sv' => $sv)); */
-        }
-
-        // Return to admin pannel
-        return System::redirect(ModUtil::url('IWnoteboard', 'admin', 'main'));
-    }
-
-    /**
-     * Check if a noteboard is ahared and available
-     * @author:     Albert PÃ©rez Monfort (aperezm@xtec.cat)
-     * @param:	args	The id of the shared noteboard
-     * @return:	The shared parameters of false if the noteboard requested is not shared
-     */
-    public function checkShared($args) {
-
-        $pid = FormUtil::getPassedValue('pid', isset($args['pid']) ? $args['pid'] : null, 'GET');
-        // Security check
-        if (!SecurityUtil::checkPermission('IWnoteboard::', '::', ACCESS_ADMIN)) {
-            return LogUtil::registerPermissionError();
-        }
-
-        // Needed argument
-        if (!isset($pid)) {
-            LogUtil::registerError($this->__('Error! Could not do what you wanted. Please check your input.'));
-            return System::redirect(ModUtil::url('IWnoteboard', 'admin', 'main'));
-        }
-
-        // Get the item
-        $item = ModUtil::apiFunc('IWnoteboard', 'user', 'getShared',
-                array('pid' => $pid));
-        if (!$item) {
-            return LogUtil::registerError($this->__('No such item found.'));
-        }
-
-        $shared = ModUtil::func('IWnoteboard', 'admin', 'requestShared',
-                array('url' => $item['url']));
-
-        if ($shared) {
-            LogUtil::registerStatus($this->__('The noteboard is shared and it is available'));
-        } else {
-            LogUtil::registerError($this->__('The noteboard is not shared or it is not available in this moment'));
-        }
-
-        return System::redirect(ModUtil::url('IWnoteboard', 'admin', 'main'));
-    }
-
-    /**
-     * Get the values of the request shared
-     * @author:     Albert PÃ©rez Monfort (aperezm@xtec.cat)
-     * @param:	args	The id of the shared noteboard
-     * @return:	The shared parameters of false if the noteboard requested is not shared
-     */
-    public function requestShared($args) {
-        $url = FormUtil::getPassedValue('url', isset($args['url']) ? $args['url'] : null, 'POST');
-
-        //AquÃ­ hi hauria d'anar la part que consulta al tauler d'un altre espai. Caldrï¿œ construir un servlet o alguna cosa de l'estil
-
-        return true;
-    }
-
-    /**
-     * Regenerate shared url with another shared value
-     * @author:     Albert PÃ©rez Monfort (aperezm@xtec.cat)
-     * @return:	Thue if success and false otherwise
-     */
-    public function regenerateShared() {
-        // Security check
-        if (!SecurityUtil::checkPermission('IWnoteboard::', '::', ACCESS_ADMIN)) {
-            return LogUtil::registerPermissionError();
-        }
-
-        $randomValue = rand(0, 350000) . time();
-
-        ModUtil::setVar('IWnoteboard', 'publicSharedURL', md5($randomValue));
-
-        return md5($randomValue);
-    }
-
-    public function sharedOptions($args) {
-
-        $public = FormUtil::getPassedValue('public', isset($args['public']) ? $args['public'] : null, 'POST');
-
-        // Security check
-        if (!SecurityUtil::checkPermission('IWnoteboard::', "::", ACCESS_ADMIN)) {
-            return LogUtil::registerError($this->__('Sorry! No authorization to access this module.'), 403);
-        }
-
-        //get shared sid
-        $publicSharedURL = ModUtil::getVar('IWnoteboard', 'publicSharedURL');
-
-        // Create output object
-        $view = Zikula_View::getInstance('IWnoteboard', false);
-        $view->assign('public', $public);
-        $view->assign('publicSharedURL', $publicSharedURL);
-
-        return $view->fetch('IWnoteboard_admin_confSharedOptions.htm');
-    }
 }

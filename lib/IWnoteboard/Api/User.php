@@ -1,6 +1,7 @@
 <?php
 
 class IWnoteboard_Api_User extends Zikula_AbstractApi {
+
     /**
      * Gets all the notes created in the noteboard
      * @author:     Albert PÃ©rez Monfort (aperezm@xtec.cat)
@@ -48,7 +49,7 @@ class IWnoteboard_Api_User extends Zikula_AbstractApi {
             $where .= " AND $c[public] = 1";
         }
         if (ModUtil::getVar('IWnoteboard', 'multiLanguage') == 1) {
-            $where .= " AND ($c[lang]='" . UserUtil::getLang() . "' OR $c[lang] = '')";
+            $where .= " AND ($c[lang]='" . ZLanguage::getLanguageCode() . "' OR $c[lang] = '')";
         }
         // get the objects from the db
         $items = DBUtil::selectObjectArray('IWnoteboard', $where, $orderby, '-1', '-1', 'nid');
@@ -212,12 +213,6 @@ class IWnoteboard_Api_User extends Zikula_AbstractApi {
         if (!DBUtil::deleteObjectByID('IWnoteboard', $nid, 'nid')) {
             return LogUtil::registerError($this->__('Error! Sorry! Deletion attempt failed.'));
         }
-        // Let any hooks know that we have deleted an item
-        ModUtil::callHooks('item', 'delete', $args['nid'],
-                        array('module' => 'IWnoteboard'));
-        // The item has been deleted, so we clear all cached pages of this item.
-        $view = Zikula_View::getInstance('IWnoteboard');
-        $view->clear_cache(null, $nid);
         return true;
     }
 
@@ -346,8 +341,12 @@ class IWnoteboard_Api_User extends Zikula_AbstractApi {
         if ($item === false) {
             return LogUtil::registerError($this->__('Error! Could not load items.'));
         }
-        // Return the item
-        return $item[0];
+        // return the item if necessary
+        if (count($item)) {
+            return $item[0];
+        } else {
+            return false;
+        }
     }
 
     /**
@@ -1050,4 +1049,23 @@ class IWnoteboard_Api_User extends Zikula_AbstractApi {
         //delete from the noteboard the deleted notes in shared noteboard
         return true;
     }
+
+    public function getlinks($args) {
+        $tema = FormUtil::getPassedValue('tema', isset($args['tema']) ? $args['tema'] : null, 'POST');
+        //Get the user permissions in noteboard
+        $permisos = ModUtil::apiFunc('IWnoteboard', 'user', 'permisos',
+                        array('uid' => UserUtil::getVar('uid')));
+        $links = array();
+        if (SecurityUtil::checkPermission('IWnoteboard::', '::', ACCESS_READ) && $permisos['nivell'] >= 3) {
+            $links[] = array('url' => ModUtil::url('IWnoteboard', 'user', 'nova', array('m' => 'n', 'tema' => $tema)), 'text' => $this->__('Add a new note'), 'id' => 'iwnoteboard_newnote', 'class' => 'z-icon-es-new');
+        }
+        if (SecurityUtil::checkPermission('IWnoteboard::', '::', ACCESS_READ)) {
+            $links[] = array('url' => ModUtil::url('IWnoteboard', 'user', 'main', array('tema' => $tema)), 'text' => $this->__('View notes list'), 'id' => 'iwnoteboard_viewlist', 'class' => 'z-icon-es-view');
+        }
+        if (SecurityUtil::checkPermission('IWnoteboard::', '::', ACCESS_READ) && $permisos['potverificar']) {
+            $links[] = array('url' => ModUtil::url('IWnoteboard', 'user', 'main', array('tema' => $tema, 'saved' => '1')), 'text' => $this->__('Show the notes stored (expired)'), 'id' => 'iwnoteboard_expired', 'class' => 'z-icon-es-view');
+        }
+        return $links;
+    }
+
 }
