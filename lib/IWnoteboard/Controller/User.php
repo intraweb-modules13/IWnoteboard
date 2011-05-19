@@ -34,6 +34,7 @@ class IWnoteboard_Controller_User extends Zikula_AbstractController {
         $anotacions = array();
         $n = 0;
         $informa = '';
+        $temes_MS = array();
 
         // Get the user permissions in noteboard
         $permissions = ModUtil::apiFunc('IWnoteboard', 'user', 'permisos', array('uid' => $uid));
@@ -362,6 +363,7 @@ class IWnoteboard_Controller_User extends Zikula_AbstractController {
         $fitxer = '';
         $tid = 0;
         $grups_array = array();
+        $temes_MS = array();
 
         if (isset($nid)) {
             // Get the record information
