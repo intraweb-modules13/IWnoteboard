@@ -923,3 +923,28 @@ msgstr "Informació addicional"
 msgid "Skip Headlines"
 msgstr "No fer ús dels titulars"
 
+msgid "Notify new entries by email"
+msgstr "Notifica entrades noves per correu electrònic"
+
+msgid "Send note to first line"
+msgstr "Envia l'anotació a la primera posició"
+
+msgid "You have a new entry in noteboard"
+msgstr "Hi ha una entrada nova en el tauler de notes"
+
+msgid "Dear,"
+msgstr "Benvolgut/da,"
+
+msgid "There is a new note sended by %s. The content is as follow:"
+msgstr "Hi ha hagut un enviament nou al tauler de notes enviat per %s. Amb el contingut següent:"
+
+msgid "You can access the note from here:"
+msgstr "Podeu accedir a l'anotació des d'aquí:"
+
+msgid "Access to the note content."
+msgstr "Accés al contingut de l'anotació."
+
+
+
+
+

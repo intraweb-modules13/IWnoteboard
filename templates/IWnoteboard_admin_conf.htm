@@ -118,7 +118,6 @@
                 </tbody>
             </table>
             <strong>{gt text="Warning: "}</strong> {gt text="Every permission level includes lower levels"}
-            <div style="height:40px;">&nbsp;</div>
             {if not $multizk}
             <div class="z-formrow">
                 <label for="directoriroot">{gt text="Root of the file folder"}</label>
@@ -151,6 +150,10 @@
                 </select>
             </div>
             <div class="z-formrow">
+                <label for="notifyNewEntriesByMail">{gt text="Notify new entries by email"}</label>
+                <input id="notifyNewEntriesByMail" type="checkbox" {if $notifyNewEntriesByMail}checked{/if} name="notifyNewEntriesByMail" value="1"/>
+            </div>
+            <div class="z-formrow">
                 <label for="c">{gt text="The notes expire at"}</label>
                 <input type="text" name="c" maxlength="3" size="3" value="{$caducitat}" /> {gt text="days from their creation"}
             </div>
@@ -166,7 +169,6 @@
                     <option value="2" {if $repperdefecte eq 2}selected{/if}>{gt text="Users chosen during the validation of the note"}</option>
                 </select>
             </div>
-
             <div class="z-formrow">
                 <label for="notRegisteredSeeRedactors">{gt text="Unregistered cannot see who has sent the notes"}</label>
                 <input type="checkbox" {if $notRegisteredSeeRedactors}checked{/if} name="notRegisteredSeeRedactors" value="1"/>

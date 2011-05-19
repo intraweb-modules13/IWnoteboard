@@ -143,8 +143,7 @@ class IWnoteboard_Api_User extends Zikula_AbstractApi {
         if (!DBUtil::insertObject($item, 'IWnoteboard', 'nid')) {
             return LogUtil::registerError($this->__('Error! Creation attempt failed.'));
         }
-        // Let any hooks know that we have created a new item.
-        ModUtil::callHooks('item', 'create', $item['nid'], array('module' => 'IWnoteboard'));
+
         // Return the id of the newly created item to the calling process
         return $item['nid'];
     }

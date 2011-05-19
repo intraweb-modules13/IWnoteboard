@@ -77,6 +77,8 @@ class IWnoteboard_Controller_Admin extends Zikula_AbstractController {
         $shipHeadersLines = ModUtil::getVar('IWnoteboard', 'shipHeadersLines');
         $editPrintAfter = ModUtil::getVar('IWnoteboard', 'editPrintAfter');
         $repperdefecte = ModUtil::getVar('IWnoteboard', 'repperdefecte');
+        $notifyNewEntriesByMail = ModUtil::getVar('IWnoteboard', 'notifyNewEntriesByMail');
+        
 
         $sv = ModUtil::func('IWmain', 'user', 'genSecurityValue');
         $groups = ModUtil::func('IWmain', 'user', 'getAllGroups',
@@ -138,6 +140,7 @@ class IWnoteboard_Controller_Admin extends Zikula_AbstractController {
                 ->assign('editPrintAfter', $editPrintAfter)
                 ->assign('noFolder', $noFolder)
                 ->assign('noWriteable', $noWriteable)
+                ->assign('notifyNewEntriesByMail', $notifyNewEntriesByMail)
                 ->fetch('IWnoteboard_admin_conf.htm');
     }
 
@@ -167,6 +170,7 @@ class IWnoteboard_Controller_Admin extends Zikula_AbstractController {
         $topicsSystem = FormUtil::getPassedValue('topicsSystem', isset($args['topicsSystem']) ? $args['topicsSystem'] : null, 'POST');
         $shipHeadersLines = FormUtil::getPassedValue('shipHeadersLines', isset($args['shipHeadersLines']) ? $args['shipHeadersLines'] : null, 'POST');
         $editPrintAfter = FormUtil::getPassedValue('editPrintAfter', isset($args['editPrintAfter']) ? $args['editPrintAfter'] : null, 'POST');
+        $notifyNewEntriesByMail = FormUtil::getPassedValue('notifyNewEntriesByMail', isset($args['notifyNewEntriesByMail']) ? $args['notifyNewEntriesByMail'] : null, 'POST');
 
         // Security check
         if (!SecurityUtil::checkPermission('IWnoteboard::', "::", ACCESS_ADMIN)) {
@@ -223,6 +227,7 @@ class IWnoteboard_Controller_Admin extends Zikula_AbstractController {
                 ->setVar('multiLanguage', $multiLanguage)
                 ->setVar('topicsSystem', $topicsSystem)
                 ->setVar('shipHeadersLines', $shipHeadersLines)
+                ->setVar('notifyNewEntriesByMail', $notifyNewEntriesByMail)
                 ->setVar('editPrintAfter', $editPrintAfter);
 
         LogUtil::registerStatus($this->__('The configuration has been modified'));

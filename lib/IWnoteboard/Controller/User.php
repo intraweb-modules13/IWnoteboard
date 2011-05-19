@@ -588,7 +588,6 @@ class IWnoteboard_Controller_User extends Zikula_AbstractController {
         $tema = FormUtil::getPassedValue('tema', isset($args['tema']) ? $args['tema'] : null, 'POST');
         $tid = FormUtil::getPassedValue('tid', isset($args['tid']) ? $args['tid'] : null, 'POST');
         $language = FormUtil::getPassedValue('language', isset($args['language']) ? $args['language'] : null, 'POST');
-        $public = FormUtil::getPassedValue('public', isset($args['public']) ? $args['public'] : null, 'POST');
 
         //gets the attached file array
         $fileName = $_FILES['fitxer']['name'];
@@ -700,7 +699,6 @@ class IWnoteboard_Controller_User extends Zikula_AbstractController {
                     'verifica' => $verifica,
                     'tid' => $tid,
                     'language' => $language,
-                    'public' => $public,
                     'literalGroups' => $literalGroups));
 
         if (!$lid) {
@@ -721,6 +719,47 @@ class IWnoteboard_Controller_User extends Zikula_AbstractController {
             ModUtil::apiFunc('IWmain', 'user', 'usersVarsDelModule', array('name' => 'nbheadlines',
                 'module' => 'IWnoteboard',
                 'sv' => $sv));
+        }
+
+        // notify entry by email if necessary
+        if (ModUtil::getVar('IWnoteboard', 'notifyNewEntriesByMail') == 1) {
+            if ($permissions['verifica'] == 1) {
+                $subject = $this->__('You have a new entry in noteboard');
+            } else {
+                $subject = $this->__('You have a new entry in noteboard and its validation is pending');
+            }
+
+            $url = System::getBaseUrl();
+
+            $sv = ModUtil::func('IWmain', 'user', 'genSecurityValue');
+            $userFullName = ModUtil::func('IWmain', 'user', 'getUserInfo', array('uid' => UserUtil::getVar('uid'),
+                        'sv' => $sv,
+                        'info' => 'ncc'));
+            $body = $this->view->assign('sendedby', $userFullName)
+                    ->assign('noteContent', $noticia)
+                    ->assign('url', $url)
+                    ->assign('nid', $lid)
+                    ->assign('sitename', System::getVar('sitename'))
+                    ->fetch('IWnoteboard_user_msgbody.htm');
+
+            // get users in administrators group
+            $sv = ModUtil::func('IWmain', 'user', 'genSecurityValue');
+            $users = ModUtil::func('IWmain', 'user', 'getMembersGroup', array('sv' => $sv,
+                        'gid' => $this->getVar('quiverifica', $q)));
+
+            foreach ($users as $user) {
+                $sendMessageArgs = array(
+                    'fromname' => System::getVar('sitename'),
+                    'fromaddress' => System::getVar('adminmail'),
+                    'toname' => $user['name'],
+                    'toaddress' => UserUtil::getVar('email', $user['id']),
+                    'replytoname' => System::getVar('sitename'),
+                    'replytoaddress' => System::getVar('adminmail'),
+                    'subject' => $subject,
+                    'body' => $body,
+                );
+                ModUtil::apiFunc('Mailer', 'user', 'sendMessage', $sendMessageArgs);
+            }
         }
 
         // redirect user to noteboard main page

@@ -45,6 +45,7 @@ class IWnoteboard_Installer extends Zikula_AbstractInstaller {
                 ->setVar('multiLanguage', '0')
                 ->setVar('topicsSystem', '0')
                 ->setVar('shipHeadersLines', '0')
+                ->setVar('notifyNewEntriesByMail', '0')
                 ->setVar('editPrintAfter', '-1');
 
 
@@ -78,6 +79,7 @@ class IWnoteboard_Installer extends Zikula_AbstractInstaller {
                 ->delVar('multiLanguage')
                 ->delVar('topicsSystem')
                 ->delVar('shipHeadersLines')
+                ->delVar('notifyNewEntriesByMail')
                 ->delVar('editPrintAfter');
 
         //Deletion successfull
