@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: Module IWnoteboard versión 3.0\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2010-01-27 10:50+0100\n"
-"PO-Revision-Date: 2011-05-19 08:12+0100\n"
+"PO-Revision-Date: 2011-05-19 08:19+0100\n"
 "Last-Translator: \n"
 "Language-Team: Intraweb <intraweb@xtec.cat>\n"
 "MIME-Version: 1.0\n"
@@ -931,6 +931,9 @@ msgstr "Envia l'anotació a la primera posició"
 
 msgid "You have a new entry in noteboard"
 msgstr "Hi ha una entrada nova en el tauler de notes"
+
+msgid "You have a new entry in noteboard and its validation is pending"
+msgstr "Hi ha una entrada nova en el tauler de notes pendent de ser validada"
 
 msgid "Dear,"
 msgstr "Benvolgut/da,"
