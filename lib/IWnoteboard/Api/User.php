@@ -110,8 +110,7 @@ class IWnoteboard_Api_User extends Zikula_AbstractApi {
             $titular = '';
         }
         // Get the user permissions in noteboard
-        $permissions = ModUtil::apiFunc('IWnoteboard', 'user', 'permisos',
-                        array('uid' => UserUtil::getVar('uid')));
+        $permissions = ModUtil::apiFunc('IWnoteboard', 'user', 'permisos', array('uid' => UserUtil::getVar('uid')));
         if (empty($permissions) ||
                 $permissions['nivell'] < 3) {
             LogUtil::registerError($this->__('You are not allowed to do this action'));
@@ -140,13 +139,12 @@ class IWnoteboard_Api_User extends Zikula_AbstractApi {
             'lang' => $language,
             'public' => $public,
             'literalGroups' => $literalGroups,
-);
+        );
         if (!DBUtil::insertObject($item, 'IWnoteboard', 'nid')) {
             return LogUtil::registerError($this->__('Error! Creation attempt failed.'));
         }
         // Let any hooks know that we have created a new item.
-        ModUtil::callHooks('item', 'create', $item['nid'],
-                        array('module' => 'IWnoteboard'));
+        ModUtil::callHooks('item', 'create', $item['nid'], array('module' => 'IWnoteboard'));
         // Return the id of the newly created item to the calling process
         return $item['nid'];
     }
@@ -194,15 +192,13 @@ class IWnoteboard_Api_User extends Zikula_AbstractApi {
             return LogUtil::registerError($this->__('Error! Could not do what you wanted. Please check your input.'));
         }
         // Get the item
-        $item = ModUtil::apiFunc('IWnoteboard', 'user', 'get',
-                        array('nid' => $nid));
+        $item = ModUtil::apiFunc('IWnoteboard', 'user', 'get', array('nid' => $nid));
         if (!$item) {
             return LogUtil::registerError($this->__('No such item found.'));
         }
         // check that user really can delete this the note
         // Get the user permissions in noteboard
-        $permissions = ModUtil::apiFunc('IWnoteboard', 'user', 'permisos',
-                        array('uid' => UserUtil::getVar('uid')));
+        $permissions = ModUtil::apiFunc('IWnoteboard', 'user', 'permisos', array('uid' => UserUtil::getVar('uid')));
         if ($permissions['nivell'] < 6) {
             LogUtil::registerError($this->__('You are not allowed to do this action'));
             return System::redirect(ModUtil::url('IWnoteboard', 'user', 'main'));
@@ -236,14 +232,12 @@ class IWnoteboard_Api_User extends Zikula_AbstractApi {
             return LogUtil::registerError($this->__('Error! Could not do what you wanted. Please check your input.'));
         }
         // Get the item
-        $item = ModUtil::apiFunc('IWnoteboard', 'user', 'get',
-                        array('nid' => $nid));
+        $item = ModUtil::apiFunc('IWnoteboard', 'user', 'get', array('nid' => $nid));
         if (!$item) {
             return LogUtil::registerError($this->__('No such item found.'));
         }
         // Get the user permissions in noteboard
-        $permissions = ModUtil::apiFunc('IWnoteboard', 'user', 'permisos',
-                        array('uid' => UserUtil::getVar('uid')));
+        $permissions = ModUtil::apiFunc('IWnoteboard', 'user', 'permisos', array('uid' => UserUtil::getVar('uid')));
         if (!$permissions['potverificar']) {
             if (empty($permissions) ||
                     $permissions['nivell'] < 5 ||
@@ -269,8 +263,12 @@ class IWnoteboard_Api_User extends Zikula_AbstractApi {
             'tid' => $tid,
             'verifica' => $verifica,
             'lang' => $language,
-            'public' => $public,
-            'literalGroups' => $literalGroups);
+        );
+
+        if (isset($args['firstLine']) && $args['firstLine'] != 1) {
+            unset($item['edited']);
+        }
+
         if (isset($saved) && $saved == 1) {
             if ($modremitent == 1) {
                 $item['informa'] = UserUtil::getVar('uid');
@@ -402,8 +400,7 @@ class IWnoteboard_Api_User extends Zikula_AbstractApi {
             return LogUtil::registerError($this->__('Error! Could not do what you wanted. Please check your input.'));
         }
         // Get the item
-        $item = ModUtil::apiFunc('IWnoteboard', 'user', 'get',
-                        array('nid' => $nid));
+        $item = ModUtil::apiFunc('IWnoteboard', 'user', 'get', array('nid' => $nid));
         if (!$item) {
             return LogUtil::registerError($this->__('No such item found.'));
         }
@@ -637,16 +634,14 @@ class IWnoteboard_Api_User extends Zikula_AbstractApi {
             return LogUtil::registerError($this->__('Error! Could not do what you wanted. Please check your input.'));
         }
         // Get the item
-        $item = ModUtil::apiFunc('IWnoteboard', 'user', 'get',
-                        array('nid' => $nid));
+        $item = ModUtil::apiFunc('IWnoteboard', 'user', 'get', array('nid' => $nid));
         if (!$item) {
             return LogUtil::registerError($this->__('No such item found.'));
         }
         $hanvist = $item['no_mostrar'];
         $sv = ModUtil::func('IWmain', 'user', 'genSecurityValue');
-        $usersFullname = ModUtil::func('IWmain', 'user', 'getAllUsersInfo',
-                        array('info' => 'ccn',
-                            'sv' => $sv));
+        $usersFullname = ModUtil::func('IWmain', 'user', 'getAllUsersInfo', array('info' => 'ccn',
+                    'sv' => $sv));
         $pntable = DBUtil::getTables();
         $c = $pntable['IWmain_column'];
         $where = "$c[value] like '$%" . $nid . "%$'";
@@ -782,8 +777,7 @@ class IWnoteboard_Api_User extends Zikula_AbstractApi {
     public function getlinks($args) {
         $tema = FormUtil::getPassedValue('tema', isset($args['tema']) ? $args['tema'] : null, 'POST');
         //Get the user permissions in noteboard
-        $permisos = ModUtil::apiFunc('IWnoteboard', 'user', 'permisos',
-                        array('uid' => UserUtil::getVar('uid')));
+        $permisos = ModUtil::apiFunc('IWnoteboard', 'user', 'permisos', array('uid' => UserUtil::getVar('uid')));
         $links = array();
         if ((SecurityUtil::checkPermission('IWnoteboard::', '::', ACCESS_READ) && $permisos['nivell'] >= 3) || !UserUtil::isLoggedIn()) {
             $links[] = array('url' => ModUtil::url('IWnoteboard', 'user', 'nova', array('m' => 'n', 'tema' => $tema)), 'text' => $this->__('Add a new note'), 'id' => 'iwnoteboard_newnote', 'class' => 'z-icon-es-new');

@@ -122,7 +122,7 @@
     }
 </script>
 <noscript>
-    {assign var='noscript' value='true'}
+{assign var='noscript' value='true'}
 </noscript>
 <link rel="stylesheet" type="text/css" href="modules/IWmain/js/calendar/css/calendar-blue.css" />	
 <script type="text/javascript" src="modules/IWmain/js/calendar/calendar.js"></script>
@@ -267,12 +267,23 @@
             </tr>
             <tr>
                 <td>
-                    <strong>{gt text="Comments allowed"}</strong>
+                    {gt text="Comments allowed"}
                 </td>
                 <td align="right">
                     <input type="checkbox" {if $admet_comentaris}checked{/if} name="admet_comentaris" value="1" />
                 </td>
             </tr>
+            {if $m eq 'e'}
+            <tr>
+                <td>
+                    {gt text="Send note to first line"}
+                </td>
+                <td align="right">
+                    <input type="checkbox" name="firstLine" value="1" />
+                </td>
+            </tr>
+            {/if}
+
             {if $saved eq 1}
             <tr>
                 <td>
@@ -300,14 +311,14 @@
         </span>
         {/if}
         <noscript>
-            <div class="z-button">
-                {button src='button_ok.png' set='icons/small' __alt="Create" __title="Create"} {$submit}
-            </div>
-            <div class="z-button">
-                <a href="{modurl modname='IWnoteboard' type='user' func='main'}">
-                    {img modname='core' src='button_cancel.png' set='icons/small'   __alt="Cancel" __title="Cancel"} {gt text="Cancel"}
-                </a>
-            </div>
+        <div class="z-button">
+            {button src='button_ok.png' set='icons/small' __alt="Create" __title="Create"} {$submit}
+        </div>
+        <div class="z-button">
+            <a href="{modurl modname='IWnoteboard' type='user' func='main'}">
+                {img modname='core' src='button_cancel.png' set='icons/small'   __alt="Cancel" __title="Cancel"} {gt text="Cancel"}
+            </a>
+        </div>
         </noscript>
     </div>
 </form>

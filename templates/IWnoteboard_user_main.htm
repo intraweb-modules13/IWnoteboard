@@ -123,7 +123,9 @@
             <td style="padding: 5px; background-color:{$note.bgcolor}" valign="top" width="150px" align="left">
                 {$users[$note.created_by]}
                 {if $note.photo neq ''}
-                <img src="{getbaseurl}{modurl modname='IWnoteboard' type='user' func='getFile' fileName=$note.photo}" alt="" />
+                <div class="userAvatar">
+                    <img src="{getbaseurl}{modurl modname='IWnoteboard' type='user' func='getFile' fileName=$note.photo}" alt="" />
+                </div>
                 {/if}
             </td>
             {/if}

@@ -23,3 +23,8 @@ table.z-admintable th {
     font-weight: bold;
     border-bottom: 1px solid #777;
 }
+
+.userAvatar {
+    text-align: center;
+    margin-top: 15px;
+}

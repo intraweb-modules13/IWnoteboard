@@ -36,27 +36,23 @@ class IWnoteboard_Controller_User extends Zikula_AbstractController {
         $informa = '';
 
         // Get the user permissions in noteboard
-        $permissions = ModUtil::apiFunc('IWnoteboard', 'user', 'permisos',
-                        array('uid' => $uid));
+        $permissions = ModUtil::apiFunc('IWnoteboard', 'user', 'permisos', array('uid' => $uid));
 
         // Get all current groups
         $sv = ModUtil::func('IWmain', 'user', 'genSecurityValue');
-        $allgroups = ModUtil::func('IWmain', 'user', 'getAllGroups',
-                        array('sv' => $sv,
-                            'plus' => $this->__('Unregistered')));
+        $allgroups = ModUtil::func('IWmain', 'user', 'getAllGroups', array('sv' => $sv,
+                    'plus' => $this->__('Unregistered')));
 
         // Get all the notes that have been sended
         if (isset($saved) &&
                 $saved == 1 &&
                 $permissions['potverificar']) {
-            $registres = ModUtil::apiFunc('IWnoteboard', 'user', 'getallcaducated',
-                            array('tema' => $tema,
-                                'nid' => $nid));
+            $registres = ModUtil::apiFunc('IWnoteboard', 'user', 'getallcaducated', array('tema' => $tema,
+                        'nid' => $nid));
         } else {
-            $registres = ModUtil::apiFunc('IWnoteboard', 'user', 'getall',
-                            array('tema' => $tema,
-                                'nid' => $nid,
-                                'marked' => $marked));
+            $registres = ModUtil::apiFunc('IWnoteboard', 'user', 'getall', array('tema' => $tema,
+                        'nid' => $nid,
+                        'marked' => $marked));
             $saved = 0;
         }
 
@@ -78,10 +74,9 @@ class IWnoteboard_Controller_User extends Zikula_AbstractController {
             }
 
             $sv = ModUtil::func('IWmain', 'user', 'genSecurityValue');
-            $havist = ModUtil::func('IWmain', 'user', 'userGetVar',
-                            array('module' => 'IWnoteboard',
-                                'name' => 'viewed',
-                                'sv' => $sv));
+            $havist = ModUtil::func('IWmain', 'user', 'userGetVar', array('module' => 'IWnoteboard',
+                        'name' => 'viewed',
+                        'sv' => $sv));
         }
 
         $vistes = '$';
@@ -101,8 +96,7 @@ class IWnoteboard_Controller_User extends Zikula_AbstractController {
 
             $marca = (strpos($registre['marca'], '$' . $uid . '$') != 0) ? 1 : 0;
             if (UserUtil::isLoggedIn()) {
-                $tema_anotacio = ModUtil::apiFunc('IWnoteboard', 'user', 'gettema',
-                                array('tid' => $registre['tid']));
+                $tema_anotacio = ModUtil::apiFunc('IWnoteboard', 'user', 'gettema', array('tid' => $registre['tid']));
             }
 
             if ((($registre['verifica'] == 1 &&
@@ -136,8 +130,7 @@ class IWnoteboard_Controller_User extends Zikula_AbstractController {
                 $comentaris_array = array();
 
                 // Get the comments associated to a note
-                $comentaris = ModUtil::apiFunc('IWnoteboard', 'user', 'getallcomentaris',
-                                array('ncid' => $registre['nid']));
+                $comentaris = ModUtil::apiFunc('IWnoteboard', 'user', 'getallcomentaris', array('ncid' => $registre['nid']));
 
                 foreach ($comentaris as $comentari) {
                     if ($comentari['verifica'] == 0) {
@@ -157,9 +150,8 @@ class IWnoteboard_Controller_User extends Zikula_AbstractController {
                 }
 
                 $sv = ModUtil::func('IWmain', 'user', 'genSecurityValue');
-                $photo = ModUtil::func('IWmain', 'user', 'getUserPicture',
-                                array('uname' => UserUtil::getVar('uname', $registre['informa']),
-                                    'sv' => $sv));
+                $photo = ModUtil::func('IWmain', 'user', 'getUserPicture', array('uname' => UserUtil::getVar('uname', $registre['informa']),
+                            'sv' => $sv));
 
                 // The user can edit their notes
                 $pot_editar = false;
@@ -183,8 +175,7 @@ class IWnoteboard_Controller_User extends Zikula_AbstractController {
                 $fileExtension = strtolower(substr(strrchr($registre['fitxer'], "."), 1));
 
                 // get file icon
-                $ctypeArray = ModUtil::func('IWmain', 'user', 'getMimetype',
-                                array('extension' => $fileExtension));
+                $ctypeArray = ModUtil::func('IWmain', 'user', 'getMimetype', array('extension' => $fileExtension));
                 $fileIcon = $ctypeArray['icon'];
 
                 $edited = '';
@@ -229,24 +220,21 @@ class IWnoteboard_Controller_User extends Zikula_AbstractController {
             $sv = ModUtil::func('IWmain', 'user', 'genSecurityValue');
 
             if ($tema == 0 && $nid == 0 && $marked == 0 && ModUtil::getVar('IWnoteboard', 'multiLanguage') == 0) {
-                ModUtil::func('IWmain', 'user', 'userSetVar',
-                                array('module' => 'IWnoteboard',
-                                    'name' => 'viewed',
-                                    'value' => $vistes,
-                                    'sv' => $sv));
+                ModUtil::func('IWmain', 'user', 'userSetVar', array('module' => 'IWnoteboard',
+                    'name' => 'viewed',
+                    'value' => $vistes,
+                    'sv' => $sv));
             } else {
-                ModUtil::func('IWmain', 'user', 'userSetVar',
-                                array('module' => 'IWnoteboard',
-                                    'name' => 'viewed',
-                                    'value' => $havist . $vistes,
-                                    'sv' => $sv));
+                ModUtil::func('IWmain', 'user', 'userSetVar', array('module' => 'IWnoteboard',
+                    'name' => 'viewed',
+                    'value' => $havist . $vistes,
+                    'sv' => $sv));
             }
 
             $sv = ModUtil::func('IWmain', 'user', 'genSecurityValue');
-            ModUtil::func('IWmain', 'user', 'userDelVar',
-                            array('module' => 'IWmain_block_news',
-                                'name' => 'news',
-                                'sv' => $sv));
+            ModUtil::func('IWmain', 'user', 'userDelVar', array('module' => 'IWmain_block_news',
+                'name' => 'news',
+                'sv' => $sv));
         }
 
         // Count the use of the module
@@ -257,10 +245,9 @@ class IWnoteboard_Controller_User extends Zikula_AbstractController {
         }
 
         $sv = ModUtil::func('IWmain', 'user', 'genSecurityValue');
-        $users = ModUtil::func('IWmain', 'user', 'getAllUsersInfo',
-                        array('info' => 'ccn',
-                            'sv' => $sv,
-                            'list' => $usersList));
+        $users = ModUtil::func('IWmain', 'user', 'getAllUsersInfo', array('info' => 'ccn',
+                    'sv' => $sv,
+                    'list' => $usersList));
 
         return $this->view->assign('temes_MS', $temes_MS)
                 ->assign('users', $users)
@@ -290,9 +277,8 @@ class IWnoteboard_Controller_User extends Zikula_AbstractController {
         }
 
         $sv = ModUtil::func('IWmain', 'user', 'genSecurityValue');
-        return ModUtil::func('IWmain', 'user', 'getFile',
-                array('fileName' => $fileName,
-                    'sv' => $sv));
+        return ModUtil::func('IWmain', 'user', 'getFile', array('fileName' => $fileName,
+            'sv' => $sv));
     }
 
     /**
@@ -321,16 +307,14 @@ class IWnoteboard_Controller_User extends Zikula_AbstractController {
         }
 
         // Get the record information
-        $registre = ModUtil::apiFunc('IWnoteboard', 'user', 'get',
-                        array('nid' => $nid));
+        $registre = ModUtil::apiFunc('IWnoteboard', 'user', 'get', array('nid' => $nid));
         if ($registre == false) {
             LogUtil::registerError($this->__('The note has not been found'));
             return System::redirect(ModUtil::url('IWnoteboard', 'user', 'main'));
         }
 
         // Get the user permissions in noteboard
-        $permissions = ModUtil::apiFunc('IWnoteboard', 'user', 'permisos',
-                        array('uid' => $uid));
+        $permissions = ModUtil::apiFunc('IWnoteboard', 'user', 'permisos', array('uid' => $uid));
 
         //Check if user really can access to note and file
         $grups_acces = explode('$', $registre['destinataris']);
@@ -343,10 +327,9 @@ class IWnoteboard_Controller_User extends Zikula_AbstractController {
             // user can download the file
             $fileNameInServer = ModUtil::getVar('IWnoteboard', 'attached') . '/' . $fileName;
             $sv = ModUtil::func('IWmain', 'user', 'genSecurityValue');
-            return ModUtil::func('IWmain', 'user', 'downloadFile',
-                    array('fileName' => $fileName,
-                        'fileNameInServer' => $fileNameInServer,
-                        'sv' => $sv));
+            return ModUtil::func('IWmain', 'user', 'downloadFile', array('fileName' => $fileName,
+                'fileNameInServer' => $fileNameInServer,
+                'sv' => $sv));
         } else {
             // user can't download the file because he/she hasn't access to the note
             LogUtil::registerError($this->__('You are not allowed to do this action'));
@@ -382,8 +365,7 @@ class IWnoteboard_Controller_User extends Zikula_AbstractController {
 
         if (isset($nid)) {
             // Get the record information
-            $registre = ModUtil::apiFunc('IWnoteboard', 'user', 'get',
-                            array('nid' => $nid));
+            $registre = ModUtil::apiFunc('IWnoteboard', 'user', 'get', array('nid' => $nid));
             if ($registre == false) {
                 LogUtil::registerError($this->__('The note has not been found'));
                 return System::redirect(ModUtil::url('IWnoteboard', 'user', 'main'));
@@ -392,8 +374,7 @@ class IWnoteboard_Controller_User extends Zikula_AbstractController {
             $registre['informa'] = 0;
 
         // Get the user permissions in noteboard
-        $permissions = ModUtil::apiFunc('IWnoteboard', 'user', 'permisos',
-                        array('uid' => UserUtil::getVar('uid')));
+        $permissions = ModUtil::apiFunc('IWnoteboard', 'user', 'permisos', array('uid' => UserUtil::getVar('uid')));
         if (!$permissions['potverificar']) {
             $saved = 0;
         }
@@ -402,8 +383,7 @@ class IWnoteboard_Controller_User extends Zikula_AbstractController {
             if (empty($permissions) ||
                     $permissions['nivell'] < 3) {
                 if (!UserUtil::isLoggedIn()) {
-                    return ModUtil::func('users', 'user', 'login',
-                            array('returnurl' => ModUtil::url('IWnoteboard', 'user', 'nova', array('m' => 'n'))));
+                    return ModUtil::func('users', 'user', 'login', array('returnurl' => ModUtil::url('IWnoteboard', 'user', 'nova', array('m' => 'n'))));
                 } else {
                     LogUtil::registerError($this->__('You are not allowed to do this action'));
                     return System::redirect(ModUtil::url('IWnoteboard', 'user', 'main'));
@@ -444,10 +424,9 @@ class IWnoteboard_Controller_User extends Zikula_AbstractController {
 
         foreach ($temes as $tema1) {
             $sv = ModUtil::func('IWmain', 'user', 'genSecurityValue');
-            if (ModUtil::func('IWmain', 'user', 'isMember',
-                            array('uid' => UserUtil::getVar('uid'),
-                                'gid' => $tema1['grup'],
-                                'sv' => $sv)) ||
+            if (ModUtil::func('IWmain', 'user', 'isMember', array('uid' => UserUtil::getVar('uid'),
+                        'gid' => $tema1['grup'],
+                        'sv' => $sv)) ||
                     SecurityUtil::checkPermission('IWnoteboard::', "::", ACCESS_ADMIN)) {
                 $temes_MS[] = array('id' => $tema1['tid'],
                     'name' => $tema1['nomtema']);
@@ -476,35 +455,33 @@ class IWnoteboard_Controller_User extends Zikula_AbstractController {
             $language = $registre['lang'];
             if ($m == 'c') {
                 // update the record in the database
-                $lid = ModUtil::apiFunc('IWnoteboard', 'user', 'update',
-                                array('data' => $registre['data'],
-                                    'nid' => $nid,
-                                    'noticia' => $noticia,
-                                    'caduca' => time(),
-                                    'titular' => $titular,
-                                    'titulin' => $titulin,
-                                    'titulout' => $titulout,
-                                    'mes_info' => $mes_info,
-                                    'text' => $text,
-                                    'fitxer' => $fitxer,
-                                    'textfitxer' => $textfitxer,
-                                    'destinataris' => $destinataris,
-                                    'admet_comentaris' => $admet_comentaris,
-                                    'verifica' => $verifica,
-                                    'v' => $v,
-                                    'tema' => $tema,
-                                    'saved' => $saved,
-                                    'm' => 'c',
-                                    'tid' => $tid,
-                                    'language' => $language,
+                $lid = ModUtil::apiFunc('IWnoteboard', 'user', 'update', array('data' => $registre['data'],
+                            'nid' => $nid,
+                            'noticia' => $noticia,
+                            'caduca' => time(),
+                            'titular' => $titular,
+                            'titulin' => $titulin,
+                            'titulout' => $titulout,
+                            'mes_info' => $mes_info,
+                            'text' => $text,
+                            'fitxer' => $fitxer,
+                            'textfitxer' => $textfitxer,
+                            'destinataris' => $destinataris,
+                            'admet_comentaris' => $admet_comentaris,
+                            'verifica' => $verifica,
+                            'v' => $v,
+                            'tema' => $tema,
+                            'saved' => $saved,
+                            'm' => 'c',
+                            'tid' => $tid,
+                            'language' => $language,
                         ));
 
                 if ($lid != false) {
                     //Uptated Successfully
                     //LogUtil::registerStatus ($this->__('Expiration of the note has been forced. Now the note is accessible from the link <strong>Show the stored notes (expired)</strong>'));
                 }
-                return System::redirect(ModUtil::url('IWnoteboard', 'user', 'main',
-                                array('tema' => $tema)));
+                return System::redirect(ModUtil::url('IWnoteboard', 'user', 'main', array('tema' => $tema)));
             }
         }
 
@@ -537,9 +514,8 @@ class IWnoteboard_Controller_User extends Zikula_AbstractController {
 
         if ($permissions['nivell'] > 3 || $permissions['potverificar']) {
             $sv = ModUtil::func('IWmain', 'user', 'genSecurityValue');
-            $groups = ModUtil::func('IWmain', 'user', 'getAllGroups',
-                            array('sv' => $sv,
-                                'plus' => $this->__('Unregistered')));
+            $groups = ModUtil::func('IWmain', 'user', 'getAllGroups', array('sv' => $sv,
+                        'plus' => $this->__('Unregistered')));
             $grupsModVar = ModUtil::getVar('IWnoteboard', 'grups');
             $marcatModVar = ModUtil::getVar('IWnoteboard', 'marcat');
             foreach ($groups as $group) {
@@ -624,8 +600,7 @@ class IWnoteboard_Controller_User extends Zikula_AbstractController {
 
         $this->checkCsrfToken();
 
-        $permissions = ModUtil::apiFunc('IWnoteboard', 'user', 'permisos',
-                        array('uid' => UserUtil::getVar('uid')));
+        $permissions = ModUtil::apiFunc('IWnoteboard', 'user', 'permisos', array('uid' => UserUtil::getVar('uid')));
 
         // Separate the groups with the dolar symbol
         $toUsers = $destinataris;
@@ -640,8 +615,7 @@ class IWnoteboard_Controller_User extends Zikula_AbstractController {
             if ($public == 1) {
                 // Get current user groups
                 $sv = ModUtil::func('IWmain', 'user', 'genSecurityValue');
-                $allGroupsInfo = ModUtil::func('IWmain', 'user', 'getAllGroupsInfo',
-                                array('sv' => $sv));
+                $allGroupsInfo = ModUtil::func('IWmain', 'user', 'getAllGroupsInfo', array('sv' => $sv));
                 $desti1 = '$$';
                 foreach ($toUsers as $dest) {
                     $desti1 .= ( $dest != 0) ? $allGroupsInfo[$dest] . '$' : '0$';
@@ -698,10 +672,9 @@ class IWnoteboard_Controller_User extends Zikula_AbstractController {
         if ($fileName != '') {
             $folder = ModUtil::getVar('IWnoteboard', 'attached');
             $sv = ModUtil::func('IWmain', 'user', 'genSecurityValue');
-            $update = ModUtil::func('IWmain', 'user', 'updateFile',
-                            array('sv' => $sv,
-                                'folder' => $folder,
-                                'file' => $_FILES['fitxer']));
+            $update = ModUtil::func('IWmain', 'user', 'updateFile', array('sv' => $sv,
+                        'folder' => $folder,
+                        'file' => $_FILES['fitxer']));
             //the function returns the error string if the update fails and and empty string if success
             if ($update['msg'] != '') {
                 LogUtil::registerError($update['msg'] . ' ' . $this->__('Probably the note have been sent without the attached file'));
@@ -712,24 +685,23 @@ class IWnoteboard_Controller_User extends Zikula_AbstractController {
         }
 
         // create a new record
-        $lid = ModUtil::apiFunc('IWnoteboard', 'user', 'crear',
-                        array('noticia' => $noticia,
-                            'data' => $data,
-                            'caduca' => $caduca,
-                            'titular' => $titular,
-                            'titulin' => $titulin,
-                            'titulout' => $titulout,
-                            'mes_info' => $mes_info,
-                            'text' => $text,
-                            'fitxer' => $nom_fitxer,
-                            'textfitxer' => $textfitxer,
-                            'destinataris' => $destinataris,
-                            'admet_comentaris' => $admet_comentaris,
-                            'verifica' => $verifica,
-                            'tid' => $tid,
-                            'language' => $language,
-                            'public' => $public,
-                            'literalGroups' => $literalGroups));
+        $lid = ModUtil::apiFunc('IWnoteboard', 'user', 'crear', array('noticia' => $noticia,
+                    'data' => $data,
+                    'caduca' => $caduca,
+                    'titular' => $titular,
+                    'titulin' => $titulin,
+                    'titulout' => $titulout,
+                    'mes_info' => $mes_info,
+                    'text' => $text,
+                    'fitxer' => $nom_fitxer,
+                    'textfitxer' => $textfitxer,
+                    'destinataris' => $destinataris,
+                    'admet_comentaris' => $admet_comentaris,
+                    'verifica' => $verifica,
+                    'tid' => $tid,
+                    'language' => $language,
+                    'public' => $public,
+                    'literalGroups' => $literalGroups));
 
         if (!$lid) {
             // error
@@ -746,15 +718,13 @@ class IWnoteboard_Controller_User extends Zikula_AbstractController {
         //Delete users headlines var. This renoval the block information
         if ($titular != '') {
             $sv = ModUtil::func('IWmain', 'user', 'genSecurityValue');
-            ModUtil::apiFunc('IWmain', 'user', 'usersVarsDelModule',
-                            array('name' => 'nbheadlines',
-                                'module' => 'IWnoteboard',
-                                'sv' => $sv));
+            ModUtil::apiFunc('IWmain', 'user', 'usersVarsDelModule', array('name' => 'nbheadlines',
+                'module' => 'IWnoteboard',
+                'sv' => $sv));
         }
 
         // redirect user to noteboard main page
-        return System::redirect(ModUtil::url('IWnoteboard', 'user', 'main',
-                        array('tema' => $tema)));
+        return System::redirect(ModUtil::url('IWnoteboard', 'user', 'main', array('tema' => $tema)));
     }
 
     /**
@@ -787,7 +757,7 @@ class IWnoteboard_Controller_User extends Zikula_AbstractController {
         $segur = FormUtil::getPassedValue('segur', isset($args['segur']) ? $args['segur'] : null, 'POST');
         $new_file = FormUtil::getPassedValue('new_file', isset($args['new_file']) ? $args['new_file'] : null, 'POST');
         $language = FormUtil::getPassedValue('language', isset($args['language']) ? $args['language'] : null, 'POST');
-        $public = FormUtil::getPassedValue('public', isset($args['public']) ? $args['public'] : null, 'POST');
+        $firstLine = FormUtil::getPassedValue('firstLine', isset($args['firstLine']) ? $args['firstLine'] : 0, 'POST');
 
         //get the file name
         $fileName = $_FILES['fitxer']['name'];
@@ -799,12 +769,10 @@ class IWnoteboard_Controller_User extends Zikula_AbstractController {
 
         $this->checkCsrfToken();
 
-        $permissions = ModUtil::apiFunc('IWnoteboard', 'user', 'permisos',
-                        array('uid' => UserUtil::getVar('uid')));
+        $permissions = ModUtil::apiFunc('IWnoteboard', 'user', 'permisos', array('uid' => UserUtil::getVar('uid')));
 
         // Get the record information
-        $registre = ModUtil::apiFunc('IWnoteboard', 'user', 'get',
-                        array('nid' => $nid));
+        $registre = ModUtil::apiFunc('IWnoteboard', 'user', 'get', array('nid' => $nid));
         if ($registre == false) {
             LogUtil::registerError($this->__('The note has not been found'));
             return System::redirect(ModUtil::url('IWnoteboard', 'user', 'main'));
@@ -829,21 +797,6 @@ class IWnoteboard_Controller_User extends Zikula_AbstractController {
                 $desti1 .= $dest . '$';
             }
             $destinataris = $desti1;
-
-            // Separate the groups with the dolar symbol
-            if ($public == 1) {
-                // Get current user groups
-                $sv = ModUtil::func('IWmain', 'user', 'genSecurityValue');
-                $allGroupsInfo = ModUtil::func('IWmain', 'user', 'getAllGroupsInfo',
-                                array('sv' => $sv));
-                $desti1 = '$$';
-                foreach ($toUsers as $dest) {
-                    $desti1 .= ( $dest != 0) ? $allGroupsInfo[$dest] . '$' : '0$';
-                }
-                $literalGroups = $desti1;
-            } else {
-                $literalGroups = '';
-            }
         }
 
         if (!$permissions['potverificar']) {
@@ -896,10 +849,9 @@ class IWnoteboard_Controller_User extends Zikula_AbstractController {
         if ($segur == 1) {
             $folder = ModUtil::getVar('IWnoteboard', 'attached');
             $sv = ModUtil::func('IWmain', 'user', 'genSecurityValue');
-            $delete = ModUtil::func('IWmain', 'user', 'deleteFile',
-                            array('sv' => $sv,
-                                'folder' => $folder,
-                                'fileName' => $registre['fitxer']));
+            $delete = ModUtil::func('IWmain', 'user', 'deleteFile', array('sv' => $sv,
+                        'folder' => $folder,
+                        'fileName' => $registre['fitxer']));
             if ($delete) {
                 $fitxer = '';
             }
@@ -909,10 +861,9 @@ class IWnoteboard_Controller_User extends Zikula_AbstractController {
         if ($fileName != '' && $new_file == '1') {
             $folder = ModUtil::getVar('IWnoteboard', 'attached');
             $sv = ModUtil::func('IWmain', 'user', 'genSecurityValue');
-            $update = ModUtil::func('IWmain', 'user', 'updateFile',
-                            array('sv' => $sv,
-                                'folder' => $folder,
-                                'file' => $_FILES['fitxer']));
+            $update = ModUtil::func('IWmain', 'user', 'updateFile', array('sv' => $sv,
+                        'folder' => $folder,
+                        'file' => $_FILES['fitxer']));
             //the function returns the error string if the update fails and and empty string if success
             if ($update['msg'] != '') {
                 LogUtil::registerError($update['msg'] . ' ' . $this->__('Probably the note have been sent without the attached file'));
@@ -925,44 +876,41 @@ class IWnoteboard_Controller_User extends Zikula_AbstractController {
         }
 
         // Update a note
-        $lid = ModUtil::apiFunc('IWnoteboard', 'user', 'update',
-                        array('data' => $data,
-                            'nid' => $nid,
-                            'noticia' => $noticia,
-                            'caduca' => $caduca,
-                            'titular' => $titular,
-                            'titulin' => $titulin,
-                            'titulout' => $titulout,
-                            'mes_info' => $mes_info,
-                            'text' => $text,
-                            'fitxer' => $fileName,
-                            'textfitxer' => $textfitxer,
-                            'destinataris' => $destinataris,
-                            'admet_comentaris' => $admet_comentaris,
-                            'verifica' => $verifica,
-                            'v' => $v,
-                            'tid' => $tid,
-                            'saved' => $saved,
-                            'modremitent' => $modremitent,
-                            'language' => $language,
-                            'public' => $public,
-                            'literalGroups' => $literalGroups));
+        $lid = ModUtil::apiFunc('IWnoteboard', 'user', 'update', array('data' => $data,
+                    'nid' => $nid,
+                    'noticia' => $noticia,
+                    'caduca' => $caduca,
+                    'titular' => $titular,
+                    'titulin' => $titulin,
+                    'titulout' => $titulout,
+                    'mes_info' => $mes_info,
+                    'text' => $text,
+                    'fitxer' => $fileName,
+                    'textfitxer' => $textfitxer,
+                    'destinataris' => $destinataris,
+                    'admet_comentaris' => $admet_comentaris,
+                    'verifica' => $verifica,
+                    'v' => $v,
+                    'tid' => $tid,
+                    'saved' => $saved,
+                    'modremitent' => $modremitent,
+                    'language' => $language,
+                    'firstLine' => $firstLine,
+                ));
 
         if ($lid != false) {
             //The note has been modified
             LogUtil::registerStatus($this->__('The note has been modified'));
             //Delete users headlines var. This renoval the block information
             $sv = ModUtil::func('IWmain', 'user', 'genSecurityValue');
-            ModUtil::apiFunc('IWmain', 'user', 'usersVarsDelModule',
-                            array('name' => 'nbheadlines',
-                                'module' => 'IWnoteboard',
-                                'sv' => $sv));
+            ModUtil::apiFunc('IWmain', 'user', 'usersVarsDelModule', array('name' => 'nbheadlines',
+                'module' => 'IWnoteboard',
+                'sv' => $sv));
         }
 
         // Redirect user to main page
-        return System::redirect(ModUtil::url('IWnoteboard', 'user', 'main',
-                        array('tema' => $tema,
-                            'saved' => $saved)));
+        return System::redirect(ModUtil::url('IWnoteboard', 'user', 'main', array('tema' => $tema,
+                    'saved' => $saved)));
     }
 
     /**
@@ -985,16 +933,14 @@ class IWnoteboard_Controller_User extends Zikula_AbstractController {
         }
 
         // get a note informtion
-        $registre = ModUtil::apiFunc('IWnoteboard', 'user', 'get',
-                        array('nid' => $nid));
+        $registre = ModUtil::apiFunc('IWnoteboard', 'user', 'get', array('nid' => $nid));
         if ($registre == false) {
             LogUtil::registerError($this->__('The note has not been found'));
             return System::redirect(ModUtil::url('IWnoteboard', 'user', 'main'));
         }
 
         // Get the user permissions in noteboard
-        $permissions = ModUtil::apiFunc('IWnoteboard', 'user', 'permisos',
-                        array('uid' => UserUtil::getVar('uid')));
+        $permissions = ModUtil::apiFunc('IWnoteboard', 'user', 'permisos', array('uid' => UserUtil::getVar('uid')));
         if (empty($permissions) ||
                 $permissions['nivell'] < 2) {
             LogUtil::registerError($this->__('You are not allowed to do this action'));
@@ -1030,8 +976,7 @@ class IWnoteboard_Controller_User extends Zikula_AbstractController {
 
         $this->checkCsrfToken();
 
-        $permissions = ModUtil::apiFunc('IWnoteboard', 'user', 'permisos',
-                        array('uid' => UserUtil::getVar('uid')));
+        $permissions = ModUtil::apiFunc('IWnoteboard', 'user', 'permisos', array('uid' => UserUtil::getVar('uid')));
         if (empty($permissions) ||
                 $permissions['nivell'] < 2) {
             LogUtil::registerError($this->__('You are not allowed to do this action'));
@@ -1039,11 +984,10 @@ class IWnoteboard_Controller_User extends Zikula_AbstractController {
         }
 
         // create a comment
-        $lid = ModUtil::apiFunc('IWnoteboard', 'user', 'crear',
-                        array('noticia' => $noticia,
-                            'data' => time(),
-                            'verifica' => $verifica,
-                            'ncid' => $nid));
+        $lid = ModUtil::apiFunc('IWnoteboard', 'user', 'crear', array('noticia' => $noticia,
+                    'data' => time(),
+                    'verifica' => $verifica,
+                    'ncid' => $nid));
 
         if ($lid != false) {
             // creation succesfully
@@ -1074,16 +1018,14 @@ class IWnoteboard_Controller_User extends Zikula_AbstractController {
         }
 
         // get comment information
-        $registre = ModUtil::apiFunc('IWnoteboard', 'user', 'get',
-                        array('nid' => $nid));
+        $registre = ModUtil::apiFunc('IWnoteboard', 'user', 'get', array('nid' => $nid));
         if ($registre == false) {
             LogUtil::registerError($this->__('The note has not been found'));
             return System::redirect(ModUtil::url('IWnoteboard', 'user', 'main'));
         }
 
         // get note information
-        $note = ModUtil::apiFunc('IWnoteboard', 'user', 'get',
-                        array('nid' => $registre['ncid']));
+        $note = ModUtil::apiFunc('IWnoteboard', 'user', 'get', array('nid' => $registre['ncid']));
         if ($note == false) {
             LogUtil::registerError($this->__('The note has not been found'));
             return System::redirect(ModUtil::url('IWnoteboard', 'user', 'main'));
@@ -1091,8 +1033,7 @@ class IWnoteboard_Controller_User extends Zikula_AbstractController {
 
 
         // Get the user permissions in noteboard
-        $permissions = ModUtil::apiFunc('IWnoteboard', 'user', 'permisos',
-                        array('uid' => UserUtil::getVar('uid')));
+        $permissions = ModUtil::apiFunc('IWnoteboard', 'user', 'permisos', array('uid' => UserUtil::getVar('uid')));
 
         if (empty($permissions) ||
                 $permissions['nivell'] < 5 ||
@@ -1153,12 +1094,10 @@ class IWnoteboard_Controller_User extends Zikula_AbstractController {
         $this->checkCsrfToken();
 
         // get a note information
-        $registre = ModUtil::apiFunc('IWnoteboard', 'user', 'get',
-                        array('nid' => $nid));
+        $registre = ModUtil::apiFunc('IWnoteboard', 'user', 'get', array('nid' => $nid));
 
         // Get the user permissions in noteboard
-        $permissions = ModUtil::apiFunc('IWnoteboard', 'user', 'permisos',
-                        array('uid' => UserUtil::getVar('uid')));
+        $permissions = ModUtil::apiFunc('IWnoteboard', 'user', 'permisos', array('uid' => UserUtil::getVar('uid')));
         if (empty($permissions) ||
                 $permissions['nivell'] < 5 ||
                 ($permissions['nivell'] < 7 &&
@@ -1169,10 +1108,9 @@ class IWnoteboard_Controller_User extends Zikula_AbstractController {
 
 
         // get the comment information
-        $lid = ModUtil::apiFunc('IWnoteboard', 'user', 'updatecomentari',
-                        array('nid' => $nid,
-                            'noticia' => $noticia,
-                            'verifica' => 1));
+        $lid = ModUtil::apiFunc('IWnoteboard', 'user', 'updatecomentari', array('nid' => $nid,
+                    'noticia' => $noticia,
+                    'verifica' => 1));
 
         if ($lid != false) {
             // Update successfully
@@ -1203,8 +1141,7 @@ class IWnoteboard_Controller_User extends Zikula_AbstractController {
             return System::redirect(ModUtil::url('IWnoteboard', 'user', 'main'));
         }
 
-        $registres = ModUtil::apiFunc('IWnoteboard', 'user', 'hanvist',
-                        array('nid' => $nid));
+        $registres = ModUtil::apiFunc('IWnoteboard', 'user', 'hanvist', array('nid' => $nid));
 
         return $this->view->assign('registres', $registres)
                 ->assign('tema', $tema)
