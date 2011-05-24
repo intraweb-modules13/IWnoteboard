@@ -1059,7 +1059,7 @@ class IWnoteboard_Controller_User extends Zikula_AbstractController {
                     ->assign('authorFullName', $authorInfo['ncc'])
                     ->assign('commentContent', $noticia)
                     ->assign('url', $url)
-                    ->assign('nid', $lid)
+                    ->assign('nid', $nid)
                     ->assign('text', 2)
                     ->assign('sitename', System::getVar('sitename'))
                     ->fetch('IWnoteboard_user_msgbody.htm');
