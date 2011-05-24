@@ -15,7 +15,7 @@ class IWnoteboard_Controller_Admin extends Zikula_AbstractController {
     public function main() {
         // Security check
         if (!SecurityUtil::checkPermission('IWnoteboard::', "::", ACCESS_ADMIN)) {
-            return LogUtil::registerError($this->__('Sorry! No authorization to access this module.'), 403);
+            throw new Zikula_Exception_Forbidden();
         }
 
         // Checks if module IWmain is installed. If not returns error
@@ -28,8 +28,7 @@ class IWnoteboard_Controller_Admin extends Zikula_AbstractController {
 
         // Check if the version needed is correct. If not return error
         $versionNeeded = '0.3';
-        if (!ModUtil::func('IWmain', 'admin', 'checkVersion',
-                        array('version' => $versionNeeded))) {
+        if (!ModUtil::func('IWmain', 'admin', 'checkVersion', array('version' => $versionNeeded))) {
             return false;
         }
         $temes_array = array();
@@ -41,15 +40,14 @@ class IWnoteboard_Controller_Admin extends Zikula_AbstractController {
 
         // Get all the groups information
         $sv = ModUtil::func('IWmain', 'user', 'genSecurityValue');
-        $groupsInfo = ModUtil::func('IWmain', 'user', 'getAllGroupsInfo',
-                        array('sv' => $sv));
+        $groupsInfo = ModUtil::func('IWmain', 'user', 'getAllGroupsInfo', array('sv' => $sv));
 
         //Agefim la llista de temes on classificar les notÃ­cies
         foreach ($themes as $theme) {
             if ($theme['descriu'] == '') {
                 $theme['descriu'] = '---';
             }
-            $grup = ($theme['grup'] == 0) ? $this->__('All', $dom) : $groupsInfo[$theme['grup']];
+            $grup = ($theme['grup'] == 0) ? $this->__('All') : $groupsInfo[$theme['grup']];
             if ($grup == '') {
                 $grup = '???';
             }
@@ -78,13 +76,12 @@ class IWnoteboard_Controller_Admin extends Zikula_AbstractController {
         $editPrintAfter = ModUtil::getVar('IWnoteboard', 'editPrintAfter');
         $repperdefecte = ModUtil::getVar('IWnoteboard', 'repperdefecte');
         $notifyNewEntriesByMail = ModUtil::getVar('IWnoteboard', 'notifyNewEntriesByMail');
-        
+
 
         $sv = ModUtil::func('IWmain', 'user', 'genSecurityValue');
-        $groups = ModUtil::func('IWmain', 'user', 'getAllGroups',
-                        array('sv' => $sv,
-                            'plus' => $this->__('Unregistered'),
-                            'less' => ModUtil::getVar('iw_myrole', 'rolegroup')));
+        $groups = ModUtil::func('IWmain', 'user', 'getAllGroups', array('sv' => $sv,
+                    'plus' => $this->__('Unregistered'),
+                    'less' => ModUtil::getVar('iw_myrole', 'rolegroup')));
 
         if (!file_exists(ModUtil::getVar('IWmain', 'documentRoot') . '/' . ModUtil::getVar('IWnoteboard', 'attached')) || ModUtil::getVar('IWnoteboard', 'attached') == '') {
             $noFolder = true;
@@ -189,10 +186,9 @@ class IWnoteboard_Controller_Admin extends Zikula_AbstractController {
         }
 
         $sv = ModUtil::func('IWmain', 'user', 'genSecurityValue');
-        $groups = ModUtil::func('IWmain', 'user', 'getAllGroups',
-                        array('sv' => $sv,
-                            'plus' => $this->__('Unregistered'),
-                            'less' => ModUtil::getVar('iw_myrole', 'rolegroup')));
+        $groups = ModUtil::func('IWmain', 'user', 'getAllGroups', array('sv' => $sv,
+                    'plus' => $this->__('Unregistered'),
+                    'less' => ModUtil::getVar('iw_myrole', 'rolegroup')));
 
         $i = 0;
         $permisos = '$$';
@@ -248,10 +244,9 @@ class IWnoteboard_Controller_Admin extends Zikula_AbstractController {
 
         // Gets the groups
         $sv = ModUtil::func('IWmain', 'user', 'genSecurityValue');
-        $groups = ModUtil::func('IWmain', 'user', 'getAllGroups',
-                        array('plus' => $this->__('All'),
-                            'less' => ModUtil::getVar('iw_myrole', 'rolegroup'),
-                            'sv' => $sv));
+        $groups = ModUtil::func('IWmain', 'user', 'getAllGroups', array('plus' => $this->__('All'),
+                    'less' => ModUtil::getVar('iw_myrole', 'rolegroup'),
+                    'sv' => $sv));
 
 
         $this->view->assign('grups', $groups)
@@ -285,19 +280,17 @@ class IWnoteboard_Controller_Admin extends Zikula_AbstractController {
         $this->checkCsrfToken();
 
         // create the new topic
-        $lid = ModUtil::apiFunc('IWnoteboard', 'admin', 'crear',
-                        array('nomtema' => $nomtema,
-                            'descriu' => $descriu,
-                            'grup' => $grup));
+        $lid = ModUtil::apiFunc('IWnoteboard', 'admin', 'crear', array('nomtema' => $nomtema,
+                    'descriu' => $descriu,
+                    'grup' => $grup));
 
         if ($lid != false) {
             // Success
             LogUtil::registerStatus($this->__('A new topic has been created'));
             $sv = ModUtil::func('IWmain', 'user', 'genSecurityValue');
-            ModUtil::apiFunc('IWmain', 'user', 'usersVarsDelModule',
-                            array('name' => 'nbtopics',
-                                'module' => 'IWnoteboard',
-                                'sv' => $sv));
+            ModUtil::apiFunc('IWmain', 'user', 'usersVarsDelModule', array('name' => 'nbtopics',
+                'module' => 'IWnoteboard',
+                'sv' => $sv));
         }
 
         // Redirect to the main site for the admin
@@ -333,10 +326,9 @@ class IWnoteboard_Controller_Admin extends Zikula_AbstractController {
 
         // Get all the groups
         $sv = ModUtil::func('IWmain', 'user', 'genSecurityValue');
-        $groups = ModUtil::func('IWmain', 'user', 'getAllGroups',
-                        array('plus' => $this->__('All'),
-                            'sv' => $sv,
-                            'less' => ModUtil::getVar('iw_myrole', 'rolegroup')));
+        $groups = ModUtil::func('IWmain', 'user', 'getAllGroups', array('plus' => $this->__('All'),
+                    'sv' => $sv,
+                    'less' => ModUtil::getVar('iw_myrole', 'rolegroup')));
 
         $this->view->assign('tid', $tid)
                 ->assign('title', $this->__('Edit a topic'))
@@ -370,19 +362,17 @@ class IWnoteboard_Controller_Admin extends Zikula_AbstractController {
 
         $this->checkCsrfToken();
 
-        $lid = ModUtil::apiFunc('IWnoteboard', 'admin', 'modificar',
-                        array('tid' => $tid,
-                            'nomtema' => $nomtema,
-                            'descriu' => $descriu,
-                            'grup' => $grup));
+        $lid = ModUtil::apiFunc('IWnoteboard', 'admin', 'modificar', array('tid' => $tid,
+                    'nomtema' => $nomtema,
+                    'descriu' => $descriu,
+                    'grup' => $grup));
         if ($lid != false) {
             // Success
             LogUtil::registerStatus($this->__('The topic has been modified'));
             $sv = ModUtil::func('IWmain', 'user', 'genSecurityValue');
-            ModUtil::apiFunc('IWmain', 'user', 'usersVarsDelModule',
-                            array('name' => 'nbtopics',
-                                'module' => 'IWnoteboard',
-                                'sv' => $sv));
+            ModUtil::apiFunc('IWmain', 'user', 'usersVarsDelModule', array('name' => 'nbtopics',
+                'module' => 'IWnoteboard',
+                'sv' => $sv));
         }
 
         // Return to admin pannel
