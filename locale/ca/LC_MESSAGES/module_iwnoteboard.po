@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: Module IWnoteboard versión 3.0\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2010-01-27 10:50+0100\n"
-"PO-Revision-Date: 2011-05-24 13:12+0100\n"
+"PO-Revision-Date: 2011-05-24 13:39+0100\n"
 "Last-Translator: intraweb <intraweb@xtec.cat>\n"
 "Language-Team: Intraweb <intraweb@xtec.cat>\n"
 "MIME-Version: 1.0\n"
@@ -957,7 +957,7 @@ msgstr "Benvolgut/da %s,"
 
 #, php-format
 msgid "%s has commented your entry in noteboard with the content as follow:"
-msgstr "%s ha comentat una entrada teva en el tauler amb el contingut següent:"
+msgstr "%s ha comentat una entrada vostra en el tauler amb el contingut següent:"
 
 msgid "Somebody has commented your entry in noteboard"
 msgstr "El vostre comentari al tauler ha estat comentat"
