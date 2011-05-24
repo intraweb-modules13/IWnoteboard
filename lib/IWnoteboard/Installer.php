@@ -18,8 +18,7 @@ class IWnoteboard_Installer extends Zikula_AbstractInstaller {
 
         // Check if the version needed is correct
         $versionNeeded = '3.0.0';
-        if (!ModUtil::func('IWmain', 'admin', 'checkVersion',
-                        array('version' => $versionNeeded))) {
+        if (!ModUtil::func('IWmain', 'admin', 'checkVersion', array('version' => $versionNeeded))) {
             return false;
         }
 
@@ -46,7 +45,9 @@ class IWnoteboard_Installer extends Zikula_AbstractInstaller {
                 ->setVar('topicsSystem', '0')
                 ->setVar('shipHeadersLines', '0')
                 ->setVar('notifyNewEntriesByMail', '0')
-                ->setVar('editPrintAfter', '-1');
+                ->setVar('editPrintAfter', '-1')
+                ->setVar('notifyNewCommentsByMail', '1')
+                ->setVar('commentCheckedByDefault', '1');
 
 
         //Initialation successfull
@@ -80,7 +81,9 @@ class IWnoteboard_Installer extends Zikula_AbstractInstaller {
                 ->delVar('topicsSystem')
                 ->delVar('shipHeadersLines')
                 ->delVar('notifyNewEntriesByMail')
-                ->delVar('editPrintAfter');
+                ->delVar('editPrintAfter')
+                ->delVar('notifyNewCommentsByMail')
+                ->delVar('commentCheckedByDefault');
 
         //Deletion successfull
         return true;

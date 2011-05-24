@@ -270,7 +270,7 @@
                     {gt text="Comments allowed"}
                 </td>
                 <td align="right">
-                    <input type="checkbox" {if $admet_comentaris}checked{/if} name="admet_comentaris" value="1" />
+                    <input type="checkbox" {if $admet_comentaris OR $m eq 'n' AND $commentCheckedByDefault eq 1}checked{/if} name="admet_comentaris" value="1" />
                 </td>
             </tr>
             {if $m eq 'e'}

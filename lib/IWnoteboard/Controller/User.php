@@ -563,6 +563,7 @@ class IWnoteboard_Controller_User extends Zikula_AbstractController {
                 ->assign('multiLanguage', ModUtil::getVar('IWnoteboard', 'multiLanguage'))
                 ->assign('shipHeadersLines', ModUtil::getVar('IWnoteboard', 'shipHeadersLines'))
                 ->assign('language', $language)
+                ->assign('commentCheckedByDefault', $this->getVar('commentCheckedByDefault'))
                 ->fetch('IWnoteboard_user_nova.htm');
     }
 
@@ -742,6 +743,7 @@ class IWnoteboard_Controller_User extends Zikula_AbstractController {
                     ->assign('url', $url)
                     ->assign('nid', $lid)
                     ->assign('sitename', System::getVar('sitename'))
+                    ->assign('text', 1)
                     ->fetch('IWnoteboard_user_msgbody.htm');
 
             // get users in administrators group
@@ -770,7 +772,7 @@ class IWnoteboard_Controller_User extends Zikula_AbstractController {
 
     /**
      * Receive the information from the form and update a entry in the database
-     * @author:     Albert Pï¿œrez Monfort (aperezm@xtec.cat)
+     * @author:     Albert Pérez Monfort (aperezm@xtec.cat)
      * @param:	args   Array with the values sended from the form
      * @return:	Thue if success
      */
@@ -1034,9 +1036,45 @@ class IWnoteboard_Controller_User extends Zikula_AbstractController {
             // creation succesfully
             if ($permissions['verifica'] == 1) {
                 LogUtil::registerStatus($this->__('A new comment has been created'));
+                $subject = $this->__('Somebody has commented your entry in noteboard');
             } else {
                 LogUtil::registerStatus($this->__('The comment has been sent successfully, but is waiting for administrator\'s validation.'));
+                $subject = $this->__('Somebody has commented your entry in noteboard and is waiting for administrator\'s validation.');
             }
+        }
+
+        if ($this->getVar('notifyNewCommentsByMail')) {
+            $url = System::getBaseUrl();
+            // Get the record information
+            $note = ModUtil::apiFunc('IWnoteboard', 'user', 'get', array('nid' => $nid));
+            $sv = ModUtil::func('IWmain', 'user', 'genSecurityValue');
+            $userFullName = ModUtil::func('IWmain', 'user', 'getUserInfo', array('uid' => UserUtil::getVar('uid'),
+                        'sv' => $sv,
+                        'info' => 'ncc'));
+            $sv = ModUtil::func('IWmain', 'user', 'genSecurityValue');
+            $authorInfo = ModUtil::func('IWmain', 'user', 'getUserInfo', array('uid' => $note['informa'],
+                        'sv' => $sv,
+                        'info' => array('ncc', 'e')));
+            $body = $this->view->assign('sendedby', $userFullName)
+                    ->assign('authorFullName', $authorInfo['ncc'])
+                    ->assign('commentContent', $noticia)
+                    ->assign('url', $url)
+                    ->assign('nid', $lid)
+                    ->assign('text', 2)
+                    ->assign('sitename', System::getVar('sitename'))
+                    ->fetch('IWnoteboard_user_msgbody.htm');
+
+            $sendMessageArgs = array(
+                'fromname' => System::getVar('sitename'),
+                'fromaddress' => System::getVar('adminmail'),
+                'toname' => $userFullName,
+                'toaddress' => $authorInfo['e'],
+                'replytoname' => System::getVar('sitename'),
+                'replytoaddress' => System::getVar('adminmail'),
+                'subject' => $subject,
+                'body' => $body,
+            );
+            ModUtil::apiFunc('Mailer', 'user', 'sendMessage', $sendMessageArgs);
         }
 
         return System::redirect(ModUtil::url('IWnoteboard', 'user', 'main'));

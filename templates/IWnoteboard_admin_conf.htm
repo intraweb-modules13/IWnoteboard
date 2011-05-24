@@ -154,6 +154,14 @@
                 <input id="notifyNewEntriesByMail" type="checkbox" {if $notifyNewEntriesByMail}checked{/if} name="notifyNewEntriesByMail" value="1"/>
             </div>
             <div class="z-formrow">
+                <label for="notifyNewCommentsByMail">{gt text="Notify new comments to authors by email"}</label>
+                <input id="notifyNewCommentsByMail" type="checkbox" {if $notifyNewCommentsByMail}checked{/if} name="notifyNewCommentsByMail" value="1"/>
+            </div>
+            <div class="z-formrow">
+                <label for="commentCheckedByDefault">{gt text="The comments option is checked by default"}</label>
+                <input id="commentCheckedByDefault" type="checkbox" {if $commentCheckedByDefault}checked{/if} name="commentCheckedByDefault" value="1"/>
+            </div>
+            <div class="z-formrow">
                 <label for="c">{gt text="The notes expire at"}</label>
                 <input type="text" name="c" maxlength="3" size="3" value="{$caducitat}" /> {gt text="days from their creation"}
             </div>

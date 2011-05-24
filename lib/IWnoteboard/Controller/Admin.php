@@ -57,26 +57,27 @@ class IWnoteboard_Controller_Admin extends Zikula_AbstractController {
                 'grup' => $grup);
         }
 
-        $grupsModVar = ModUtil::getVar('IWnoteboard', 'grups');
-        $permisosModVar = ModUtil::getVar('IWnoteboard', 'permisos');
-        $marcatModVar = ModUtil::getVar('IWnoteboard', 'marcat');
-        $verificaModVar = ModUtil::getVar('IWnoteboard', 'verifica');
-        $quiverifica = ModUtil::getVar('IWnoteboard', 'quiverifica');
-        $caducitat = ModUtil::getVar('IWnoteboard', 'caducitat');
-        $colorrow1 = ModUtil::getVar('IWnoteboard', 'colorrow1');
-        $colorrow2 = ModUtil::getVar('IWnoteboard', 'colorrow2');
-        $colornewrow1 = ModUtil::getVar('IWnoteboard', 'colornewrow1');
-        $colornewrow2 = ModUtil::getVar('IWnoteboard', 'colornewrow2');
-        $attached = ModUtil::getVar('IWnoteboard', 'attached');
+        $grupsModVar = $this->getVar('grups');
+        $permisosModVar = $this->getVar('permisos');
+        $marcatModVar = $this->getVar('marcat');
+        $verificaModVar = $this->getVar('verifica');
+        $quiverifica = $this->getVar('quiverifica');
+        $caducitat = $this->getVar('caducitat');
+        $colorrow1 = $this->getVar('colorrow1');
+        $colorrow2 = $this->getVar('colorrow2');
+        $colornewrow1 = $this->getVar('colornewrow1');
+        $colornewrow2 = $this->getVar('colornewrow2');
+        $attached = $this->getVar('attached');
         $directoriroot = ModUtil::getVar('IWmain', 'documentRoot');
-        $notRegisteredSeeRedactors = ModUtil::getVar('IWnoteboard', 'notRegisteredSeeRedactors');
-        $multiLanguage = ModUtil::getVar('IWnoteboard', 'multiLanguage');
-        $topicsSystem = ModUtil::getVar('IWnoteboard', 'topicsSystem');
-        $shipHeadersLines = ModUtil::getVar('IWnoteboard', 'shipHeadersLines');
-        $editPrintAfter = ModUtil::getVar('IWnoteboard', 'editPrintAfter');
-        $repperdefecte = ModUtil::getVar('IWnoteboard', 'repperdefecte');
-        $notifyNewEntriesByMail = ModUtil::getVar('IWnoteboard', 'notifyNewEntriesByMail');
-
+        $notRegisteredSeeRedactors = $this->getVar('notRegisteredSeeRedactors');
+        $multiLanguage = $this->getVar('multiLanguage');
+        $topicsSystem = $this->getVar('topicsSystem');
+        $shipHeadersLines = $this->getVar('shipHeadersLines');
+        $editPrintAfter = $this->getVar('editPrintAfter');
+        $repperdefecte = $this->getVar('repperdefecte');
+        $notifyNewEntriesByMail = $this->getVar('notifyNewEntriesByMail');
+        $notifyNewCommentsByMail = $this->getVar('notifyNewCommentsByMail');
+        $commentCheckedByDefault = $this->getVar('commentCheckedByDefault');
 
         $sv = ModUtil::func('IWmain', 'user', 'genSecurityValue');
         $groups = ModUtil::func('IWmain', 'user', 'getAllGroups', array('sv' => $sv,
@@ -138,6 +139,8 @@ class IWnoteboard_Controller_Admin extends Zikula_AbstractController {
                 ->assign('noFolder', $noFolder)
                 ->assign('noWriteable', $noWriteable)
                 ->assign('notifyNewEntriesByMail', $notifyNewEntriesByMail)
+                ->assign('notifyNewCommentsByMail', $notifyNewCommentsByMail)
+                ->assign('commentCheckedByDefault', $commentCheckedByDefault)
                 ->fetch('IWnoteboard_admin_conf.htm');
     }
 
@@ -168,6 +171,8 @@ class IWnoteboard_Controller_Admin extends Zikula_AbstractController {
         $shipHeadersLines = FormUtil::getPassedValue('shipHeadersLines', isset($args['shipHeadersLines']) ? $args['shipHeadersLines'] : null, 'POST');
         $editPrintAfter = FormUtil::getPassedValue('editPrintAfter', isset($args['editPrintAfter']) ? $args['editPrintAfter'] : null, 'POST');
         $notifyNewEntriesByMail = FormUtil::getPassedValue('notifyNewEntriesByMail', isset($args['notifyNewEntriesByMail']) ? $args['notifyNewEntriesByMail'] : null, 'POST');
+        $notifyNewCommentsByMail = FormUtil::getPassedValue('notifyNewCommentsByMail', isset($args['notifyNewCommentsByMail']) ? $args['notifyNewCommentsByMail'] : null, 'POST');
+        $commentCheckedByDefault = FormUtil::getPassedValue('commentCheckedByDefault', isset($args['commentCheckedByDefault']) ? $args['commentCheckedByDefault'] : null, 'POST');
 
         // Security check
         if (!SecurityUtil::checkPermission('IWnoteboard::', "::", ACCESS_ADMIN)) {
@@ -224,7 +229,10 @@ class IWnoteboard_Controller_Admin extends Zikula_AbstractController {
                 ->setVar('topicsSystem', $topicsSystem)
                 ->setVar('shipHeadersLines', $shipHeadersLines)
                 ->setVar('notifyNewEntriesByMail', $notifyNewEntriesByMail)
-                ->setVar('editPrintAfter', $editPrintAfter);
+                ->setVar('editPrintAfter', $editPrintAfter)
+                ->setVar('notifyNewCommentsByMail', $notifyNewCommentsByMail)
+                ->setVar('commentCheckedByDefault', $commentCheckedByDefault)
+        ;
 
         LogUtil::registerStatus($this->__('The configuration has been modified'));
         return System::redirect(ModUtil::url('IWnoteboard', 'admin', 'main'));
