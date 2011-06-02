@@ -244,7 +244,6 @@ class IWnoteboard_Controller_Admin extends Zikula_AbstractController {
      * @return	The form fields
      */
     public function noutema() {
-
         // Security check
         if (!SecurityUtil::checkPermission('IWnoteboard::', "::", ACCESS_ADMIN)) {
             throw new Zikula_Exception_Forbidden();
@@ -257,7 +256,7 @@ class IWnoteboard_Controller_Admin extends Zikula_AbstractController {
                     'sv' => $sv));
 
 
-        $this->view->assign('grups', $groups)
+        return $this->view->assign('grups', $groups)
                 ->assign('title', $this->__('Create a new topic'))
                 ->assign('submit', $this->__('Create the topic'))
                 ->assign('nomtema', '')
@@ -297,8 +296,8 @@ class IWnoteboard_Controller_Admin extends Zikula_AbstractController {
             LogUtil::registerStatus($this->__('A new topic has been created'));
             $sv = ModUtil::func('IWmain', 'user', 'genSecurityValue');
             ModUtil::apiFunc('IWmain', 'user', 'usersVarsDelModule', array('name' => 'nbtopics',
-                'module' => 'IWnoteboard',
-                'sv' => $sv));
+                        'module' => 'IWnoteboard',
+                        'sv' => $sv));
         }
 
         // Redirect to the main site for the admin
@@ -338,7 +337,7 @@ class IWnoteboard_Controller_Admin extends Zikula_AbstractController {
                     'sv' => $sv,
                     'less' => ModUtil::getVar('iw_myrole', 'rolegroup')));
 
-        $this->view->assign('tid', $tid)
+        return $this->view->assign('tid', $tid)
                 ->assign('title', $this->__('Edit a topic'))
                 ->assign('nomtema', $registre['nomtema'])
                 ->assign('descriu', $registre['descriu'])
@@ -379,8 +378,8 @@ class IWnoteboard_Controller_Admin extends Zikula_AbstractController {
             LogUtil::registerStatus($this->__('The topic has been modified'));
             $sv = ModUtil::func('IWmain', 'user', 'genSecurityValue');
             ModUtil::apiFunc('IWmain', 'user', 'usersVarsDelModule', array('name' => 'nbtopics',
-                'module' => 'IWnoteboard',
-                'sv' => $sv));
+                        'module' => 'IWnoteboard',
+                        'sv' => $sv));
         }
 
         // Return to admin pannel
