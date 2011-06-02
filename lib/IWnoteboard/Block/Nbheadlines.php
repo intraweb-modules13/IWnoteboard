@@ -74,6 +74,7 @@ class IWnoteboard_Block_Nbheadlines extends Zikula_Controller_AbstractBlock {
         $usersFullname = ModUtil::func('IWmain', 'user', 'getAllUsersInfo', array('info' => 'nc',
                     'sv' => $sv));
 
+        $en_te = false;
         foreach ($registres as $registre) {
             $permisos = ModUtil::apiFunc('IWnoteboard', 'user', 'permisos', array('uid' => $uid));
             //separem la llista de grups que tenen accï¿œs a la notï¿œcia i ho posem en una matriu
