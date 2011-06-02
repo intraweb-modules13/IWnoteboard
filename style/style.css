@@ -28,3 +28,8 @@ table.z-admintable th {
     text-align: center;
     margin-top: 15px;
 }
+
+.noteInBlock {
+    border-bottom: 1px dotted #555;
+    margin-bottom: 15px;
+}
