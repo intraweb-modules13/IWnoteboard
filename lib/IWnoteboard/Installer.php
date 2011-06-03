@@ -92,9 +92,90 @@ class IWnoteboard_Installer extends Zikula_AbstractInstaller {
     /**
      * Update the IWnoteboard module
      * @author Albert Pérez Monfort (aperezm@xtec.cat)
+     * @author Jaume Fernàndez Valiente (jfern343@xtec.cat)
      * @return bool true if successful, false otherwise
      */
     public function upgrade($oldversion) {
+
+        $prefix = $GLOBALS['ZConfig']['System']['prefix'];
+
+        //Delete unneeded tables
+        DBUtil::dropTable('iw_noteboard_public');
+
+        //Rename tables
+        if (!DBUtil::renameTable('iw_noteboard', 'IWnoteboard'))
+            return false;
+        if (!DBUtil::renameTable('iw_noteboard_topics', 'IWnoteboard_topics'))
+            return false;
+
+        // Delete unneded columns
+        $c = array();
+        $c[] = "ALTER TABLE `{$prefix}_IWnoteboard` DROP `iw_public` ";
+        $c[] = "ALTER TABLE `{$prefix}_IWnoteboard` DROP `iw_sharedFrom` ";
+        $c[] = "ALTER TABLE `{$prefix}_IWnoteboard` DROP `iw_sharedId` ";
+        foreach ($c as $sql) {
+            DBUtil::executeSQL($sql);
+        }
+
+        // Update z_blocs table
+        $c = "UPDATE {$prefix}_blocks SET z_bkey = 'Nbheadlines' WHERE z_bkey = 'nbheadlines'";
+        if (!DBUtil::executeSQL($c)) {
+            return false;
+        }
+
+        $c = "UPDATE {$prefix}_blocks SET z_bkey = 'Nbtopics' WHERE z_bkey = 'nbtopics'";
+        if (!DBUtil::executeSQL($c)) {
+            return false;
+        }
+
+
+        // Update module_vars table
+        // Update the name (keeps old var value)
+        $c = "UPDATE {$prefix}_module_vars SET z_modname = 'IWnoteboard' WHERE z_bkey = 'iw_noteboard'";
+        if (!DBUtil::executeSQL($c)) {
+            return false;
+        }
+
+        //Array de noms
+        $oldVarsNames = DBUtil::selectFieldArray("module_vars", 'name', "`z_modname` = 'IWforms'", '', false, '');
+
+
+        $newVarsNames = Array('grups', 'permisos', 'marcat', 'verifica', 'caducitat', 'repperdefecte', 'colorrow1',
+            'colorrow2', 'colornewrow1', 'colornewrow2', 'attached', 'notRegisteredSeeRedactors', 'multiLanguage',
+            'topicsSystem', 'shipHeadersLines', 'notifyNewEntriesByMail', 'editPrintAfter',
+            'notifyNewCommentsByMail', 'commentCheckedByDefault');
+
+        $newVars = Array('grups' => '',
+            'permisos' => '',
+            'marcat' => '',
+            'verifica' => '',
+            'caducitat' => '30',
+            'repperdefecte' => '1',
+            'colorrow1' => '#FFFFFF',
+            'colorrow2' => '#FFFFCC',
+            'colornewrow1' => '#FFCC99',
+            'colornewrow2' => '#99FFFF',
+            'attached' => 'noteboard',
+            'notRegisteredSeeRedactors' => '1',
+            'multiLanguage' => '0',
+            'topicsSystem' => '0',
+            'shipHeadersLines' => '0',
+            'notifyNewEntriesByMail' => '0',
+            'editPrintAfter' => '-1',
+            'notifyNewCommentsByMail' => '1',
+            'commentCheckedByDefault' => '1');
+
+        // Delete unneeded vars
+        $del = array_diff($oldVarsNames, $newVarsNames);
+        foreach ($del as $i) {
+            $this->delVar($i);
+        }
+
+        // Add new vars
+        $add = array_diff($newVarsNames, $oldVarsNames);
+        foreach ($add as $i) {
+            $this->setVar($i, $newVars[$i]);
+        }
 
         return true;
     }
