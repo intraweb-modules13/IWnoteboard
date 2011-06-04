@@ -151,8 +151,10 @@ class IWnoteboard_Controller_User extends Zikula_AbstractController {
                 }
 
                 $sv = ModUtil::func('IWmain', 'user', 'genSecurityValue');
-                $photo = ModUtil::func('IWmain', 'user', 'getUserPicture', array('uname' => UserUtil::getVar('uname', $registre['informa']),
-                            'sv' => $sv));
+                $photo = ModUtil::func('IWmain', 'user', 'getUserPicture',
+                        array('uname' => UserUtil::getVar('uname', $registre['informa']),
+                            'sv' => $sv,
+                            'small' => 1));
 
                 // The user can edit their notes
                 $pot_editar = false;
