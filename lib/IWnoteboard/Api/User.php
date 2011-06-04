@@ -679,6 +679,7 @@ class IWnoteboard_Api_User extends Zikula_AbstractApi {
     public function permisos($args) {
         $uid = FormUtil::getPassedValue('uid', isset($args['uid']) ? $args['uid'] : UserUtil::getVar('uid'), 'POST');
         $sv = FormUtil::getPassedValue('sv', isset($args['sv']) ? $args['sv'] : null, 'POST');
+        $requestByCron = false;
         if (!ModUtil::func('IWmain', 'user', 'checkSecurityValue', array('sv' => $sv))) {
             // Security check
             if (!SecurityUtil::checkPermission('IWnoteboard::', '::', ACCESS_READ)) {
