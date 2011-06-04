@@ -47,7 +47,8 @@ class IWnoteboard_Installer extends Zikula_AbstractInstaller {
                 ->setVar('notifyNewEntriesByMail', '0')
                 ->setVar('editPrintAfter', '-1')
                 ->setVar('notifyNewCommentsByMail', '1')
-                ->setVar('commentCheckedByDefault', '1');
+                ->setVar('commentCheckedByDefault', '1')
+                ->setVar('smallAvatar', '0');
 
 
         //Initialation successfull
@@ -83,7 +84,8 @@ class IWnoteboard_Installer extends Zikula_AbstractInstaller {
                 ->delVar('notifyNewEntriesByMail')
                 ->delVar('editPrintAfter')
                 ->delVar('notifyNewCommentsByMail')
-                ->delVar('commentCheckedByDefault');
+                ->delVar('commentCheckedByDefault')
+                ->delVar('smallAvatar');
 
         //Deletion successfull
         return true;
@@ -128,7 +130,6 @@ class IWnoteboard_Installer extends Zikula_AbstractInstaller {
             return false;
         }
 
-
         // Update module_vars table
         // Update the name (keeps old var value)
         $c = "UPDATE {$prefix}_module_vars SET z_modname = 'IWnoteboard' WHERE z_bkey = 'iw_noteboard'";
@@ -143,7 +144,7 @@ class IWnoteboard_Installer extends Zikula_AbstractInstaller {
         $newVarsNames = Array('grups', 'permisos', 'marcat', 'verifica', 'caducitat', 'repperdefecte', 'colorrow1',
             'colorrow2', 'colornewrow1', 'colornewrow2', 'attached', 'notRegisteredSeeRedactors', 'multiLanguage',
             'topicsSystem', 'shipHeadersLines', 'notifyNewEntriesByMail', 'editPrintAfter',
-            'notifyNewCommentsByMail', 'commentCheckedByDefault');
+            'notifyNewCommentsByMail', 'commentCheckedByDefault', 'smallAvatars');
 
         $newVars = Array('grups' => '',
             'permisos' => '',
@@ -163,7 +164,8 @@ class IWnoteboard_Installer extends Zikula_AbstractInstaller {
             'notifyNewEntriesByMail' => '0',
             'editPrintAfter' => '-1',
             'notifyNewCommentsByMail' => '1',
-            'commentCheckedByDefault' => '1');
+            'commentCheckedByDefault' => '1',
+            'smallAvatars' => '0');
 
         // Delete unneeded vars
         $del = array_diff($oldVarsNames, $newVarsNames);

@@ -178,6 +178,10 @@
                 </select>
             </div>
             <div class="z-formrow">
+                <label for="smallAvatars">{gt text="Use small avatars"}</label>
+                <input type="checkbox" {if $smallAvatars}checked{/if} name="smallAvatars" value="1"/>
+            </div>
+            <div class="z-formrow">
                 <label for="notRegisteredSeeRedactors">{gt text="Unregistered cannot see who has sent the notes"}</label>
                 <input type="checkbox" {if $notRegisteredSeeRedactors}checked{/if} name="notRegisteredSeeRedactors" value="1"/>
             </div>

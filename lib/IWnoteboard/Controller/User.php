@@ -222,20 +222,20 @@ class IWnoteboard_Controller_User extends Zikula_AbstractController {
 
             if ($tema == 0 && $nid == 0 && $marked == 0 && ModUtil::getVar('IWnoteboard', 'multiLanguage') == 0) {
                 ModUtil::func('IWmain', 'user', 'userSetVar', array('module' => 'IWnoteboard',
-                    'name' => 'viewed',
-                    'value' => $vistes,
-                    'sv' => $sv));
+                            'name' => 'viewed',
+                            'value' => $vistes,
+                            'sv' => $sv));
             } else {
                 ModUtil::func('IWmain', 'user', 'userSetVar', array('module' => 'IWnoteboard',
-                    'name' => 'viewed',
-                    'value' => $havist . $vistes,
-                    'sv' => $sv));
+                            'name' => 'viewed',
+                            'value' => $havist . $vistes,
+                            'sv' => $sv));
             }
 
             $sv = ModUtil::func('IWmain', 'user', 'genSecurityValue');
             ModUtil::func('IWmain', 'user', 'userDelVar', array('module' => 'IWmain_block_news',
-                'name' => 'news',
-                'sv' => $sv));
+                        'name' => 'news',
+                        'sv' => $sv));
         }
 
         // Count the use of the module
@@ -720,8 +720,8 @@ class IWnoteboard_Controller_User extends Zikula_AbstractController {
         if ($titular != '') {
             $sv = ModUtil::func('IWmain', 'user', 'genSecurityValue');
             ModUtil::apiFunc('IWmain', 'user', 'usersVarsDelModule', array('name' => 'nbheadlines',
-                'module' => 'IWnoteboard',
-                'sv' => $sv));
+                        'module' => 'IWnoteboard',
+                        'sv' => $sv));
         }
 
         // notify entry by email if necessary
@@ -739,12 +739,12 @@ class IWnoteboard_Controller_User extends Zikula_AbstractController {
                         'sv' => $sv,
                         'info' => 'ncc'));
             $body = $this->view->assign('sendedby', $userFullName)
-                    ->assign('noteContent', $noticia)
-                    ->assign('url', $url)
-                    ->assign('nid', $lid)
-                    ->assign('sitename', System::getVar('sitename'))
-                    ->assign('text', 1)
-                    ->fetch('IWnoteboard_user_msgbody.htm');
+                            ->assign('noteContent', $noticia)
+                            ->assign('url', $url)
+                            ->assign('nid', $lid)
+                            ->assign('sitename', System::getVar('sitename'))
+                            ->assign('text', 1)
+                            ->fetch('IWnoteboard_user_msgbody.htm');
 
             // get users in administrators group
             $sv = ModUtil::func('IWmain', 'user', 'genSecurityValue');
@@ -947,8 +947,8 @@ class IWnoteboard_Controller_User extends Zikula_AbstractController {
             //Delete users headlines var. This renoval the block information
             $sv = ModUtil::func('IWmain', 'user', 'genSecurityValue');
             ModUtil::apiFunc('IWmain', 'user', 'usersVarsDelModule', array('name' => 'nbheadlines',
-                'module' => 'IWnoteboard',
-                'sv' => $sv));
+                        'module' => 'IWnoteboard',
+                        'sv' => $sv));
         }
 
         // Redirect user to main page
@@ -1056,13 +1056,13 @@ class IWnoteboard_Controller_User extends Zikula_AbstractController {
                         'sv' => $sv,
                         'info' => array('ncc', 'e')));
             $body = $this->view->assign('sendedby', $userFullName)
-                    ->assign('authorFullName', $authorInfo['ncc'])
-                    ->assign('commentContent', $noticia)
-                    ->assign('url', $url)
-                    ->assign('nid', $nid)
-                    ->assign('text', 2)
-                    ->assign('sitename', System::getVar('sitename'))
-                    ->fetch('IWnoteboard_user_msgbody.htm');
+                            ->assign('authorFullName', $authorInfo['ncc'])
+                            ->assign('commentContent', $noticia)
+                            ->assign('url', $url)
+                            ->assign('nid', $nid)
+                            ->assign('text', 2)
+                            ->assign('sitename', System::getVar('sitename'))
+                            ->fetch('IWnoteboard_user_msgbody.htm');
 
             $sendMessageArgs = array(
                 'fromname' => System::getVar('sitename'),

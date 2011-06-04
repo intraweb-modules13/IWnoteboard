@@ -78,6 +78,7 @@ class IWnoteboard_Controller_Admin extends Zikula_AbstractController {
         $notifyNewEntriesByMail = $this->getVar('notifyNewEntriesByMail');
         $notifyNewCommentsByMail = $this->getVar('notifyNewCommentsByMail');
         $commentCheckedByDefault = $this->getVar('commentCheckedByDefault');
+        $smallAvatars = $this->getVar('smallAvatars');
 
         $sv = ModUtil::func('IWmain', 'user', 'genSecurityValue');
         $groups = ModUtil::func('IWmain', 'user', 'getAllGroups', array('sv' => $sv,
@@ -141,6 +142,7 @@ class IWnoteboard_Controller_Admin extends Zikula_AbstractController {
                 ->assign('notifyNewEntriesByMail', $notifyNewEntriesByMail)
                 ->assign('notifyNewCommentsByMail', $notifyNewCommentsByMail)
                 ->assign('commentCheckedByDefault', $commentCheckedByDefault)
+                ->assign('smallAvatars', $smallAvatars)
                 ->fetch('IWnoteboard_admin_conf.htm');
     }
 
@@ -173,6 +175,7 @@ class IWnoteboard_Controller_Admin extends Zikula_AbstractController {
         $notifyNewEntriesByMail = FormUtil::getPassedValue('notifyNewEntriesByMail', isset($args['notifyNewEntriesByMail']) ? $args['notifyNewEntriesByMail'] : null, 'POST');
         $notifyNewCommentsByMail = FormUtil::getPassedValue('notifyNewCommentsByMail', isset($args['notifyNewCommentsByMail']) ? $args['notifyNewCommentsByMail'] : null, 'POST');
         $commentCheckedByDefault = FormUtil::getPassedValue('commentCheckedByDefault', isset($args['commentCheckedByDefault']) ? $args['commentCheckedByDefault'] : null, 'POST');
+        $smallAvatars = FormUtil::getPassedValue('smallAvatars', isset($args['smallAvatars']) ? $args['smallAvatars'] : null, 'POST');
 
         // Security check
         if (!SecurityUtil::checkPermission('IWnoteboard::', "::", ACCESS_ADMIN)) {
@@ -232,6 +235,7 @@ class IWnoteboard_Controller_Admin extends Zikula_AbstractController {
                 ->setVar('editPrintAfter', $editPrintAfter)
                 ->setVar('notifyNewCommentsByMail', $notifyNewCommentsByMail)
                 ->setVar('commentCheckedByDefault', $commentCheckedByDefault)
+                ->setVar('smallAvatars', $smallAvatars)
         ;
 
         LogUtil::registerStatus($this->__('The configuration has been modified'));
