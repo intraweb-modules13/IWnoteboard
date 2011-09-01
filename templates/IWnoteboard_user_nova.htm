@@ -124,10 +124,11 @@
 <noscript>
 {assign var='noscript' value='true'}
 </noscript>
-<link rel="stylesheet" type="text/css" href="modules/IWmain/js/calendar/css/calendar-blue.css" />	
-<script type="text/javascript" src="modules/IWmain/js/calendar/calendar.js"></script>
-<script type="text/javascript" src="modules/IWmain/js/calendar/calendar-setup.js"></script>
-<script type="text/javascript" src="modules/IWmain/js/calendar/calendar-ca.js"></script>
+<link rel="stylesheet" href="modules/IWmain/js/calendar/css/jscal2.css" type="text/css" />
+<link rel="stylesheet" href="modules/IWmain/js/calendar/css/border-radius.css" type="text/css" />
+<link rel="stylesheet" href="modules/IWmain/js/calendar/css/style.css" type="text/css" />
+<script type="text/javascript" src="modules/IWmain/js/calendar/jscal2.js"></script>
+<script type="text/javascript" src="modules/IWmain/js/calendar/lang/ca.js"></script>
 
 {include file="IWnoteboard_user_menu.htm" pageTitle=$titol}
 
@@ -169,8 +170,8 @@
         <div class="z-formrow">
             <label for="caduca">{gt text="Closing date"}</label>
             <div class="z-formnote">
-                <input type="text" name="caduca" id="caduca" maxlength="8" size="8" value="{$caduca}" />
-                <img id="trigBegin1" name="trigBegin1" src="modules/IWnoteboard/images/calendar.gif" style="cursor:pointer;" alt="" />
+                <input size="10" id="caducaDate" name="caduca"  value="{$caduca}" onfocus="blur();" />
+                <img id="caducaDate_btn" src="modules/IWnoteboard/images/calendar.gif" style="cursor:pointer;" />
             </div>
         </div>
     </fieldset>
@@ -184,15 +185,15 @@
         <div class="z-formrow">
             <label for="titulin">{gt text="Since"}</label>
             <div class="z-formnote">
-                <input type="text" name="titulin" id="titulin" maxlength="8" size="8" value="{$titulin}">
-                <img id="trigBegin0" name="trigBegin0" src="modules/IWnoteboard/images/calendar.gif" style="cursor:pointer;" />
+                <input size="10" id="titulinDate" name="titulin"  value="{$titulin}" onfocus="blur();" />
+                <img id="titulinDate_btn" src="modules/IWnoteboard/images/calendar.gif" style="cursor:pointer;" />
             </div>
         </div>
         <div class="z-formrow">
             <label for="titulout">{gt text="Up to"}</label>
             <div class="z-formnote">
-                <input type="text" name="titulout" id="titulout" maxlength="8" size="8" value="{$titulout}">
-                <img id="trigBegin2" name="trigBegin2" src="modules/IWnoteboard/images/calendar.gif" style="cursor:pointer;" />
+                <input size="10" id="tituloutDate" name="titulout"  value="{$titulout}" onfocus="blur();" />
+                <img id="tituloutDate_btn" src="modules/IWnoteboard/images/calendar.gif" style="cursor:pointer;" />
             </div>
         </div>
     </fieldset>
@@ -306,7 +307,7 @@
         </span>
         <span class="z-buttons">
             <a href="#" onclick ='javascript:history.back(-1)'>
-                {img modname='core' src='button_cancel.png' set='icons/small'   __alt="Cancel" __title="Cancel"} {gt text="Cancel"}
+                {img modname='core' src='button_cancel.png' set='icons/small' __alt="Cancel" __title="Cancel"} {gt text="Cancel"}
             </a>
         </span>
         {/if}
@@ -323,31 +324,21 @@
     </div>
 </form>
 
-<script type="text/javascript">
-    Calendar.setup({
-        inputField     :    "caduca",      // id of the input field
-        ifFormat       :    "%d/%m/%y",       // format of the input field
-        showsTime      :    true,            // will display a time selector
-        button         :    "trigBegin1",   // trigger for the calendar (button ID)
-        singleClick    :    true,           // double-click mode
-        step           :    1                // show all years in drop-down boxes (instead of every other year as default)
+<script type="text/javascript">   
+    var caduca = Calendar.setup({
+        onSelect       :    function(caduca) { caduca.hide() }
     });
+    caduca.manageFields("caducaDate_btn", "caducaDate", "%d/%m/%y");
+    
     {{if not $shipHeadersLines}}
-    Calendar.setup({
-        inputField     :    "titulin",      // id of the input field
-        ifFormat       :    "%d/%m/%y",       // format of the input field
-        showsTime      :    true,            // will display a time selector
-        button         :    "trigBegin0",   // trigger for the calendar (button ID)
-        singleClick    :    true,           // double-click mode
-        step           :    1                // show all years in drop-down boxes (instead of every other year as default)
+    var titulin = Calendar.setup({
+        onSelect       :    function(titulin) { titulin.hide() }
     });
-    Calendar.setup({
-        inputField     :    "titulout",      // id of the input field
-        ifFormat       :    "%d/%m/%y",       // format of the input field
-        showsTime      :    true,            // will display a time selector
-        button         :    "trigBegin2",   // trigger for the calendar (button ID)
-        singleClick    :    true,           // double-click mode
-        step           :    1                // show all years in drop-down boxes (instead of every other year as default)
+    titulin.manageFields("titulinDate_btn", "titulinDate", "%d/%m/%y");
+    
+    var titulout = Calendar.setup({
+        onSelect       :    function(titulout) { titulout.hide() }
     });
+    titulout.manageFields("tituloutDate_btn", "tituloutDate", "%d/%m/%y");
     {{/if}}
 </script>
