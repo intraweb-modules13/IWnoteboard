@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: Module IWnoteboard versión 3.0\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2010-01-27 10:50+0100\n"
-"PO-Revision-Date: 2012-03-19 13:31+0100\n"
+"PO-Revision-Date: 2012-03-19 13:37+0100\n"
 "Last-Translator: intraweb <intraweb@xtec.cat>\n"
 "Language-Team: Intraweb <intraweb@xtec.cat>\n"
 "MIME-Version: 1.0\n"
@@ -970,4 +970,7 @@ msgstr "Notifica els comentaris nous als autors per correu electrònic"
 
 msgid "The comments option is checked by default"
 msgstr "L'opció de comentaris està marcada per defecte"
+
+msgid "Use small avatars"
+msgstr "Fes ús d'avatars petits"
 
