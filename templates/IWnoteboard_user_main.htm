@@ -124,7 +124,7 @@
                 {$users[$note.created_by]}
                 {if $note.photo neq ''}
                 <div class="userAvatar">
-                    <img src="{getbaseurl}{modurl modname='IWnoteboard' type='user' func='getFile' fileName=$note.photo}" alt="" />
+                    <img src="{$baseurl}{modurl modname='IWnoteboard' type='user' func='getFile' fileName=$note.photo}" alt="" />
                 </div>
                 {/if}
             </td>
