@@ -99,46 +99,28 @@ class IWnoteboard_Installer extends Zikula_AbstractInstaller {
      */
     public function upgrade($oldversion) {
 
-        $prefix = $GLOBALS['ZConfig']['System']['prefix'];
-
-        //Delete unneeded tables
-        DBUtil::dropTable('iw_noteboard_public');
-
-        //Rename tables
-        if (!DBUtil::renameTable('iw_noteboard', 'IWnoteboard'))
-            return false;
-        if (!DBUtil::renameTable('iw_noteboard_topics', 'IWnoteboard_topics'))
-            return false;
-
         // Delete unneded columns
         $c = array();
-        $c[] = "ALTER TABLE `{$prefix}_IWnoteboard` DROP `iw_public` ";
-        $c[] = "ALTER TABLE `{$prefix}_IWnoteboard` DROP `iw_sharedFrom` ";
-        $c[] = "ALTER TABLE `{$prefix}_IWnoteboard` DROP `iw_sharedId` ";
+        $c[] = "ALTER TABLE `IWnoteboard` DROP `iw_public` ";
+        $c[] = "ALTER TABLE `IWnoteboard` DROP `iw_sharedFrom` ";
+        $c[] = "ALTER TABLE `IWnoteboard` DROP `iw_sharedId` ";
         foreach ($c as $sql) {
             DBUtil::executeSQL($sql);
         }
 
         // Update z_blocs table
-        $c = "UPDATE {$prefix}_blocks SET z_bkey = 'Nbheadlines' WHERE z_bkey = 'nbheadlines'";
+        $c = "UPDATE blocks SET bkey = 'Nbheadlines' WHERE bkey = 'nbheadlines'";
         if (!DBUtil::executeSQL($c)) {
             return false;
         }
 
-        $c = "UPDATE {$prefix}_blocks SET z_bkey = 'Nbtopics' WHERE z_bkey = 'nbtopics'";
-        if (!DBUtil::executeSQL($c)) {
-            return false;
-        }
-
-        // Update module_vars table
-        // Update the name (keeps old var value)
-        $c = "UPDATE {$prefix}_module_vars SET z_modname = 'IWnoteboard' WHERE z_bkey = 'iw_noteboard'";
+        $c = "UPDATE blocks SET bkey = 'Nbtopics' WHERE bkey = 'nbtopics'";
         if (!DBUtil::executeSQL($c)) {
             return false;
         }
 
         //Array de noms
-        $oldVarsNames = DBUtil::selectFieldArray("module_vars", 'name', "`z_modname` = 'IWforms'", '', false, '');
+        $oldVarsNames = DBUtil::selectFieldArray("module_vars", 'name', "`modname` = 'IWnoteboard'", '', false, '');
 
 
         $newVarsNames = Array('grups', 'permisos', 'marcat', 'verifica', 'caducitat', 'repperdefecte', 'colorrow1',
