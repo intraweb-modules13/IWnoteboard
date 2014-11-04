@@ -163,7 +163,7 @@
                         {img modname='IWnoteboard' src='vist.gif'}
                     </a>
                 </div>
-                {if $note.marca eq 1}
+		{if $note.marca eq 1}
                 <div>
                     <a href="javascript:void(0);" onclick="marca({$note.nid})">
                         {img src='marcat.gif' modname='IWnoteboard' __alt='Mark the note with a flag'  style="display: none;" id="marca_`$note.nid`"}{img src='nmarcat.gif' modname='IWnoteboard' __alt='Remove the mark'  id="nomarca_`$note.nid`"}
