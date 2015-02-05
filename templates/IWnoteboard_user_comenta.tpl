@@ -20,7 +20,7 @@
     }
 </script>
 
-{include file="IWnoteboard_user_menu.htm"}
+{include file="IWnoteboard_user_menu.tpl"}
 <h2>{$titol}</h2>
 <form class="z-form" action=""  name="new_note" enctype="multipart/form-data" method="post">
     <input type="hidden" name="csrftoken" value="{insert name='csrftoken'}" />

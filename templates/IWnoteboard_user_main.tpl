@@ -1,4 +1,4 @@
-{include file="IWnoteboard_user_menu.htm"}
+{include file="IWnoteboard_user_menu.tpl"}
 {ajaxheader modname=IWnoteboard filename=IWnoteboard.js}
 {if $temes_MS|@count gt 2 && $loggedIn}
 <form method="post" name="main" action="{modurl modname='IWnoteboard' type='user' func='main' tema=$tema}">

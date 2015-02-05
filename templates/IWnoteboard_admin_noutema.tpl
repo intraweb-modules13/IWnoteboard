@@ -1,4 +1,4 @@
-{include file="IWnoteboard_admin_menu.htm"}
+{include file="IWnoteboard_admin_menu.tpl"}
 <div class="z-admincontainer">
     <div class="z-adminpageicon">
         {if isset($m) AND $m eq 0}

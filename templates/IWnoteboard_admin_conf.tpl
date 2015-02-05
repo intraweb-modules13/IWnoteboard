@@ -1,7 +1,7 @@
 <script type="text/javascript" src="modules/IWmain/js/ColorPicker2.js"></script>
 <script type="text/javascript" src="modules/IWmain/js/AnchorPosition.js"></script>
 <script type="text/javascript" src="modules/IWmain/js/PopupWindow.js"></script>
-{include file="IWnoteboard_admin_menu.htm"}
+{include file="IWnoteboard_admin_menu.tpl"}
 <div class="z-admincontainer">
     <div class="z-adminpageicon">{img modname='core' src='windowlist.png' set='icons/large'}</div>
     <h2>{gt text="Module configuration"}</h2>

@@ -130,7 +130,7 @@
 <script type="text/javascript" src="modules/IWmain/js/calendar/jscal2.js"></script>
 <script type="text/javascript" src="modules/IWmain/js/calendar/lang/ca.js"></script>
 
-{include file="IWnoteboard_user_menu.htm" pageTitle=$titol}
+{include file="IWnoteboard_user_menu.tpl" pageTitle=$titol}
 
 <form class="z-form" id="new_note" enctype="multipart/form-data" method="post" action="">
     <input type="hidden" name="csrftoken" value="{insert name='csrftoken'}" />

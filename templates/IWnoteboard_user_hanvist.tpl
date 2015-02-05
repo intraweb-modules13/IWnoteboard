@@ -1,4 +1,4 @@
-{include file="IWnoteboard_user_menu.htm"}
+{include file="IWnoteboard_user_menu.tpl"}
 <h2>{gt text="Have seen the note"}</h2>
 <table width="100%">
     {section name=vist loop=$registres}

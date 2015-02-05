@@ -1,4 +1,4 @@
-{include file="IWnoteboard_admin_menu.htm"}
+{include file="IWnoteboard_admin_menu.tpl"}
 <div class="z-admincontainer">
     {if $m eq 0}
     <div class="z-adminpageicon">{img modname='core' src='filenew.png' set='icons/large'}</div>
