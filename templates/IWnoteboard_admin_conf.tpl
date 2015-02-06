@@ -3,7 +3,7 @@
 <script type="text/javascript" src="modules/IWmain/js/PopupWindow.js"></script>
 {include file="IWnoteboard_admin_menu.tpl"}
 <div class="z-admincontainer">
-    <div class="z-adminpageicon">{img modname='core' src='windowlist.png' set='icons/large'}</div>
+    <div class="z-adminpageicon">{img modname='core' src='configure.png' set='icons/large'}</div>
     <h2>{gt text="Module configuration"}</h2>
     {if $topicsSystem eq 0}
     <table class="z-datatable">

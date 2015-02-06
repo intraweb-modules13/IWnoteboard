@@ -161,7 +161,7 @@
         {/if}
         <div class="z-formrow">
             <label for="noticia">{gt text="Note content"}</label>
-            <textarea id="intraweb" id="noticia" name="noticia" cols="70" rows="7">{$noticia|safetext}</textarea>
+            <textarea id="noticia" name="noticia" cols="70" rows="7">{$noticia|safetext}</textarea>
         </div>
         <div class="z-formrow">
             <label for="data">{gt text="Publish date"}</label>
@@ -323,7 +323,7 @@
         </noscript>
     </div>
 </form>
-
+{notifydisplayhooks eventname='iwnoteboard.ui_hooks.iwnoteboard.form_edit'}
 <script type="text/javascript">   
     var caduca = Calendar.setup({
         onSelect       :    function(caduca) { caduca.hide() }
