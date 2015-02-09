@@ -2,11 +2,12 @@
     function send(){
         var j=0;
         if(document.new_note.noticia.value==""){
+			// for gt detection
             //			alert("{{gt text="The text of the note is empty!"}}");
             //			var error=true;
         }
 		
-        resposta=confirm('{{gt text="Do you really want to send the note?"}}');
+        resposta=confirm("{{gt text="Do you really want to send the note?"}}");
 		
         if(document.new_note.m.value=="n"){
             document.new_note.action="index.php?module=IWnoteboard&func=comenta_crear"

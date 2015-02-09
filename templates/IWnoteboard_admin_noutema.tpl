@@ -2,9 +2,9 @@
 <div class="z-admincontainer">
     <div class="z-adminpageicon">
         {if isset($m) AND $m eq 0}
-        {img modname='core' src='filenew.png' set='icons/large' __alt=''}
+        {img modname='core' src='filenew.png' set='icons/large'}
         {else}
-        {img modname='core' src='edit.png' set='icons/large' __alt=''}
+        {img modname='core' src='edit.png' set='icons/large'}
         {/if}
     </div>
     <h2>{$title}</h2>
@@ -52,6 +52,7 @@
         var f=document.forms['new_tema'];
         var error=false;
         if(f.nomtema.value==''){
+			// for gt detection
             alert('{{gt text="The topic name is empty"}}');
             error=true;
         }

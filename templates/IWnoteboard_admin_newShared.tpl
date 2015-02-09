@@ -30,7 +30,8 @@
     function send(valor){
         var error=false;
         if(document.newShared.url.value==''){
-            alert('{{gt text="The shared URL is empty"}}');
+			// for gt detection
+            alert("{{gt text="The shared URL is empty"}}");
             error=true;
         }
         if(!error){

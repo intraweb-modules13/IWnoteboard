@@ -3,6 +3,7 @@
         var f=document.forms['new_note'];
         var j=0;
         if(f.fitxer.value!="" && "{{$extensions}}".indexOf(f.fitxer.value.substring(f.fitxer.value.length-3,f.fitxer.value.length))==-1  && !error){
+			//for gt detection
             alert("{{gt text="The extension of the attached file is not accepted. Allowed extensions are: "}}{{$extensions}}");
             var error=true;
         }
@@ -29,12 +30,16 @@
         }
 			
         if(!error && j==0){
+			//for gt detection
             alert("{{gt text="There are no chosen addressee for the note"}}");
             var error=true;
         }
         {{/if}}
 		
-        if(!error){resposta=confirm("{{gt text="Do you really want to send the note?"}}");}
+        if(!error){
+			//for gt detection
+			resposta=confirm("{{gt text="Do you really want to send the note?"}}");
+		}
 		
         if(f.m.value=="n"){
             f.action="index.php?module=IWnoteboard&func=crear"
@@ -60,16 +65,21 @@
         if(field.value != '') {
             if(regs = field.value.match(re)) {
                 if(regs[1] < 1 || regs[1] > 31) {
+					//for gt detection
                     errorMsg = "{{gt text="Some of the dates in the form are not correct"}} " + field.value;
                 } else if(regs[2] < 1 || regs[2] > 12) {
+					//for gt detection
                     errorMsg = "{{gt text="Some of the dates in the form are not correct"}} " + field.value;
                 } else if(regs[3] < minYear || regs[3] > maxYear) {
+					//for gt detection
                     errorMsg = "{{gt text="Some of the dates in the form are not correct"}} " + field.value;
                 }
             } else {
+				//for gt detection
                 errorMsg = "{{gt text="Some of the dates in the form are not correct"}} " + field.value;
             }
         } else if(!allowBlank) {
+			//for gt detection
             errorMsg = "{{gt text="Some of the dates in the form are not correct"}}";
         }
         if(errorMsg != "") {
@@ -115,6 +125,7 @@
         caduca = new Date(20 + f.caduca.value.substr(6,2), f.caduca.value.substr(3,2), f.caduca.value.substr(0,2))
         var result = true;
         if (data > caduca){
+			//for gt detection
             alert("{{gt text="The closing date is incorrect"}}");
             result = false;
         }

@@ -205,8 +205,8 @@
 </table>
 
 <script type="text/javascript">
-    var deletingnote = '{{gt text="...deleting the note..."}}';
-    var addingflag = '{{gt text="...modifying note flag status..."}}';
-    var hidingnote = '{{gt text="...hidding note..."}}';
-    var savingnote = '{{gt text="...saving note..."}}';
+    var deletingnote = "{{gt text="...deleting the note..."}}";
+    var addingflag = "{{gt text="...modifying note flag status..."}}";
+    var hidingnote = "{{gt text="...hidding note..."}}";
+    var savingnote = "{{gt text="...saving note..."}}";
 </script>
